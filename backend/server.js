@@ -61,7 +61,7 @@ app.use('/', authRoutes);
 app.use('/', animalRoutes);
 app.use('/', medicalRoutes);
 app.use('/', marketplaceRoutes);
-app.use('/orders', require('./routes/orders'));
+app.use('/orders', require('./routes/guide'));
 app.use('/guide', require('./routes/guide'));
 app.use('/', aiRoutes);
 app.use('/', require('./routes/community'));
