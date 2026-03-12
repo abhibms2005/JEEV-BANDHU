@@ -4,124 +4,530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JeevBandhu - Livestock Health Management</title>
+    <title>JeevBandhu - Bio-Safe Livestock Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+        @keyframes float-slow { 0%,100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-15px) rotate(3deg); } }
+        @keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+        @keyframes count-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slide-up { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes gradient-shift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .float { animation: float 6s ease-in-out infinite; }
+        .float-slow { animation: float-slow 8s ease-in-out infinite; }
+        .float-delay { animation: float 6s ease-in-out 2s infinite; }
+        .slide-up { animation: slide-up 0.8s ease-out both; }
+        .slide-up-d1 { animation: slide-up 0.8s ease-out 0.1s both; }
+        .slide-up-d2 { animation: slide-up 0.8s ease-out 0.2s both; }
+        .slide-up-d3 { animation: slide-up 0.8s ease-out 0.3s both; }
+        .slide-up-d4 { animation: slide-up 0.8s ease-out 0.4s both; }
+        .gradient-animate { background-size: 200% 200%; animation: gradient-shift 8s ease infinite; }
+        .glass-card { background: rgba(255,255,255,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); }
+    </style>
 </head>
 
-<body class="bg-gradient-to-br from-emerald-50 to-green-100">
+<body class="bg-white overflow-x-hidden" style="font-family: 'Plus Jakarta Sans', sans-serif;">
     <!-- Navigation -->
-    <nav class="bg-white shadow-md">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl" style="background: rgba(255,255,255,0.92); box-shadow: 0 1px 20px rgba(0,0,0,0.06);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</div>
-                <div class="space-x-4">
-                    <a href="/login" class="text-gray-700 hover:text-emerald-600 transition">Login</a>
-                    <a href="/register" class="btn-primary">Get Started</a>
+                <a href="/" class="flex items-center gap-2.5 group">
+                    <div class="w-9 h-9 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-emerald-200 transition-shadow">
+                        <i class="fas fa-leaf text-white text-sm"></i>
+                    </div>
+                    <span class="text-xl font-extrabold bg-gradient-to-r from-emerald-700 to-teal-600 bg-clip-text text-transparent" style="-webkit-background-clip:text;-webkit-text-fill-color:transparent;">JeevBandhu</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-2">
+                    <a href="#features" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-emerald-600 transition rounded-lg hover:bg-emerald-50">Features</a>
+                    <a href="#how-it-works" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-emerald-600 transition rounded-lg hover:bg-emerald-50">How it Works</a>
+                    <a href="#why-us" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-emerald-600 transition rounded-lg hover:bg-emerald-50">Why Us</a>
+                    <div class="w-px h-6 bg-gray-200 mx-2"></div>
+                    <a href="/login" class="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-emerald-600 transition">Login</a>
+                    <a href="/register" class="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full hover:shadow-lg hover:shadow-emerald-200 transition-all hover:-translate-y-0.5">
+                        Get Started <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                    </a>
                 </div>
+                <button id="mobileMenuBtn" class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger">
+                    <span class="block w-5 h-0.5 bg-gray-700 mb-1 rounded transition-all"></span>
+                    <span class="block w-5 h-0.5 bg-gray-700 mb-1 rounded transition-all"></span>
+                    <span class="block w-5 h-0.5 bg-gray-700 rounded transition-all"></span>
+                </button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="mobile-menu hidden fixed top-16 right-0 h-screen w-80 bg-white shadow-2xl z-40 md:hidden overflow-y-auto">
+            <div class="flex flex-col p-5 space-y-1">
+                <a href="#features" class="mobile-nav-item"><i class="fas fa-th-large text-emerald-500 w-5"></i> Features</a>
+                <a href="#how-it-works" class="mobile-nav-item"><i class="fas fa-route text-blue-500 w-5"></i> How it Works</a>
+                <a href="#why-us" class="mobile-nav-item"><i class="fas fa-star text-amber-500 w-5"></i> Why Us</a>
+                <div class="border-t border-gray-100 my-3"></div>
+                <a href="/login" class="mobile-nav-item"><i class="fas fa-sign-in-alt text-gray-500 w-5"></i> Login</a>
+                <a href="/register" class="mt-2 px-5 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-sm font-semibold rounded-xl text-center hover:shadow-lg transition-all">
+                    Get Started Free <i class="fas fa-arrow-right ml-1"></i>
+                </a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div class="text-center">
-            <h1 class="text-5xl font-bold text-gray-900 mb-6">
-                Bio-Safe Livestock Management
-            </h1>
-            <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-                Track animal health, ensure withdrawal compliance, and trade with complete transparency.
-                JeevBandhu creates a verified marketplace for antibiotic-free livestock products.
-            </p>
-            <div class="flex justify-center space-x-6">
-                <a href="/register?role=farmer"
-                    class="bg-emerald-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-emerald-700 transition">
-                    I'm a Farmer
-                </a>
-                <a href="/register?role=buyer"
-                    class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
-                    I'm a Buyer
-                </a>
+    <section class="relative min-h-screen flex items-center overflow-hidden pt-16" style="background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 20%, #eff6ff 40%, #faf5ff 60%, #fff7ed 80%, #fef2f2 100%);">
+        <!-- Decorative Elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 float"></div>
+            <div class="absolute top-40 right-20 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-15 float-delay"></div>
+            <div class="absolute bottom-20 left-1/3 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-15 float-slow"></div>
+            <div class="absolute top-1/4 right-1/4 w-64 h-64 bg-amber-200 rounded-full mix-blend-multiply filter blur-3xl opacity-15 float"></div>
+            <!-- Grid pattern -->
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 1px 1px, rgba(16,185,129,0.07) 1px, transparent 0); background-size: 40px 40px;"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Left Content -->
+                <div class="space-y-8">
+                    <div class="slide-up">
+                        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200 mb-6">
+                            <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                            Trusted by 500+ Farmers Across India
+                        </span>
+                    </div>
+
+                    <h1 class="slide-up-d1 text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-[1.1] tracking-tight">
+                        Smart <span class="bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 bg-clip-text" style="-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Bio-Safe</span> Livestock Management
+                    </h1>
+
+                    <p class="slide-up-d2 text-lg md:text-xl text-gray-500 leading-relaxed max-w-lg">
+                        AI-powered health tracking, automatic withdrawal compliance, and a verified marketplace — all in one platform built for Indian farmers.
+                    </p>
+
+                    <div class="slide-up-d3 flex flex-col sm:flex-row gap-4">
+                        <a href="/register?role=farmer" class="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-base rounded-2xl shadow-xl shadow-emerald-200 hover:shadow-2xl hover:shadow-emerald-300 transition-all hover:-translate-y-1">
+                            <i class="fas fa-seedling"></i>
+                            Start as Farmer
+                            <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="/register?role=buyer" class="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-gray-700 font-bold text-base rounded-2xl shadow-lg border border-gray-200 hover:border-emerald-300 hover:shadow-xl transition-all hover:-translate-y-1">
+                            <i class="fas fa-shopping-bag text-emerald-600"></i>
+                            I'm a Buyer
+                            <i class="fas fa-arrow-right text-sm text-emerald-600 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+
+                    <!-- Mini Stats -->
+                    <div class="slide-up-d4 flex items-center gap-6 pt-4">
+                        <div class="flex -space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xs font-bold border-2 border-white shadow">R</div>
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-bold border-2 border-white shadow">A</div>
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs font-bold border-2 border-white shadow">S</div>
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center text-white text-xs font-bold border-2 border-white shadow">M</div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-gray-800">500+ Active Users</p>
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-star text-amber-400 text-xs"></i>
+                                <i class="fas fa-star text-amber-400 text-xs"></i>
+                                <i class="fas fa-star text-amber-400 text-xs"></i>
+                                <i class="fas fa-star text-amber-400 text-xs"></i>
+                                <i class="fas fa-star text-amber-400 text-xs"></i>
+                                <span class="text-xs text-gray-500 ml-1">4.9/5 rating</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Visual — Dashboard Preview Cards -->
+                <div class="relative hidden lg:block">
+                    <!-- Main Dashboard Card -->
+                    <div class="relative z-10 float-slow">
+                        <div class="bg-white rounded-3xl shadow-2xl p-6 border border-gray-100 max-w-md ml-auto">
+                            <div class="flex items-center justify-between mb-5">
+                                <h3 class="font-bold text-gray-800 text-lg">Herd Overview</h3>
+                                <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full">Live</span>
+                            </div>
+                            <!-- Mini stat row -->
+                            <div class="grid grid-cols-3 gap-3 mb-5">
+                                <div class="bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl p-3 text-center border border-emerald-100">
+                                    <p class="text-2xl font-extrabold text-emerald-600">28</p>
+                                    <p class="text-xs text-gray-500 font-medium">Total</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-3 text-center border border-green-100">
+                                    <p class="text-2xl font-extrabold text-green-600">24</p>
+                                    <p class="text-xs text-gray-500 font-medium">Healthy</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-red-50 to-rose-50 rounded-xl p-3 text-center border border-red-100">
+                                    <p class="text-2xl font-extrabold text-red-500">3</p>
+                                    <p class="text-xs text-gray-500 font-medium">Locked</p>
+                                </div>
+                            </div>
+                            <!-- Health bar -->
+                            <div class="mb-4">
+                                <div class="flex justify-between mb-1.5">
+                                    <span class="text-sm font-semibold text-gray-600">Avg Health Score</span>
+                                    <span class="text-sm font-extrabold text-emerald-600">85/100</span>
+                                </div>
+                                <div class="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full bg-gradient-to-r from-emerald-400 to-teal-500" style="width:85%"></div>
+                                </div>
+                            </div>
+                            <!-- Animal entries -->
+                            <div class="space-y-2.5">
+                                <div class="flex items-center gap-3 p-2.5 rounded-xl bg-gray-50 hover:bg-emerald-50 transition">
+                                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center text-white text-sm"><i class="fas fa-cow"></i></div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-semibold text-gray-800">COW-001</p>
+                                        <p class="text-xs text-gray-400">Holstein Friesian</p>
+                                    </div>
+                                    <span class="px-2.5 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">Healthy</span>
+                                </div>
+                                <div class="flex items-center gap-3 p-2.5 rounded-xl bg-gray-50 hover:bg-red-50 transition">
+                                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white text-sm"><i class="fas fa-cow"></i></div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-semibold text-gray-800">BUF-007</p>
+                                        <p class="text-xs text-gray-400">Murrah Buffalo</p>
+                                    </div>
+                                    <span class="px-2.5 py-1 bg-red-100 text-red-600 text-xs font-bold rounded-full animate-pulse">Locked</span>
+                                </div>
+                                <div class="flex items-center gap-3 p-2.5 rounded-xl bg-gray-50 hover:bg-emerald-50 transition">
+                                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white text-sm"><i class="fas fa-horse"></i></div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-semibold text-gray-800">GOT-012</p>
+                                        <p class="text-xs text-gray-400">Jamunapari Goat</p>
+                                    </div>
+                                    <span class="px-2.5 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">Healthy</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Badge Cards -->
+                    <div class="absolute -top-4 -left-4 z-20 float">
+                        <div class="glass-card rounded-2xl px-5 py-4 shadow-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="w-11 h-11 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-green-200">
+                                    <i class="fas fa-shield-alt text-lg"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-800 text-sm">Bio-Safe Verified</p>
+                                    <p class="text-xs text-green-600 font-semibold">100% Compliant</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="absolute -bottom-6 left-8 z-20 float-delay">
+                        <div class="glass-card rounded-2xl px-5 py-4 shadow-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="w-11 h-11 bg-gradient-to-br from-purple-400 to-violet-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-purple-200">
+                                    <i class="fas fa-robot text-lg"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-800 text-sm">AI Diagnosis</p>
+                                    <p class="text-xs text-purple-600 font-semibold">98% Accuracy</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Three Pillars Section -->
-    <section class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">The Three Pillars</h2>
-
-        <div class="grid md:grid-cols-3 gap-8">
-            <!-- Pillar A -->
-            <div class="card">
-                <div class="text-4xl mb-4">📋</div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Digital Health Passport</h3>
-                <p class="text-gray-600">
-                    Every animal has a unique profile with complete medical history, genetic lineage,
-                    and real-time health tracking.
-                </p>
-            </div>
-
-            <!-- Pillar B -->
-            <div class="card">
-                <div class="text-4xl mb-4">🔒</div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Bio-Safety Engine</h3>
-                <p class="text-gray-600">
-                    Automatic withdrawal period enforcement. Animals under medication are locked
-                    from production until scientifically safe.
-                </p>
-            </div>
-
-            <!-- Pillar C -->
-            <div class="card">
-                <div class="text-4xl mb-4">✅</div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Verified Marketplace</h3>
-                <p class="text-gray-600">
-                    Only bio-safe products can be listed. Buyers get complete transparency
-                    with cryptographic proof of compliance.
-                </p>
+    <!-- Trusted Stats Bar -->
+    <section class="relative -mt-1 bg-white border-t border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center group">
+                    <div class="text-4xl font-extrabold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text mb-1" style="-webkit-background-clip:text;-webkit-text-fill-color:transparent;">500+</div>
+                    <p class="text-sm text-gray-500 font-medium">Active Farmers</p>
+                </div>
+                <div class="text-center group">
+                    <div class="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text mb-1" style="-webkit-background-clip:text;-webkit-text-fill-color:transparent;">10K+</div>
+                    <p class="text-sm text-gray-500 font-medium">Animals Tracked</p>
+                </div>
+                <div class="text-center group">
+                    <div class="text-4xl font-extrabold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text mb-1" style="-webkit-background-clip:text;-webkit-text-fill-color:transparent;">100%</div>
+                    <p class="text-sm text-gray-500 font-medium">Bio-Safe Products</p>
+                </div>
+                <div class="text-center group">
+                    <div class="text-4xl font-extrabold bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text mb-1" style="-webkit-background-clip:text;-webkit-text-fill-color:transparent;">24/7</div>
+                    <p class="text-sm text-gray-500 font-medium">AI Monitoring</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section class="bg-white py-16 mt-12">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Why JeevBandhu?</h2>
+    <section id="features" class="py-24 bg-gradient-to-b from-white via-gray-50 to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 uppercase tracking-wider mb-4">
+                    <i class="fas fa-star"></i> Core Features
+                </span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">The Three Pillars of Trust</h2>
+                <p class="text-lg text-gray-500 max-w-2xl mx-auto">Everything you need to manage livestock health and build a verified, transparent marketplace</p>
+            </div>
 
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="flex items-start space-x-4">
-                    <div class="text-2xl">🎯</div>
-                    <div>
-                        <h3 class="font-bold text-lg mb-2">Automated Compliance</h3>
-                        <p class="text-gray-600">No manual tracking. System automatically enforces withdrawal periods.
-                        </p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Pillar 1 -->
+                <div class="group relative bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-t-3xl"></div>
+                    <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center text-white text-2xl mb-6 shadow-lg shadow-emerald-200 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-id-card"></i>
                     </div>
+                    <h3 class="text-xl font-extrabold text-gray-900 mb-3">Digital Health Passport</h3>
+                    <p class="text-gray-500 mb-6 leading-relaxed">Every animal gets a unique profile with complete medical history, breed info, and real-time health tracking.</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center"><i class="fas fa-check text-xs text-emerald-600"></i></span><span class="text-gray-600">Individual health profiles</span></li>
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center"><i class="fas fa-check text-xs text-emerald-600"></i></span><span class="text-gray-600">Complete medical history</span></li>
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center"><i class="fas fa-check text-xs text-emerald-600"></i></span><span class="text-gray-600">Weight & feed tracking</span></li>
+                    </ul>
                 </div>
 
-                <div class="flex items-start space-x-4">
-                    <div class="text-2xl">🛡️</div>
-                    <div>
-                        <h3 class="font-bold text-lg mb-2">Consumer Trust</h3>
-                        <p class="text-gray-600">Buyers see complete medical history before purchasing.</p>
+                <!-- Pillar 2 -->
+                <div class="group relative bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-t-3xl"></div>
+                    <div class="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center text-white text-2xl mb-6 shadow-lg shadow-amber-200 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-shield-alt"></i>
                     </div>
+                    <h3 class="text-xl font-extrabold text-gray-900 mb-3">Bio-Safety Engine</h3>
+                    <p class="text-gray-500 mb-6 leading-relaxed">Automatic withdrawal period enforcement ensures animals under medication stay locked from production until safe.</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center"><i class="fas fa-check text-xs text-amber-600"></i></span><span class="text-gray-600">Auto withdrawal lock</span></li>
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center"><i class="fas fa-check text-xs text-amber-600"></i></span><span class="text-gray-600">Medicine tracking</span></li>
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center"><i class="fas fa-check text-xs text-amber-600"></i></span><span class="text-gray-600">Compliance reports</span></li>
+                    </ul>
                 </div>
 
-                <div class="flex items-start space-x-4">
-                    <div class="text-2xl">🌐</div>
-                    <div>
-                        <h3 class="font-bold text-lg mb-2">Traceability</h3>
-                        <p class="text-gray-600">Every product linked to its source animal for full traceability.</p>
+                <!-- Pillar 3 -->
+                <div class="group relative bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-t-3xl"></div>
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center text-white text-2xl mb-6 shadow-lg shadow-blue-200 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-store"></i>
                     </div>
+                    <h3 class="text-xl font-extrabold text-gray-900 mb-3">Verified Marketplace</h3>
+                    <p class="text-gray-500 mb-6 leading-relaxed">Only bio-safe products can be listed. Buyers get complete transparency with proof of compliance.</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center"><i class="fas fa-check text-xs text-blue-600"></i></span><span class="text-gray-600">Bio-verified listings</span></li>
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center"><i class="fas fa-check text-xs text-blue-600"></i></span><span class="text-gray-600">Full traceability</span></li>
+                        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center"><i class="fas fa-check text-xs text-blue-600"></i></span><span class="text-gray-600">Trusted transactions</span></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-24" style="background: linear-gradient(135deg, #ecfdf5 0%, #eff6ff 50%, #faf5ff 100%);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-blue-100 text-blue-700 uppercase tracking-wider mb-4">
+                    <i class="fas fa-route"></i> How It Works
+                </span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Get Started in 3 Simple Steps</h2>
+                <p class="text-lg text-gray-500 max-w-xl mx-auto">From registration to your first verified sale — it's that easy</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 relative">
+                <!-- Connecting Line (desktop) -->
+                <div class="hidden md:block absolute top-24 left-[20%] right-[20%] h-0.5 bg-gradient-to-r from-emerald-300 via-blue-300 to-purple-300"></div>
+
+                <!-- Step 1 -->
+                <div class="relative text-center group">
+                    <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl border-2 border-emerald-200 group-hover:border-emerald-500 group-hover:shadow-emerald-200 transition-all relative z-10">
+                        <span class="absolute -top-3 -right-3 w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">1</span>
+                        <i class="fas fa-user-plus text-2xl text-emerald-600"></i>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-gray-900 mb-2">Register Your Farm</h3>
+                    <p class="text-gray-500 text-sm max-w-xs mx-auto">Create an account, add your animals with details like species, breed, and age</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative text-center group">
+                    <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl border-2 border-blue-200 group-hover:border-blue-500 group-hover:shadow-blue-200 transition-all relative z-10">
+                        <span class="absolute -top-3 -right-3 w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">2</span>
+                        <i class="fas fa-heartbeat text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-gray-900 mb-2">Track Health & Compliance</h3>
+                    <p class="text-gray-500 text-sm max-w-xs mx-auto">Log medicines, track withdrawal periods, and monitor health scores with AI insights</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative text-center group">
+                    <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl border-2 border-purple-200 group-hover:border-purple-500 group-hover:shadow-purple-200 transition-all relative z-10">
+                        <span class="absolute -top-3 -right-3 w-8 h-8 bg-gradient-to-br from-purple-500 to-violet-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">3</span>
+                        <i class="fas fa-handshake text-2xl text-purple-600"></i>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-gray-900 mb-2">Sell With Trust</h3>
+                    <p class="text-gray-500 text-sm max-w-xs mx-auto">List verified products on the marketplace — buyers see full health history before purchase</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Us Section -->
+    <section id="why-us" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-purple-100 text-purple-700 uppercase tracking-wider mb-4">
+                    <i class="fas fa-bolt"></i> Why JeevBandhu
+                </span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">The Smarter Way to Farm</h2>
+                <p class="text-lg text-gray-500 max-w-2xl mx-auto">Advanced technology meets traditional farming wisdom</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="group p-6 rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-emerald-50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center text-white text-xl mb-5 shadow-lg shadow-emerald-200 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="font-extrabold text-gray-900 mb-2">AI Diagnosis</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Describe symptoms and get instant AI-powered disease diagnosis with treatment plans</p>
+                </div>
+
+                <div class="group p-6 rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-blue-50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center text-white text-xl mb-5 shadow-lg shadow-blue-200 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="font-extrabold text-gray-900 mb-2">Live Monitoring</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Real-time health dashboards with automated alerts for any changes in animal condition</p>
+                </div>
+
+                <div class="group p-6 rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-purple-50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-violet-500 rounded-2xl flex items-center justify-center text-white text-xl mb-5 shadow-lg shadow-purple-200 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="font-extrabold text-gray-900 mb-2">Community</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Connect with farmers, share knowledge, and get advice from experienced veterinarians</p>
+                </div>
+
+                <div class="group p-6 rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-amber-50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center text-white text-xl mb-5 shadow-lg shadow-amber-200 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-capsules"></i>
+                    </div>
+                    <h3 class="font-extrabold text-gray-900 mb-2">Medicine Guide</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Complete database of veterinary medicines with dosages, withdrawal periods, and safety info</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-700 gradient-animate"></div>
+        <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.08) 1px, transparent 0); background-size: 30px 30px;"></div>
+        <!-- Decorative circles -->
+        <div class="absolute -top-20 -right-20 w-80 h-80 bg-white opacity-5 rounded-full"></div>
+        <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-white opacity-5 rounded-full"></div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-white bg-opacity-20 text-white mb-6">
+                <i class="fas fa-rocket"></i> Start Today — It's Free
+            </div>
+            <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">Ready to Transform Your<br>Livestock Business?</h2>
+            <p class="text-lg text-emerald-100 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Join hundreds of farmers who are already building trust, ensuring compliance, and growing their business with JeevBandhu.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/register?role=farmer" class="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-emerald-700 font-bold text-base rounded-2xl shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1">
+                    <i class="fas fa-seedling"></i>
+                    Register as Farmer
+                    <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                </a>
+                <a href="/register?role=buyer" class="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent text-white font-bold text-base rounded-2xl border-2 border-white border-opacity-40 hover:bg-white hover:text-emerald-700 transition-all hover:-translate-y-1">
+                    <i class="fas fa-shopping-bag"></i>
+                    Register as Buyer
+                    <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8 mt-16">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-300">© 2025 JeevBandhu - Ensuring Bio-Safe Livestock Products</p>
+    <footer class="bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
+                <div>
+                    <div class="flex items-center gap-2.5 mb-5">
+                        <div class="w-9 h-9 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-leaf text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-extrabold text-white">JeevBandhu</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-5">Empowering Indian farmers with AI-driven livestock health management and bio-safe marketplace transparency.</p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-9 h-9 bg-gray-800 hover:bg-emerald-600 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-all"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-9 h-9 bg-gray-800 hover:bg-emerald-600 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-all"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="w-9 h-9 bg-gray-800 hover:bg-emerald-600 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-all"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-5">Product</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="/register" class="text-gray-400 hover:text-emerald-400 transition">Dashboard</a></li>
+                        <li><a href="/register" class="text-gray-400 hover:text-emerald-400 transition">Marketplace</a></li>
+                        <li><a href="/register" class="text-gray-400 hover:text-emerald-400 transition">AI Diagnosis</a></li>
+                        <li><a href="/register" class="text-gray-400 hover:text-emerald-400 transition">Medicine Guide</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-5">Resources</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#features" class="text-gray-400 hover:text-emerald-400 transition">Features</a></li>
+                        <li><a href="#how-it-works" class="text-gray-400 hover:text-emerald-400 transition">How It Works</a></li>
+                        <li><a href="#why-us" class="text-gray-400 hover:text-emerald-400 transition">Why JeevBandhu</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-emerald-400 transition">Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-5">Legal</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="text-gray-400 hover:text-emerald-400 transition">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-emerald-400 transition">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-emerald-400 transition">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">&copy; 2026 JeevBandhu. All rights reserved.</p>
+                <p class="text-sm text-gray-500">Building trust in livestock commerce <i class="fas fa-heart text-emerald-500 text-xs"></i></p>
+            </div>
         </div>
     </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenuBtn.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenuBtn.classList.remove('active');
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('active');
+                });
+            });
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', (e) => {
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

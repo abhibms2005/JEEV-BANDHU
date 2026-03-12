@@ -5,201 +5,394 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List Product - JeevBandhu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body class="bg-gradient-to-br from-emerald-50 via-white to-blue-50 min-h-screen">
+<body class="min-h-screen" style="font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 25%, #f0f9ff 50%, #faf5ff 75%, #fff7ed 100%);">
+
     <!-- Navigation -->
-    <nav class="bg-white shadow-md">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav class="nav-glass">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="/dashboard" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
-
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="/dashboard" class="text-gray-700 hover:text-emerald-600 transition">Dashboard</a>
-                    <a href="/guide/medicine-guide" class="text-gray-700 hover:text-emerald-600 transition">Medicine
-                        Guide</a>
-                    <span class="text-gray-600">Hi, <%= user.name %></span>
-                    <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-red-600 hover:text-red-700 transition">Logout</button>
-                    </form>
+                <a href="/dashboard" class="flex items-center gap-2.5 group">
+                    <div class="w-9 h-9 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-emerald-200 transition-shadow">
+                        <i class="fas fa-leaf text-white text-sm"></i>
+                    </div>
+                    <span class="text-xl font-extrabold bg-gradient-to-r from-emerald-700 to-teal-600 bg-clip-text text-transparent" style="-webkit-background-clip:text;-webkit-text-fill-color:transparent;">JeevBandhu</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="/dashboard" class="nav-link-pill"><i class="fas fa-home text-xs"></i> Dashboard</a>
+                    <div class="dropdown-container">
+                        <button class="nav-link-pill dropdown-trigger">
+                            <i class="fas fa-seedling text-xs"></i> Farm <i class="fas fa-chevron-down text-[10px] ml-1 dd-arrow"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/animals/add" class="dropdown-item"><i class="fas fa-plus text-emerald-500 w-5"></i> Add Animal</a>
+                            <a href="/dashboard" class="dropdown-item"><i class="fas fa-chart-bar text-blue-500 w-5"></i> My Animals</a>
+                            <a href="/ai-assistant" class="dropdown-item"><i class="fas fa-robot text-purple-500 w-5"></i> AI Diagnosis</a>
+                            <a href="/guide/medicine-guide" class="dropdown-item"><i class="fas fa-capsules text-rose-500 w-5"></i> Medicine Guide</a>
+                            <a href="/compliance" class="dropdown-item"><i class="fas fa-shield-alt text-teal-500 w-5"></i> Biosecurity</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-container">
+                        <button class="nav-link-pill dropdown-trigger">
+                            <i class="fas fa-store text-xs"></i> Commerce <i class="fas fa-chevron-down text-[10px] ml-1 dd-arrow"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/marketplace" class="dropdown-item"><i class="fas fa-shopping-bag text-indigo-500 w-5"></i> Browse Marketplace</a>
+                            <a href="/list-product" class="dropdown-item"><i class="fas fa-plus-circle text-emerald-500 w-5"></i> List Product</a>
+                            <a href="/my-products" class="dropdown-item"><i class="fas fa-box text-amber-500 w-5"></i> My Products</a>
+                            <a href="/my-orders" class="dropdown-item"><i class="fas fa-receipt text-orange-500 w-5"></i> Sales</a>
+                        </div>
+                    </div>
+                    <a href="/community" class="nav-link-pill"><i class="fas fa-users text-xs"></i> Community</a>
+                    <div class="flex items-center ml-3 pl-3 border-l border-gray-200 gap-2">
+                        <div class="w-8 h-8 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                            <%= (user.name || 'U').charAt(0).toUpperCase() %>
+                        </div>
+                        <span class="text-gray-700 font-semibold text-sm"><%= user.name %></span>
+                        <form action="/logout" method="POST" class="inline ml-1">
+                            <button type="submit" class="text-gray-400 hover:text-red-500 transition-colors text-sm"><i class="fas fa-sign-out-alt"></i></button>
+                        </form>
+                    </div>
                 </div>
-
-                <!-- Mobile Hamburger Button -->
-                <button id="listProductMenuBtn"
-                    class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative">
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700"></span>
+                <button id="listProductMenuBtn" class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative">
+                    <span class="block w-5 h-0.5 bg-gray-700 mb-1 rounded transition-all"></span>
+                    <span class="block w-5 h-0.5 bg-gray-700 mb-1 rounded transition-all"></span>
+                    <span class="block w-5 h-0.5 bg-gray-700 rounded transition-all"></span>
                 </button>
             </div>
         </div>
-
-        <!-- Mobile Menu Overlay -->
-        <div id="listProductMenu"
-            class="mobile-menu hidden fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-40 md:hidden overflow-y-auto">
-            <div class="flex flex-col p-6 pt-20 space-y-4">
-                <a href="/dashboard"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">🏠
-                    Dashboard</a>
-                <a href="/guide/medicine-guide"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">💊 Medicine
-                    Guide</a>
-                <a href="/list-product" class="text-emerald-600 font-semibold py-2 border-b border-gray-200">➕ List
-                    Product</a>
-                <a href="/my-products"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">📦 My
-                    Products</a>
-                <a href="/marketplace"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">🛒
-                    Marketplace</a>
-                <span class="text-gray-600 px-3 py-2 bg-emerald-50 rounded-full text-center text-sm">Hi, <%= user.name
-                        %></span>
-                <form action="/logout" method="POST" class="inline">
-                    <button type="submit"
-                        class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2">Logout</button>
-                </form>
+        <!-- Mobile Menu -->
+        <div id="listProductMenu" class="mobile-menu hidden fixed top-16 right-0 h-screen w-80 bg-white shadow-2xl z-40 md:hidden overflow-y-auto">
+            <div class="flex flex-col p-5 space-y-1">
+                <div class="flex items-center gap-3 p-4 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl mb-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold shadow-md"><%= (user.name || 'U').charAt(0).toUpperCase() %></div>
+                    <div><p class="font-semibold text-gray-800 text-sm"><%= user.name %></p><p class="text-xs text-emerald-600">Farmer</p></div>
+                </div>
+                <a href="/dashboard" class="mobile-nav-item"><i class="fas fa-home text-emerald-500 w-5"></i> Dashboard</a>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider px-4 pt-3 pb-1">Farm</p>
+                <a href="/animals/add" class="mobile-nav-item"><i class="fas fa-plus text-emerald-500 w-5"></i> Add Animal</a>
+                <a href="/ai-assistant" class="mobile-nav-item"><i class="fas fa-robot text-purple-500 w-5"></i> AI Diagnosis</a>
+                <a href="/guide/medicine-guide" class="mobile-nav-item"><i class="fas fa-capsules text-rose-500 w-5"></i> Medicine Guide</a>
+                <a href="/compliance" class="mobile-nav-item"><i class="fas fa-shield-alt text-teal-500 w-5"></i> Biosecurity</a>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider px-4 pt-3 pb-1">Commerce</p>
+                <a href="/marketplace" class="mobile-nav-item"><i class="fas fa-shopping-bag text-indigo-500 w-5"></i> Marketplace</a>
+                <a href="/list-product" class="mobile-nav-item"><i class="fas fa-plus-circle text-emerald-500 w-5"></i> List Product</a>
+                <a href="/my-products" class="mobile-nav-item"><i class="fas fa-box text-amber-500 w-5"></i> My Products</a>
+                <a href="/my-orders" class="mobile-nav-item"><i class="fas fa-receipt text-orange-500 w-5"></i> Sales</a>
+                <div class="pt-3 mt-3 border-t border-gray-100">
+                    <form action="/logout" method="POST">
+                        <button type="submit" class="mobile-nav-item text-red-500 hover:bg-red-50 w-full text-left"><i class="fas fa-sign-out-alt w-5"></i> Logout</button>
+                    </form>
+                </div>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">📦 List New Product</h1>
-            <p class="text-gray-600 mt-2">Add a product to the bio-safe verified marketplace</p>
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <!-- Page Header -->
+        <div class="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-amber-200">
+                        <i class="fas fa-box-open text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900">List New Product</h1>
+                        <p class="text-gray-500 text-sm">Add a product to the bio-safe verified marketplace</p>
+                    </div>
+                </div>
+            </div>
+            <a href="/my-products" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-gray-600 bg-white border border-gray-200 rounded-xl hover:border-emerald-300 hover:text-emerald-600 transition-all shadow-sm">
+                <i class="fas fa-box"></i> My Products
+            </a>
         </div>
 
-        <form id="productForm" class="card">
-            <div id="errorDiv" class="hidden mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg"></div>
+        <!-- Steps Indicator -->
+        <div class="flex items-center gap-3 mb-8 px-1">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
+                <span class="text-sm font-semibold text-emerald-700 hidden sm:inline">Source</span>
+            </div>
+            <div class="flex-1 h-0.5 bg-emerald-200 rounded"></div>
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
+                <span class="text-sm font-semibold text-blue-700 hidden sm:inline">Details</span>
+            </div>
+            <div class="flex-1 h-0.5 bg-blue-200 rounded"></div>
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
+                <span class="text-sm font-semibold text-amber-700 hidden sm:inline">Pricing</span>
+            </div>
+            <div class="flex-1 h-0.5 bg-amber-200 rounded"></div>
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center text-xs font-bold">4</div>
+                <span class="text-sm font-semibold text-purple-700 hidden sm:inline">Publish</span>
+            </div>
+        </div>
 
-            <div class="space-y-6">
-                <!-- Source Animal -->
-                <div>
-                    <label for="animalId" class="block text-sm font-medium text-gray-700 mb-1">
-                        🐮 Source Animal <span class="text-red-500">*</span>
-                    </label>
-                    <% if (animals.length===0) { %>
-                        <div class="p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded-lg">
-                            <strong>⚠️ No healthy animals available.</strong> All your animals are currently under
-                            withdrawal or quarantine.
+        <form id="productForm">
+            <div id="errorDiv" class="hidden mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex items-center gap-3">
+                <i class="fas fa-exclamation-circle text-red-500 text-lg"></i>
+                <span id="errorText"></span>
+            </div>
+
+            <!-- Section 1: Source Animal -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-5 overflow-hidden">
+                <div class="px-6 py-4 bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-emerald-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 bg-emerald-600 rounded-xl flex items-center justify-center text-white text-sm">
+                            <i class="fas fa-cow"></i>
                         </div>
-                        <% } else { %>
-                            <select id="animalId" name="animalId" required class="input-field">
-                                <option value="">Select an animal</option>
-                                <% animals.forEach(animal=> { %>
-                                    <option value="<%= animal._id %>">
-                                        <%= animal.tagId %> - <%= animal.species %> (Health: <%= animal.healthScore %>)
-                                    </option>
-                                    <% }) %>
-                            </select>
-                            <p class="mt-1 text-sm text-green-600">✅ Only healthy, verified animals are shown</p>
-                            <% } %>
-                </div>
-
-                <!-- Product Type -->
-                <div>
-                    <label for="productType" class="block text-sm font-medium text-gray-700 mb-1">
-                        🥛 Product Type <span class="text-red-500">*</span>
-                    </label>
-                    <select id="productType" name="productType" required class="input-field">
-                        <option value="">Select product type</option>
-                        <option value="Milk">Milk</option>
-                        <option value="Ghee">Ghee</option>
-                        <option value="Cheese">Cheese</option>
-                        <option value="Butter">Butter</option>
-                        <option value="Paneer">Paneer</option>
-                        <option value="Yogurt">Yogurt</option>
-                        <option value="Meat">Meat</option>
-                        <option value="Eggs">Eggs</option>
-                        <option value="Wool">Wool</option>
-                    </select>
-                </div>
-
-                <!-- Quantity and Unit -->
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label for="totalQuantity" class="block text-sm font-medium text-gray-700 mb-1">
-                            📊 Total Quantity <span class="text-red-500">*</span>
-                        </label>
-                        <input type="number" id="totalQuantity" name="totalQuantity" required min="0.1" step="0.1"
-                            class="input-field" placeholder="e.g., 50">
-                        <p class="mt-1 text-xs text-gray-500">Total available for sale</p>
+                        <div>
+                            <h2 class="font-bold text-gray-900">Source Animal</h2>
+                            <p class="text-xs text-gray-500">Select the verified animal for this product</p>
+                        </div>
                     </div>
-
-                    <div>
-                        <label for="unit" class="block text-sm font-medium text-gray-700 mb-1">
-                            📏 Unit
-                        </label>
-                        <select id="unit" name="unit" class="input-field">
-                            <option value="liters">Liters</option>
-                            <option value="kg">Kilograms</option>
-                            <option value="units">Units</option>
-                            <option value="dozen">Dozen</option>
+                </div>
+                <div class="p-6">
+                    <% if (animals.length===0) { %>
+                        <div class="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                            <i class="fas fa-exclamation-triangle text-amber-500 mt-0.5"></i>
+                            <div>
+                                <p class="font-semibold text-amber-800 text-sm">No healthy animals available</p>
+                                <p class="text-xs text-amber-600 mt-1">All your animals are currently under withdrawal or quarantine. <a href="/animals/add" class="underline font-semibold">Add a new animal</a></p>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <select id="animalId" name="animalId" required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-gray-50 hover:bg-white">
+                            <option value="">Choose a healthy animal...</option>
+                            <% animals.forEach(animal => { %>
+                                <option value="<%= animal._id %>">
+                                    <%= animal.tagId %> — <%= animal.species %> (Health: <%= animal.healthScore %>/100)
+                                </option>
+                            <% }) %>
                         </select>
-                    </div>
-                </div>
-
-                <!-- Price Per Unit -->
-                <div>
-                    <label for="pricePerUnit" class="block text-sm font-medium text-gray-700 mb-1">
-                        💰 Price per Unit (₹) <span class="text-red-500">*</span>
-                    </label>
-                    <input type="number" id="pricePerUnit" name="pricePerUnit" required min="0.01" step="0.01"
-                        class="input-field" placeholder="e.g., 60">
-                    <p class="mt-1 text-xs text-gray-500">Price per liter/kg/unit</p>
-                </div>
-
-                <!-- Min Order Quantity -->
-                <div>
-                    <label for="minOrderQuantity" class="block text-sm font-medium text-gray-700 mb-1">
-                        📦 Minimum Order Quantity
-                    </label>
-                    <input type="number" id="minOrderQuantity" name="minOrderQuantity" min="0.1" step="0.1" value="1"
-                        class="input-field" placeholder="e.g., 1">
-                    <p class="mt-1 text-xs text-gray-500">Minimum quantity buyers must order</p>
-                </div>
-
-                <!-- Total Value Preview -->
-                <div id="valuePreview" class="hidden p-4 bg-emerald-50 border-2 border-emerald-200 rounded-lg">
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-700 font-medium">📈 Total Inventory Value:</span>
-                        <span id="totalValue" class="text-2xl font-bold text-emerald-600">₹0</span>
-                    </div>
-                    <p class="text-sm text-gray-600 mt-2" id="valueCalculation"></p>
-                </div>
-
-                <!-- Description -->
-                <div>
-                    <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
-                        📝 Description (Optional)
-                    </label>
-                    <textarea id="description" name="description" rows="3" class="input-field"
-                        placeholder="Tell buyers about your product quality, farming practices, etc..."></textarea>
+                        <div class="flex items-center gap-2 mt-3 px-1">
+                            <div class="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-green-600 text-[10px]"></i>
+                            </div>
+                            <p class="text-xs text-green-600 font-medium">Only healthy, bio-safe verified animals are shown</p>
+                        </div>
+                    <% } %>
                 </div>
             </div>
 
-            <div class="mt-6 flex space-x-4">
-                <button type="submit" class="flex-1 btn-primary" <%=animals.length===0 ? 'disabled' : '' %>>
-                    ✅ List Product
+            <!-- Section 2: Product Details -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-5 overflow-hidden">
+                <div class="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-white text-sm">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-gray-900">Product Details</h2>
+                            <p class="text-xs text-gray-500">Type, quantity and packaging info</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 space-y-5">
+                    <!-- Product Type -->
+                    <div>
+                        <label for="productType" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Product Type <span class="text-red-500">*</span>
+                        </label>
+                        <select id="productType" name="productType" required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-gray-50 hover:bg-white">
+                            <option value="">Select product type</option>
+                            <option value="Milk">🥛 Milk</option>
+                            <option value="Ghee">🧈 Ghee</option>
+                            <option value="Cheese">🧀 Cheese</option>
+                            <option value="Butter">🧈 Butter</option>
+                            <option value="Paneer">🫕 Paneer</option>
+                            <option value="Yogurt">🥣 Yogurt</option>
+                            <option value="Meat">🥩 Meat</option>
+                            <option value="Eggs">🥚 Eggs</option>
+                            <option value="Wool">🧶 Wool</option>
+                        </select>
+                    </div>
+
+                    <!-- Grid: Quantity & Unit -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="totalQuantity" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Total Quantity <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <input type="number" id="totalQuantity" name="totalQuantity" required min="0.1" step="0.1"
+                                    class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-gray-50 hover:bg-white"
+                                    placeholder="e.g., 50">
+                            </div>
+                            <p class="mt-1.5 text-xs text-gray-400">Total available for sale</p>
+                        </div>
+                        <div>
+                            <label for="unit" class="block text-sm font-semibold text-gray-700 mb-2">Unit</label>
+                            <select id="unit" name="unit" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-gray-50 hover:bg-white">
+                                <option value="liters">Liters</option>
+                                <option value="kg">Kilograms</option>
+                                <option value="units">Units</option>
+                                <option value="dozen">Dozen</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Pricing -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-5 overflow-hidden">
+                <div class="px-6 py-4 bg-gradient-to-r from-amber-50 to-orange-50 border-b border-amber-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 bg-amber-500 rounded-xl flex items-center justify-center text-white text-sm">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-gray-900">Pricing</h2>
+                            <p class="text-xs text-gray-500">Set competitive pricing for your product</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 space-y-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="pricePerUnit" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Price per Unit (₹) <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold text-sm">₹</span>
+                                <input type="number" id="pricePerUnit" name="pricePerUnit" required min="0.01" step="0.01"
+                                    class="w-full pl-8 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all bg-gray-50 hover:bg-white"
+                                    placeholder="60.00">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="minOrderQuantity" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Min Order Qty
+                            </label>
+                            <input type="number" id="minOrderQuantity" name="minOrderQuantity" min="0.1" step="0.1" value="1"
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all bg-gray-50 hover:bg-white"
+                                placeholder="1">
+                        </div>
+                    </div>
+
+                    <!-- Live Value Preview -->
+                    <div id="valuePreview" class="hidden">
+                        <div class="p-5 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-xl">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-chart-line text-emerald-600"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 font-medium">Total Inventory Value</p>
+                                        <p class="text-xs text-gray-400 mt-0.5" id="valueCalculation"></p>
+                                    </div>
+                                </div>
+                                <span id="totalValue" class="text-2xl font-extrabold text-emerald-600">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Description -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6 overflow-hidden">
+                <div class="px-6 py-4 bg-gradient-to-r from-purple-50 to-pink-50 border-b border-purple-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 bg-purple-600 rounded-xl flex items-center justify-center text-white text-sm">
+                            <i class="fas fa-pen-fancy"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-gray-900">Description</h2>
+                            <p class="text-xs text-gray-500">Tell buyers about your product (optional)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <textarea id="description" name="description" rows="4"
+                        class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all bg-gray-50 hover:bg-white resize-none"
+                        placeholder="Share details about quality, freshness, farming practices, certifications..."></textarea>
+                    <p class="mt-2 text-xs text-gray-400">A good description helps buyers trust your product more</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button type="submit" class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-emerald-200 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0" <%= animals.length===0 ? 'disabled' : '' %>>
+                    <i class="fas fa-rocket"></i> Publish to Marketplace
                 </button>
-                <a href="/dashboard" class="flex-1 btn-secondary text-center">
-                    ❌ Cancel
+                <a href="/dashboard" class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white text-gray-600 font-semibold rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all">
+                    <i class="fas fa-arrow-left"></i> Cancel
                 </a>
             </div>
         </form>
 
         <!-- Info Box -->
-        <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <h3 class="font-semibold text-blue-900 mb-2">ℹ️ How Quantity-Based Listing Works</h3>
-            <ul class="text-sm text-blue-800 space-y-1">
-                <li>• Set your <strong>total available quantity</strong> and <strong>price per unit</strong></li>
-                <li>• Buyers can order any amount (above minimum) from your inventory</li>
-                <li>• Available quantity updates automatically after each order</li>
-                <li>• Only bio-safe verified products appear in the marketplace</li>
-            </ul>
+        <div class="mt-8 bg-white rounded-2xl border border-blue-100 overflow-hidden shadow-sm">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
+                <h3 class="font-bold text-blue-900 flex items-center gap-2">
+                    <i class="fas fa-info-circle text-blue-500"></i> How Quantity-Based Listing Works
+                </h3>
+            </div>
+            <div class="p-6">
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fas fa-boxes-stacked text-emerald-600 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">Set Inventory</p>
+                            <p class="text-xs text-gray-500">Define total quantity and price per unit</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fas fa-cart-shopping text-blue-600 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">Flexible Orders</p>
+                            <p class="text-xs text-gray-500">Buyers order any amount above your minimum</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fas fa-rotate text-amber-600 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">Auto Update</p>
+                            <p class="text-xs text-gray-500">Stock adjusts automatically after each order</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fas fa-shield-halved text-green-600 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">Bio-Safe Verified</p>
+                            <p class="text-xs text-gray-500">Only compliant products appear in marketplace</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center"><i class="fas fa-leaf text-white text-xs"></i></div>
+                    <span class="font-bold text-white">JeevBandhu</span>
+                </div>
+                <p class="text-sm">&copy; 2026 JeevBandhu. Ensuring Bio-Safe Livestock Products.</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
         const totalQtyInput = document.getElementById('totalQuantity');
@@ -209,7 +402,6 @@
         const totalValue = document.getElementById('totalValue');
         const valueCalculation = document.getElementById('valueCalculation');
 
-        // Update total value preview
         function updateValuePreview() {
             const qty = parseFloat(totalQtyInput.value) || 0;
             const price = parseFloat(pricePerUnitInput.value) || 0;
@@ -245,50 +437,39 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    alert('✅ Product listed successfully in the marketplace!');
+                    alert('Product listed successfully in the marketplace!');
                     window.location.href = '/my-products';
                 } else {
                     const errorDiv = document.getElementById('errorDiv');
-                    errorDiv.textContent = '❌ ' + result.error + (result.details ? ' ' + result.details : '');
+                    const errorText = document.getElementById('errorText');
+                    errorText.textContent = result.error + (result.details ? ' ' + result.details : '');
                     errorDiv.classList.remove('hidden');
-
-                    if (result.blocked) {
-                        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
+                    errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             } catch (error) {
-                alert('❌ Failed to list product. Please try again.');
+                alert('Failed to list product. Please try again.');
             }
         });
 
-        // Mobile menu toggle
+        // Dropdown logic
+        document.querySelectorAll('.dropdown-container').forEach(container => {
+            const trigger = container.querySelector('.dropdown-trigger');
+            const menu = container.querySelector('.dropdown-menu');
+            const arrow = trigger.querySelector('.dd-arrow');
+            let timeout;
+            container.addEventListener('mouseenter', () => { clearTimeout(timeout); menu.classList.add('active'); if(arrow) arrow.style.transform='rotate(180deg)'; });
+            container.addEventListener('mouseleave', () => { timeout = setTimeout(() => { menu.classList.remove('active'); if(arrow) arrow.style.transform='rotate(0deg)'; }, 150); });
+            trigger.addEventListener('click', (e) => { e.stopPropagation(); const a=menu.classList.contains('active'); document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('active')); if(!a) menu.classList.add('active'); });
+        });
+        document.addEventListener('click', () => { document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('active')); document.querySelectorAll('.dd-arrow').forEach(a=>a.style.transform='rotate(0deg)'); });
+
+        // Mobile menu
         const listProductMenuBtn = document.getElementById('listProductMenuBtn');
         const listProductMenu = document.getElementById('listProductMenu');
-
         if (listProductMenuBtn && listProductMenu) {
-            listProductMenuBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                listProductMenu.classList.toggle('hidden');
-                listProductMenu.classList.toggle('active');
-                listProductMenuBtn.classList.toggle('active');
-            });
-
-            document.addEventListener('click', function (e) {
-                if (listProductMenu && !listProductMenu.contains(e.target) && !listProductMenuBtn.contains(e.target)) {
-                    listProductMenu.classList.add('hidden');
-                    listProductMenu.classList.remove('active');
-                    listProductMenuBtn.classList.remove('active');
-                }
-            });
-
-            const listProductLinks = listProductMenu.querySelectorAll('a');
-            listProductLinks.forEach(link => {
-                link.addEventListener('click', function () {
-                    listProductMenu.classList.add('hidden');
-                    listProductMenu.classList.remove('active');
-                    listProductMenuBtn.classList.remove('active');
-                });
-            });
+            listProductMenuBtn.addEventListener('click', (e) => { e.stopPropagation(); listProductMenuBtn.classList.toggle('active'); listProductMenu.classList.toggle('active'); listProductMenu.classList.toggle('hidden'); });
+            document.addEventListener('click', (e) => { if (!listProductMenu.contains(e.target) && !listProductMenuBtn.contains(e.target)) { listProductMenu.classList.add('hidden'); listProductMenu.classList.remove('active'); listProductMenuBtn.classList.remove('active'); } });
+            listProductMenu.querySelectorAll('a, button[type="submit"]').forEach(link => { link.addEventListener('click', () => { listProductMenuBtn.classList.remove('active'); listProductMenu.classList.add('hidden'); listProductMenu.classList.remove('active'); }); });
         }
     </script>
 </body>

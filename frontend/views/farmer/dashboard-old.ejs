@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - JeevBandhu</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <style>
+        /* Dropdown menu styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            z-index: 100;
+            top: 100%;
+            left: 0;
+            margin-top: 0px;
+            /* Remove gap */
+            padding-top: 8px;
+            /* Add internal padding instead */
+        }
+
+        .dropdown-content a {
+            color: #374151;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f3f4f6;
+            color: #059669;
+        }
+
+        .dropdown-content a:first-child {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-trigger {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Ensure dropdown stays visible when hovering over content */
+        .dropdown-content:hover {
+            display: block;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Navigation with Organized Dropdowns -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/dashboard" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/dashboard" class="text-emerald-600 font-semibold">🏠 Dashboard</a>
+
+                    <!-- Farm Management Dropdown -->
+                    <div class="dropdown">
+                        <span class="dropdown-trigger text-gray-700 hover:text-emerald-600 transition">🌾 Farm ▾</span>
+                        <div class="dropdown-content">
+                            <a href="/animals/add">➕ Add Animal</a>
+                            <a href="/dashboard">📊 My Animals</a>
+                            <a href="/ai-assistant">🩺 AI Diagnosis</a>
+                            <a href="/guide/medicine-guide">💊 Medicine Guide</a>
+                            <a href="/compliance">✅ Biosecurity</a>
+                        </div>
+                    </div>
+
+                    <!-- Commerce Dropdown -->
+                    <div class="dropdown">
+                        <span class="dropdown-trigger text-gray-700 hover:text-emerald-600 transition">💼 Commerce
+                            ▾</span>
+                        <div class="dropdown-content">
+                            <a href="/marketplace">🛒 Browse Marketplace</a>
+                            <a href="/list-product">➕ List Product</a>
+                            <a href="/my-products">📦 My Products</a>
+                            <a href="/orders/sales">💰 Sales</a>
+                        </div>
+                    </div>
+
+                    <a href="/community" class="text-gray-700 hover:text-emerald-600 transition">👥 Community</a>
+                    <span class="text-gray-600">Hi, <%= user.name %></span>
+                    <form action="/logout" method="POST" class="inline">
+                        <button type="submit" class="text-red-600 hover:text-red-700 transition">Logout</button>
+                    </form>
+                </div>
+
+                <!-- Mobile Hamburger Button -->
+                <button id="dashboardMenuBtn"
+                    class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative">
+                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
+                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
+                    <span class="block w-6 h-0.5 bg-gray-700"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="dashboardMenu"
+            class="mobile-menu hidden fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-40 md:hidden overflow-y-auto">
+            <div class="flex flex-col p-6 pt-20 space-y-4">
+                <a href="/dashboard" class="text-emerald-600 font-semibold py-2 border-b border-gray-200">🏠
+                    Dashboard</a>
+
+                <!-- Farm Section in Mobile -->
+                <div class="text-gray-500 text-xs font-semibold uppercase mt-2">Farm Management</div>
+                <a href="/animals/add"
+                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">➕ Add
+                    Animal</a>
+                <a href="/dashboard"
+                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">📊 My
+                    Animals</a>
+                <a href="/ai-assistant"
+                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">🩺 AI
+                    Diagnosis</a>
+                <a href="/guide/medicine-guide"
+                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">💊
+                    Medicine Guide</a>
+                <a href="/compliance"
+                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-200">✅
+                    Biosecurity</a>
+
+                <!-- Commerce Section in Mobile -->
+                <div class="text-gray-500 text-xs font-semibold uppercase mt-2">Commerce</div>
+                <a href="/marketplace"
+                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">🛒
+                    Browse Marketplace</a>
+                <a href="/list-product"
+                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">➕ List
+                    Product</a>
+                <a href="/my-products"
+                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">📦 My
+                    Products</a>
+                <a href="/orders/sales"
+                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-200">💰
+                    Sales</a>
+
+                <a href="/community"
+                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">👥
+                    Community</a>
+                <span class="text-gray-600 px-3 py-2 bg-emerald-50 rounded-full text-center text-sm">Hi, <%= user.name
+                        %></span>
+                <form action="/logout" method="POST" class="inline">
+                    <button type="submit"
+                        class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2">Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">My Herd Dashboard</h1>
+            <p class="text-gray-600 mt-2">Manage your livestock and monitor health status</p>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="card bg-gradient-to-br from-green-50 to-emerald-100">
+                <h3 class="text-sm font-medium text-gray-600">Total Animals</h3>
+                <p class="text-3xl font-bold text-gray-900 mt-2">
+                    <%= stats.total %>
+                </p>
+            </div>
+
+            <div class="card bg-gradient-to-br from-emerald-50 to-green-100">
+                <h3 class="text-sm font-medium text-gray-600">Healthy</h3>
+                <p class="text-3xl font-bold text-health-good mt-2">
+                    <%= stats.healthy %>
+                </p>
+            </div>
+
+            <div class="card bg-gradient-to-br from-red-50 to-pink-100">
+                <h3 class="text-sm font-medium text-gray-600">Withdrawal Lock</h3>
+                <p class="text-3xl font-bold text-health-danger mt-2">
+                    <%= stats.locked %>
+                </p>
+            </div>
+
+            <div class="card bg-gradient-to-br from-blue-50 to-indigo-100">
+                <h3 class="text-sm font-medium text-gray-600">Avg Health Score</h3>
+                <p class="text-3xl font-bold text-gray-900 mt-2">
+                    <%= stats.avgHealthScore %>
+                </p>
+            </div>
+        </div>
+
+        <!-- Health Score Reasoning -->
+        <div class="card mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200">
+            <div class="flex items-start justify-between mb-6">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                        📊 Health Score Breakdown
+                    </h2>
+                    <p class="text-sm text-gray-600 mt-2">Understanding your herd's health score calculation</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-4xl font-bold text-blue-600">
+                        <%= stats.avgHealthScore %>
+                    </div>
+                    <p class="text-xs text-gray-600">Average Score</p>
+                </div>
+            </div>
+
+            <!-- Toggle Button -->
+            <div class="mb-4">
+                <button onclick="toggleHealthInfo()"
+                    class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md">
+                    <span id="healthInfoIcon">ℹ️</span>
+                    <span id="healthInfoText">How is health calculated?</span>
+                </button>
+            </div>
+
+            <!-- Collapsible Details Panel -->
+            <div id="healthInfoPanel" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <!-- Medical History Factor -->
+                    <div class="bg-white p-5 rounded-lg border border-blue-200 shadow-sm">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-2xl">💊</span>
+                            <h3 class="font-semibold text-gray-900">Medical History</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3">Recent treatments and interventions</p>
+                        <div class="flex items-center gap-2">
+                            <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                            <span class="text-xs font-semibold">85%</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-3">Fewer recent treatments = better score</p>
+                    </div>
+
+                    <!-- Withdrawal Compliance Factor -->
+                    <div class="bg-white p-5 rounded-lg border border-blue-200 shadow-sm">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-2xl">⏰</span>
+                            <h3 class="font-semibold text-gray-900">Withdrawal Status</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3">Medicine withdrawal period tracking</p>
+                        <div class="flex items-center gap-2">
+                            <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 70%"></div>
+                            </div>
+                            <span class="text-xs font-semibold">70%</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-3">No locked animals = optimal score</p>
+                    </div>
+
+                    <!-- Biosecurity Compliance Factor -->
+                    <div class="bg-white p-5 rounded-lg border border-blue-200 shadow-sm">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-2xl">🛡️</span>
+                            <h3 class="font-semibold text-gray-900">Biosecurity</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3">Safety and compliance measures</p>
+                        <div class="flex items-center gap-2">
+                            <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: <%= stats.biosecurityScore %>%">
+                                </div>
+                            </div>
+                            <span class="text-xs font-semibold">
+                                <%= stats.biosecurityScore %>%
+                            </span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-3">
+                            <a href="/compliance" class="text-blue-600 hover:underline">View compliance tracker</a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-blue-100 p-4 rounded-lg border border-blue-300">
+                    <p class="text-sm text-gray-700">
+                        <span class="font-semibold">💡 Tip:</span> Maintain high biosecurity compliance and keep animals
+                        healthy to improve your overall health score.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function toggleHealthInfo() {
+                const panel = document.getElementById('healthInfoPanel');
+                const icon = document.getElementById('healthInfoIcon');
+                const text = document.getElementById('healthInfoText');
+
+                if (panel.classList.contains('hidden')) {
+                    panel.classList.remove('hidden');
+                    icon.textContent = '▼';
+                    text.textContent = 'Hide calculation details';
+                } else {
+                    panel.classList.add('hidden');
+                    icon.textContent = 'ℹ️';
+                    text.textContent = 'How is health calculated?';
+                }
+            }
+        </script>
+
+
+        <% if (animals.length===0) { %>
+            <div class="text-center py-16">
+                <div class="text-6xl mb-4">🐄</div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">No animals yet</h2>
+                <p class="text-gray-600 mb-6">Start by adding your first animal to the system</p>
+                <a href="/animals/add" class="btn-primary">Add First Animal</a>
+            </div>
+            <% } else { %>
+                <!-- Herd Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <% animals.forEach(animal=> { %>
+                        <div class="card border-4 
+            <%= animal.status === 'HEALTHY' ? 'status-healthy' : '' %>
+            <%= animal.status === 'WITHDRAWAL_LOCK' ? 'status-locked' : '' %>
+            <%= animal.status === 'QUARANTINE' ? 'status-quarantine' : '' %>">
+
+                            <!-- Animal Header -->
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-900">
+                                        <%= animal.tagId %>
+                                    </h3>
+                                    <p class="text-sm text-gray-600">
+                                        <%= animal.species %>
+                                            <% if (animal.breed) { %> - <%= animal.breed %>
+                                                    <% } %>
+                                    </p>
+                                </div>
+
+                                <!-- Status Badge with Icon -->
+                                <div class="flex items-center gap-2">
+                                    <% if (animal.status==='HEALTHY' ) { %>
+                                        <span class="text-2xl">✅</span>
+                                        <% } else if (animal.status==='WITHDRAWAL_LOCK' ) { %>
+                                            <span class="text-2xl">🔒</span>
+                                            <% } else if (animal.status==='QUARANTINE' ) { %>
+                                                <span class="text-2xl">⚠️</span>
+                                                <% } %>
+                                                    <span class="px-3 py-1 rounded-full text-xs font-semibold
+                                        <%= animal.status === 'HEALTHY' ? 'bg-green-200 text-green-800' : '' %>
+                                        <%= animal.status === 'WITHDRAWAL_LOCK' ? 'bg-red-200 text-red-800' : '' %>
+                                        <%= animal.status === 'QUARANTINE' ? 'bg-yellow-200 text-yellow-800' : '' %>">
+                                                        <%= animal.status %>
+                                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Health Score -->
+                            <div class="mb-4">
+                                <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                    <span>Health Score</span>
+                                    <span class="font-semibold">
+                                        <%= animal.healthScore %>/100
+                                    </span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="h-2 rounded-full
+                  <%= animal.healthScore >= 70 ? 'bg-health-good' : '' %>
+                  <%= animal.healthScore >= 40 && animal.healthScore < 70 ? 'bg-health-warning' : '' %>
+                  <%= animal.healthScore < 40 ? 'bg-health-danger' : '' %>" style="width: <%= animal.healthScore %>%">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Withdrawal Warning -->
+                            <% if (animal.status==='WITHDRAWAL_LOCK' && animal.withdrawalEndsAt) { %>
+                                <% const now=new Date(); const diff=new Date(animal.withdrawalEndsAt) - now; const
+                                    daysRemaining=Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24))); %>
+                                    <div
+                                        class="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded-lg mb-4 text-sm">
+                                        <strong>🔒 LOCKED:</strong>
+                                        <%= daysRemaining %> day(s) remaining
+                                    </div>
+                                    <% } else if (animal.status==='HEALTHY' ) { %>
+                                        <div
+                                            class="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded-lg mb-4 text-sm">
+                                            <strong>✅ Ready</strong> for production
+                                        </div>
+                                        <% } %>
+
+                                            <!-- Actions -->
+                                            <div class="grid grid-cols-2 gap-2 mb-2">
+                                                <a href="/animals/<%= animal._id %>"
+                                                    class="text-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
+                                                    View Details
+                                                </a>
+                                                <a href="/animals/<%= animal._id %>/add-medicine"
+                                                    class="text-center px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition text-sm">
+                                                    Add Medicine
+                                                </a>
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <button
+                                                    onclick="openWeightModal('<%= animal._id %>', '<%= animal.name %>')"
+                                                    class="px-3 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition text-sm">
+                                                    📊 Log Weight
+                                                </button>
+                                                <button
+                                                    onclick="openFeedModal('<%= animal._id %>', '<%= animal.name %>')"
+                                                    class="px-3 py-2 bg-yellow-500 text-black rounded-lg hover:bg-yellow-600 transition text-sm font-semibold shadow-md">
+                                                    🌾 Log Feed
+                                                </button>
+                                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+                <% } %>
+    </main>
+
+    <!-- Weight Logging Modal -->
+    <div id="weightModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">📊 Log Animal Weight</h2>
+            <form id="weightForm">
+                <input type="hidden" id="weightAnimalId">
+                <input type="hidden" id="weightAnimalName">
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Weight (kg)</label>
+                    <input type="number" id="weightValue" step="0.1" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                    <input type="date" id="weightDate" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
+                    <textarea id="weightNotes" rows="2"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-4">
+                    <button type="button" onclick="closeWeightModal()"
+                        class="px-8 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-semibold">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="px-8 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-semibold">
+                        Save Weight
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Feed Logging Modal -->
+    <div id="feedModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">🌾 Log Feed Consumption</h2>
+            <form id="feedForm">
+                <input type="hidden" id="feedAnimalId">
+                <input type="hidden" id="feedAnimalName">
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Feed Amount (kg)</label>
+                    <input type="number" id="feedAmount" step="0.1" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Feed Type</label>
+                    <select id="feedType"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500">
+                        <option value="Standard Feed">Standard Feed</option>
+                        <option value="Protein Mix">Protein Mix</option>
+                        <option value="Grains">Grains</option>
+                        <option value="Hay">Hay</option>
+                        <option value="Silage">Silage</option>
+                        <option value="Custom Mix">Custom Mix</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                    <input type="date" id="feedDate" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
+                    <textarea id="feedNotes" rows="2"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-4">
+                    <button type="button" onclick="closeFeedModal()"
+                        class="px-8 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-semibold">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="px-8 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition font-bold shadow-md">
+                        Save Feed Record
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date as default
+        document.getElementById('weightDate').valueAsDate = new Date();
+        document.getElementById('feedDate').valueAsDate = new Date();
+
+        // Weight Modal Functions
+        function openWeightModal(animalId, animalName) {
+            document.getElementById('weightAnimalId').value = animalId;
+            document.getElementById('weightAnimalName').value = animalName;
+            document.getElementById('weightModal').classList.remove('hidden');
+        }
+
+        function closeWeightModal() {
+            document.getElementById('weightModal').classList.add('hidden');
+            document.getElementById('weightForm').reset();
+        }
+
+        // Feed Modal Functions
+        function openFeedModal(animalId, animalName) {
+            document.getElementById('feedAnimalId').value = animalId;
+            document.getElementById('feedAnimalName').value = animalName;
+            document.getElementById('feedModal').classList.remove('hidden');
+        }
+
+        function closeFeedModal() {
+            document.getElementById('feedModal').classList.add('hidden');
+            document.getElementById('feedForm').reset();
+        }
+
+        // Handle Weight Form Submission
+        document.getElementById('weightForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const data = {
+                animalId: document.getElementById('weightAnimalId').value,
+                weight: document.getElementById('weightValue').value,
+                recordedDate: document.getElementById('weightDate').value,
+                notes: document.getElementById('weightNotes').value
+            };
+
+            try {
+                const response = await fetch('/api/animals/weight', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('✅ Weight recorded successfully! Page will refresh to update dashboard.');
+                    closeWeightModal();
+                    // Reload page to update dashboard
+                    window.location.reload();
+                } else {
+                    alert(`❌ ${result.error}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Failed to record weight. Please try again.');
+            }
+        });
+
+        // Handle Feed Form Submission
+        document.getElementById('feedForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const data = {
+                animalId: document.getElementById('feedAnimalId').value,
+                feedAmount: document.getElementById('feedAmount').value,
+                feedType: document.getElementById('feedType').value,
+                feedDate: document.getElementById('feedDate').value,
+                notes: document.getElementById('feedNotes').value
+            };
+
+            try {
+                const response = await fetch('/api/animals/feed', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('✅ Feed consumption recorded successfully! Page will refresh to update dashboard.');
+                    closeFeedModal();
+                    // Reload page to update dashboard
+                    window.location.reload();
+                } else {
+                    alert(`❌ ${result.error}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Failed to record feed. Please try again.');
+            }
+        });
+
+        // Mobile menu toggle for dashboard
+        const dashboardMenuBtn = document.getElementById('dashboardMenuBtn');
+        const dashboardMenu = document.getElementById('dashboardMenu');
+
+        if (dashboardMenuBtn && dashboardMenu) {
+            dashboardMenuBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                dashboardMenu.classList.toggle('hidden');
+                dashboardMenu.classList.toggle('active');
+                dashboardMenuBtn.classList.toggle('active');
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function (e) {
+                if (dashboardMenu && !dashboardMenu.contains(e.target) && !dashboardMenuBtn.contains(e.target)) {
+                    dashboardMenu.classList.add('hidden');
+                    dashboardMenu.classList.remove('active');
+                    dashboardMenuBtn.classList.remove('active');
+                }
+            });
+
+            // Close menu when clicking a link
+            const dashboardLinks = dashboardMenu.querySelectorAll('a');
+            dashboardLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    dashboardMenu.classList.add('hidden');
+                    dashboardMenu.classList.remove('active');
+                    dashboardMenuBtn.classList.remove('active');
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>

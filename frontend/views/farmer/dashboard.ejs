@@ -1,3 +1,4 @@
+<%# Dashboard - Modern Design %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,490 +6,441 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - JeevBandhu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
-    <style>
-        /* Dropdown menu styles */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: white;
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            z-index: 100;
-            top: 100%;
-            left: 0;
-            margin-top: 0px;
-            /* Remove gap */
-            padding-top: 8px;
-            /* Add internal padding instead */
-        }
-
-        .dropdown-content a {
-            color: #374151;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            transition: background-color 0.2s;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f3f4f6;
-            color: #059669;
-        }
-
-        .dropdown-content a:first-child {
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
-
-        .dropdown-content a:last-child {
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown-trigger {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        /* Ensure dropdown stays visible when hovering over content */
-        .dropdown-content:hover {
-            display: block;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 
-<body class="bg-gray-50">
-    <!-- Navigation with Organized Dropdowns -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<body class="min-h-screen" style="font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 25%, #f0f9ff 50%, #faf5ff 75%, #fff7ed 100%);">
+    <!-- Navigation -->
+    <nav class="nav-glass">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="/dashboard" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
+                <a href="/dashboard" class="flex items-center gap-2.5 group">
+                    <div class="w-9 h-9 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-emerald-200 transition-shadow">
+                        <i class="fas fa-leaf text-white text-sm"></i>
+                    </div>
+                    <span class="text-xl font-extrabold bg-gradient-to-r from-emerald-700 to-teal-600 bg-clip-text text-transparent" style="-webkit-background-clip:text;-webkit-text-fill-color:transparent;">JeevBandhu</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-1">
+                    <!-- Dashboard -->
+                    <a href="/dashboard" class="nav-link-pill"><i class="fas fa-home text-xs"></i> Dashboard</a>
 
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="/dashboard" class="text-emerald-600 font-semibold">🏠 Dashboard</a>
-
-                    <!-- Farm Management Dropdown -->
-                    <div class="dropdown">
-                        <span class="dropdown-trigger text-gray-700 hover:text-emerald-600 transition">🌾 Farm ▾</span>
-                        <div class="dropdown-content">
-                            <a href="/animals/add">➕ Add Animal</a>
-                            <a href="/dashboard">📊 My Animals</a>
-                            <a href="/ai-assistant">🩺 AI Diagnosis</a>
-                            <a href="/guide/medicine-guide">💊 Medicine Guide</a>
-                            <a href="/compliance">✅ Biosecurity</a>
+                    <!-- Farm Dropdown -->
+                    <div class="dropdown-container">
+                        <button class="nav-link-pill dropdown-trigger">
+                            <i class="fas fa-seedling text-xs"></i> Farm
+                            <i class="fas fa-chevron-down text-[10px] ml-1 dd-arrow"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/animals/add" class="dropdown-item"><i class="fas fa-plus text-emerald-500 w-5"></i> Add Animal</a>
+                            <a href="/dashboard" class="dropdown-item"><i class="fas fa-chart-bar text-blue-500 w-5"></i> My Animals</a>
+                            <a href="/ai-assistant" class="dropdown-item"><i class="fas fa-robot text-purple-500 w-5"></i> AI Diagnosis</a>
+                            <a href="/guide/medicine-guide" class="dropdown-item"><i class="fas fa-capsules text-rose-500 w-5"></i> Medicine Guide</a>
+                            <a href="/compliance" class="dropdown-item"><i class="fas fa-shield-alt text-teal-500 w-5"></i> Biosecurity</a>
                         </div>
                     </div>
 
                     <!-- Commerce Dropdown -->
-                    <div class="dropdown">
-                        <span class="dropdown-trigger text-gray-700 hover:text-emerald-600 transition">💼 Commerce
-                            ▾</span>
-                        <div class="dropdown-content">
-                            <a href="/marketplace">🛒 Browse Marketplace</a>
-                            <a href="/list-product">➕ List Product</a>
-                            <a href="/my-products">📦 My Products</a>
-                            <a href="/orders/sales">💰 Sales</a>
+                    <div class="dropdown-container">
+                        <button class="nav-link-pill dropdown-trigger">
+                            <i class="fas fa-store text-xs"></i> Commerce
+                            <i class="fas fa-chevron-down text-[10px] ml-1 dd-arrow"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/marketplace" class="dropdown-item"><i class="fas fa-shopping-bag text-indigo-500 w-5"></i> Browse Marketplace</a>
+                            <a href="/list-product" class="dropdown-item"><i class="fas fa-plus-circle text-emerald-500 w-5"></i> List Product</a>
+                            <a href="/my-products" class="dropdown-item"><i class="fas fa-box text-amber-500 w-5"></i> My Products</a>
+                            <a href="/my-orders" class="dropdown-item"><i class="fas fa-receipt text-orange-500 w-5"></i> Sales</a>
                         </div>
                     </div>
 
-                    <a href="/community" class="text-gray-700 hover:text-emerald-600 transition">👥 Community</a>
-                    <span class="text-gray-600">Hi, <%= user.name %></span>
-                    <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-red-600 hover:text-red-700 transition">Logout</button>
-                    </form>
+                    <!-- Community -->
+                    <a href="/community" class="nav-link-pill"><i class="fas fa-users text-xs"></i> Community</a>
+
+                    <!-- User -->
+                    <div class="flex items-center ml-3 pl-3 border-l border-gray-200 gap-2">
+                        <div class="w-8 h-8 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                            <%= (user.name || 'U').charAt(0).toUpperCase() %>
+                        </div>
+                        <span class="text-gray-700 font-semibold text-sm"><%= user.name %></span>
+                        <form action="/logout" method="POST" class="inline ml-1">
+                            <button type="submit" class="text-gray-400 hover:text-red-500 transition-colors text-sm" title="Logout">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
-                <!-- Mobile Hamburger Button -->
-                <button id="dashboardMenuBtn"
-                    class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative">
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700"></span>
+                <!-- Mobile Hamburger -->
+                <button id="mobileMenuBtn" class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative">
+                    <span class="block w-5 h-0.5 bg-gray-700 mb-1 rounded transition-all"></span>
+                    <span class="block w-5 h-0.5 bg-gray-700 mb-1 rounded transition-all"></span>
+                    <span class="block w-5 h-0.5 bg-gray-700 rounded transition-all"></span>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile Menu Overlay -->
-        <div id="dashboardMenu"
-            class="mobile-menu hidden fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-40 md:hidden overflow-y-auto">
-            <div class="flex flex-col p-6 pt-20 space-y-4">
-                <a href="/dashboard" class="text-emerald-600 font-semibold py-2 border-b border-gray-200">🏠
-                    Dashboard</a>
-
-                <!-- Farm Section in Mobile -->
-                <div class="text-gray-500 text-xs font-semibold uppercase mt-2">Farm Management</div>
-                <a href="/animals/add"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">➕ Add
-                    Animal</a>
-                <a href="/dashboard"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">📊 My
-                    Animals</a>
-                <a href="/ai-assistant"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">🩺 AI
-                    Diagnosis</a>
-                <a href="/guide/medicine-guide"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">💊
-                    Medicine Guide</a>
-                <a href="/compliance"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-200">✅
-                    Biosecurity</a>
-
-                <!-- Commerce Section in Mobile -->
-                <div class="text-gray-500 text-xs font-semibold uppercase mt-2">Commerce</div>
-                <a href="/marketplace"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">🛒
-                    Browse Marketplace</a>
-                <a href="/list-product"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">➕ List
-                    Product</a>
-                <a href="/my-products"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">📦 My
-                    Products</a>
-                <a href="/orders/sales"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-200">💰
-                    Sales</a>
-
-                <a href="/community"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">👥
-                    Community</a>
-                <span class="text-gray-600 px-3 py-2 bg-emerald-50 rounded-full text-center text-sm">Hi, <%= user.name
-                        %></span>
-                <form action="/logout" method="POST" class="inline">
-                    <button type="submit"
-                        class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2">Logout</button>
-                </form>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu hidden fixed top-16 right-0 h-screen w-80 bg-white shadow-2xl z-40 md:hidden overflow-y-auto">
+            <div class="flex flex-col p-5 space-y-1">
+                <div class="flex items-center gap-3 p-4 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl mb-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold shadow-md">
+                        <%= (user.name || 'U').charAt(0).toUpperCase() %>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-800 text-sm"><%= user.name || 'User' %></p>
+                        <p class="text-xs text-emerald-600">Farmer</p>
+                    </div>
+                </div>
+                <a href="/dashboard" class="mobile-nav-item"><i class="fas fa-home text-emerald-500 w-5"></i> Dashboard</a>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider px-4 pt-3 pb-1">Farm</p>
+                <a href="/animals/add" class="mobile-nav-item"><i class="fas fa-plus text-emerald-500 w-5"></i> Add Animal</a>
+                <a href="/dashboard" class="mobile-nav-item"><i class="fas fa-chart-bar text-blue-500 w-5"></i> My Animals</a>
+                <a href="/ai-assistant" class="mobile-nav-item"><i class="fas fa-robot text-purple-500 w-5"></i> AI Diagnosis</a>
+                <a href="/guide/medicine-guide" class="mobile-nav-item"><i class="fas fa-capsules text-rose-500 w-5"></i> Medicine Guide</a>
+                <a href="/compliance" class="mobile-nav-item"><i class="fas fa-shield-alt text-teal-500 w-5"></i> Biosecurity</a>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider px-4 pt-3 pb-1">Commerce</p>
+                <a href="/marketplace" class="mobile-nav-item"><i class="fas fa-shopping-bag text-indigo-500 w-5"></i> Marketplace</a>
+                <a href="/list-product" class="mobile-nav-item"><i class="fas fa-plus-circle text-emerald-500 w-5"></i> List Product</a>
+                <a href="/my-products" class="mobile-nav-item"><i class="fas fa-box text-amber-500 w-5"></i> My Products</a>
+                <a href="/my-orders" class="mobile-nav-item"><i class="fas fa-receipt text-orange-500 w-5"></i> Sales</a>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider px-4 pt-3 pb-1">Social</p>
+                <a href="/community" class="mobile-nav-item"><i class="fas fa-users text-blue-500 w-5"></i> Community</a>
+                <div class="pt-3 mt-3 border-t border-gray-100">
+                    <form action="/logout" method="POST">
+                        <button type="submit" class="mobile-nav-item text-red-500 hover:bg-red-50 w-full text-left">
+                            <i class="fas fa-sign-out-alt w-5"></i> Logout
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">My Herd Dashboard</h1>
-            <p class="text-gray-600 mt-2">Manage your livestock and monitor health status</p>
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <!-- Header -->
+        <div class="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+                <p class="text-emerald-600 font-semibold text-sm mb-1"><i class="fas fa-chart-line mr-1"></i> Overview</p>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">My Herd Dashboard</h1>
+                <p class="text-gray-500">Track livestock health, manage records, and stay bio-safe compliant</p>
+            </div>
+            <a href="/animals/add" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-emerald-200 transition-all hover:-translate-y-0.5">
+                <i class="fas fa-plus"></i> Add Animal
+            </a>
         </div>
 
-        <!-- Stats Overview -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="card bg-gradient-to-br from-green-50 to-emerald-100">
-                <h3 class="text-sm font-medium text-gray-600">Total Animals</h3>
-                <p class="text-3xl font-bold text-gray-900 mt-2">
-                    <%= stats.total %>
-                </p>
-            </div>
-
-            <div class="card bg-gradient-to-br from-emerald-50 to-green-100">
-                <h3 class="text-sm font-medium text-gray-600">Healthy</h3>
-                <p class="text-3xl font-bold text-health-good mt-2">
-                    <%= stats.healthy %>
-                </p>
-            </div>
-
-            <div class="card bg-gradient-to-br from-red-50 to-pink-100">
-                <h3 class="text-sm font-medium text-gray-600">Withdrawal Lock</h3>
-                <p class="text-3xl font-bold text-health-danger mt-2">
-                    <%= stats.locked %>
-                </p>
-            </div>
-
-            <div class="card bg-gradient-to-br from-blue-50 to-indigo-100">
-                <h3 class="text-sm font-medium text-gray-600">Avg Health Score</h3>
-                <p class="text-3xl font-bold text-gray-900 mt-2">
-                    <%= stats.avgHealthScore %>
-                </p>
-            </div>
-        </div>
-
-        <!-- Health Score Reasoning -->
-        <div class="card mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200">
-            <div class="flex items-start justify-between mb-6">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
-                        📊 Health Score Breakdown
-                    </h2>
-                    <p class="text-sm text-gray-600 mt-2">Understanding your herd's health score calculation</p>
-                </div>
-                <div class="text-right">
-                    <div class="text-4xl font-bold text-blue-600">
-                        <%= stats.avgHealthScore %>
+        <!-- Stats Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+            <div class="relative overflow-hidden bg-white rounded-2xl p-6 border border-emerald-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-100 to-transparent rounded-bl-full opacity-60"></div>
+                <div class="flex items-start justify-between mb-3 relative">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium mb-1">Total Animals</p>
+                        <p class="text-3xl font-extrabold text-emerald-600"><%= stats.total %></p>
                     </div>
-                    <p class="text-xs text-gray-600">Average Score</p>
+                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center text-white text-lg shadow-lg shadow-emerald-200 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-cow"></i>
+                    </div>
                 </div>
+                <p class="text-xs text-gray-400 font-medium"><i class="fas fa-arrow-up text-emerald-500"></i> Your herd size</p>
             </div>
 
-            <!-- Toggle Button -->
-            <div class="mb-4">
-                <button onclick="toggleHealthInfo()"
-                    class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md">
-                    <span id="healthInfoIcon">ℹ️</span>
-                    <span id="healthInfoText">How is health calculated?</span>
+            <div class="relative overflow-hidden bg-white rounded-2xl p-6 border border-green-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-green-100 to-transparent rounded-bl-full opacity-60"></div>
+                <div class="flex items-start justify-between mb-3 relative">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium mb-1">Healthy</p>
+                        <p class="text-3xl font-extrabold text-green-600"><%= stats.healthy %></p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center text-white text-lg shadow-lg shadow-green-200 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400 font-medium"><i class="fas fa-check-circle text-green-500"></i> Ready for production</p>
+            </div>
+
+            <div class="relative overflow-hidden bg-white rounded-2xl p-6 border border-red-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-red-100 to-transparent rounded-bl-full opacity-60"></div>
+                <div class="flex items-start justify-between mb-3 relative">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium mb-1">Withdrawal Lock</p>
+                        <p class="text-3xl font-extrabold text-red-600"><%= stats.locked %></p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-rose-500 rounded-xl flex items-center justify-center text-white text-lg shadow-lg shadow-red-200 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400 font-medium"><i class="fas fa-exclamation-circle text-red-500"></i> Under medication</p>
+            </div>
+
+            <div class="relative overflow-hidden bg-white rounded-2xl p-6 border border-amber-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-amber-100 to-transparent rounded-bl-full opacity-60"></div>
+                <div class="flex items-start justify-between mb-3 relative">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium mb-1">Avg Health Score</p>
+                        <p class="text-3xl font-extrabold text-amber-600"><%= stats.avgHealthScore %></p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-lg shadow-lg shadow-amber-200 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400 font-medium"><span class="text-amber-500"><i class="fas fa-star"></i></span> Out of 100</p>
+            </div>
+        </div>
+
+        <!-- Health Score Breakdown -->
+        <div class="card-lg mb-12">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
+                <div>
+                    <h2 class="heading-md mb-2"><i class="fas fa-chart-line text-emerald-600 mr-2"></i>Health Score Breakdown</h2>
+                    <p class="text-gray-600">Understanding your herd's overall health calculation</p>
+                </div>
+                <button onclick="toggleHealthInfo()" class="btn-secondary btn-sm mt-4 md:mt-0">
+                    <span id="healthInfoIcon"><i class="fas fa-chevron-down"></i></span>
+                    <span id="healthInfoText" class="ml-2">View Details</span>
                 </button>
             </div>
 
             <!-- Collapsible Details Panel -->
             <div id="healthInfoPanel" class="hidden">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="grid md:grid-cols-3 gap-6 mb-6">
                     <!-- Medical History Factor -->
-                    <div class="bg-white p-5 rounded-lg border border-blue-200 shadow-sm">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="text-2xl">💊</span>
-                            <h3 class="font-semibold text-gray-900">Medical History</h3>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-3">Recent treatments and interventions</p>
-                        <div class="flex items-center gap-2">
-                            <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                <div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
+                    <div class="p-6 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 hover:shadow-md transition-all">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="icon-box bg-green-100 text-green-600">
+                                <i class="fas fa-pills"></i>
                             </div>
-                            <span class="text-xs font-semibold">85%</span>
+                            <h3 class="font-semibold text-lg">Medical History</h3>
                         </div>
-                        <p class="text-xs text-gray-500 mt-3">Fewer recent treatments = better score</p>
+                        <p class="text-gray-600 text-sm mb-4">Recent treatments and interventions</p>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 85%;"></div>
+                        </div>
+                        <span class="text-xs text-gray-600">85% • Fewer treatments = better</span>
                     </div>
 
                     <!-- Withdrawal Compliance Factor -->
-                    <div class="bg-white p-5 rounded-lg border border-blue-200 shadow-sm">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="text-2xl">⏰</span>
-                            <h3 class="font-semibold text-gray-900">Withdrawal Status</h3>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-3">Medicine withdrawal period tracking</p>
-                        <div class="flex items-center gap-2">
-                            <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 70%"></div>
+                    <div class="p-6 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 hover:shadow-md transition-all">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="icon-box bg-amber-100 text-amber-600">
+                                <i class="fas fa-hourglass-end"></i>
                             </div>
-                            <span class="text-xs font-semibold">70%</span>
+                            <h3 class="font-semibold text-lg">Withdrawal Status</h3>
                         </div>
-                        <p class="text-xs text-gray-500 mt-3">No locked animals = optimal score</p>
+                        <p class="text-gray-600 text-sm mb-4">Medicine withdrawal period tracking</p>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-amber-500 h-2 rounded-full" style="width: 70%;"></div>
+                        </div>
+                        <span class="text-xs text-gray-600">70% • No locked animals = optimal</span>
                     </div>
 
                     <!-- Biosecurity Compliance Factor -->
-                    <div class="bg-white p-5 rounded-lg border border-blue-200 shadow-sm">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="text-2xl">🛡️</span>
-                            <h3 class="font-semibold text-gray-900">Biosecurity</h3>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-3">Safety and compliance measures</p>
-                        <div class="flex items-center gap-2">
-                            <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                <div class="bg-blue-500 h-2 rounded-full" style="width: <%= stats.biosecurityScore %>%">
-                                </div>
+                    <div class="p-6 rounded-xl bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 hover:shadow-md transition-all">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="icon-box bg-blue-100 text-blue-600">
+                                <i class="fas fa-shield-alt"></i>
                             </div>
-                            <span class="text-xs font-semibold">
-                                <%= stats.biosecurityScore %>%
-                            </span>
+                            <h3 class="font-semibold text-lg">Biosecurity</h3>
                         </div>
-                        <p class="text-xs text-gray-500 mt-3">
-                            <a href="/compliance" class="text-blue-600 hover:underline">View compliance tracker</a>
-                        </p>
+                        <p class="text-gray-600 text-sm mb-4">Safety and compliance measures</p>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-blue-500 h-2 rounded-full" style="width: <%= stats.biosecurityScore %>%;"></div>
+                        </div>
+                        <span class="text-xs text-gray-600"><%= stats.biosecurityScore %>% • <a href="/compliance" class="text-emerald-600 hover:underline font-semibold">View Tracker</a></span>
                     </div>
                 </div>
 
-                <div class="bg-blue-100 p-4 rounded-lg border border-blue-300">
+                <div class="p-4 rounded-lg bg-emerald-50 border border-emerald-200">
                     <p class="text-sm text-gray-700">
-                        <span class="font-semibold">💡 Tip:</span> Maintain high biosecurity compliance and keep animals
-                        healthy to improve your overall health score.
+                        <i class="fas fa-lightbulb text-amber-500 mr-2"></i>
+                        <span class="font-semibold">Tip:</span> Maintain high biosecurity compliance and keep animals healthy to improve your overall health score.
                     </p>
                 </div>
             </div>
         </div>
 
-        <script>
-            function toggleHealthInfo() {
-                const panel = document.getElementById('healthInfoPanel');
-                const icon = document.getElementById('healthInfoIcon');
-                const text = document.getElementById('healthInfoText');
-
-                if (panel.classList.contains('hidden')) {
-                    panel.classList.remove('hidden');
-                    icon.textContent = '▼';
-                    text.textContent = 'Hide calculation details';
-                } else {
-                    panel.classList.add('hidden');
-                    icon.textContent = 'ℹ️';
-                    text.textContent = 'How is health calculated?';
-                }
-            }
-        </script>
-
-
+        <!-- Animals Section -->
         <% if (animals.length===0) { %>
-            <div class="text-center py-16">
-                <div class="text-6xl mb-4">🐄</div>
-                <h2 class="text-2xl font-bold text-gray-900 mb-2">No animals yet</h2>
-                <p class="text-gray-600 mb-6">Start by adding your first animal to the system</p>
-                <a href="/animals/add" class="btn-primary">Add First Animal</a>
-            </div>
-            <% } else { %>
-                <!-- Herd Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <% animals.forEach(animal=> { %>
-                        <div class="card border-4 
-            <%= animal.status === 'HEALTHY' ? 'status-healthy' : '' %>
-            <%= animal.status === 'WITHDRAWAL_LOCK' ? 'status-locked' : '' %>
-            <%= animal.status === 'QUARANTINE' ? 'status-quarantine' : '' %>">
-
-                            <!-- Animal Header -->
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <h3 class="text-xl font-bold text-gray-900">
-                                        <%= animal.tagId %>
-                                    </h3>
-                                    <p class="text-sm text-gray-600">
-                                        <%= animal.species %>
-                                            <% if (animal.breed) { %> - <%= animal.breed %>
-                                                    <% } %>
-                                    </p>
-                                </div>
-
-                                <!-- Status Badge with Icon -->
-                                <div class="flex items-center gap-2">
-                                    <% if (animal.status==='HEALTHY' ) { %>
-                                        <span class="text-2xl">✅</span>
-                                        <% } else if (animal.status==='WITHDRAWAL_LOCK' ) { %>
-                                            <span class="text-2xl">🔒</span>
-                                            <% } else if (animal.status==='QUARANTINE' ) { %>
-                                                <span class="text-2xl">⚠️</span>
-                                                <% } %>
-                                                    <span class="px-3 py-1 rounded-full text-xs font-semibold
-                                        <%= animal.status === 'HEALTHY' ? 'bg-green-200 text-green-800' : '' %>
-                                        <%= animal.status === 'WITHDRAWAL_LOCK' ? 'bg-red-200 text-red-800' : '' %>
-                                        <%= animal.status === 'QUARANTINE' ? 'bg-yellow-200 text-yellow-800' : '' %>">
-                                                        <%= animal.status %>
-                                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- Health Score -->
-                            <div class="mb-4">
-                                <div class="flex justify-between text-sm text-gray-600 mb-1">
-                                    <span>Health Score</span>
-                                    <span class="font-semibold">
-                                        <%= animal.healthScore %>/100
-                                    </span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="h-2 rounded-full
-                  <%= animal.healthScore >= 70 ? 'bg-health-good' : '' %>
-                  <%= animal.healthScore >= 40 && animal.healthScore < 70 ? 'bg-health-warning' : '' %>
-                  <%= animal.healthScore < 40 ? 'bg-health-danger' : '' %>" style="width: <%= animal.healthScore %>%">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Withdrawal Warning -->
-                            <% if (animal.status==='WITHDRAWAL_LOCK' && animal.withdrawalEndsAt) { %>
-                                <% const now=new Date(); const diff=new Date(animal.withdrawalEndsAt) - now; const
-                                    daysRemaining=Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24))); %>
-                                    <div
-                                        class="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded-lg mb-4 text-sm">
-                                        <strong>🔒 LOCKED:</strong>
-                                        <%= daysRemaining %> day(s) remaining
-                                    </div>
-                                    <% } else if (animal.status==='HEALTHY' ) { %>
-                                        <div
-                                            class="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded-lg mb-4 text-sm">
-                                            <strong>✅ Ready</strong> for production
-                                        </div>
-                                        <% } %>
-
-                                            <!-- Actions -->
-                                            <div class="grid grid-cols-2 gap-2 mb-2">
-                                                <a href="/animals/<%= animal._id %>"
-                                                    class="text-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
-                                                    View Details
-                                                </a>
-                                                <a href="/animals/<%= animal._id %>/add-medicine"
-                                                    class="text-center px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition text-sm">
-                                                    Add Medicine
-                                                </a>
-                                            </div>
-                                            <div class="grid grid-cols-2 gap-2">
-                                                <button
-                                                    onclick="openWeightModal('<%= animal._id %>', '<%= animal.name %>')"
-                                                    class="px-3 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition text-sm">
-                                                    📊 Log Weight
-                                                </button>
-                                                <button
-                                                    onclick="openFeedModal('<%= animal._id %>', '<%= animal.name %>')"
-                                                    class="px-3 py-2 bg-yellow-500 text-black rounded-lg hover:bg-yellow-600 transition text-sm font-semibold shadow-md">
-                                                    🌾 Log Feed
-                                                </button>
-                                            </div>
-                        </div>
-                        <% }) %>
+            <div class="card-lg text-center py-16">
+                <div class="text-6xl mb-6 text-emerald-600">
+                    <i class="fas fa-cow"></i>
                 </div>
-                <% } %>
+                <h2 class="heading-md mb-4">No animals yet</h2>
+                <p class="text-gray-600 text-lg mb-8 max-w-md mx-auto">Start managing your herd by adding your first animal to the system</p>
+                <a href="/animals/add" class="btn-primary btn-lg inline-flex items-center gap-2">
+                    <i class="fas fa-plus"></i>
+                    Add First Animal
+                </a>
+            </div>
+        <% } else { %>
+            <div class="mb-8 flex items-center justify-between">
+                <div>
+                    <h2 class="heading-md mb-1">Your Herd</h2>
+                    <p class="text-gray-600"><%= animals.length %> animal<%= animals.length !== 1 ? 's' : '' %> · <span class="text-emerald-600 font-semibold"><%= stats.healthy %> healthy</span></p>
+                </div>
+                <a href="/animals/add" class="btn-primary btn-sm">
+                    <i class="fas fa-plus mr-2"></i>Add Animal
+                </a>
+            </div>
+
+            <!-- Herd Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <% animals.forEach((animal, index) => { %>
+                    <% const isHealthy = animal.status === 'HEALTHY'; %>
+                    <% const isWithdrawal = animal.status === 'WITHDRAWAL_LOCK'; %>
+                    <div class="card-lg group hover-lift transition-all duration-300" style="animation: slideIn 0.5s ease-out;">
+                        <!-- Card Header -->
+                        <div class="flex justify-between items-start mb-5">
+                            <div>
+                                <h3 class="heading-sm text-gray-900"><%= animal.tagId %></h3>
+                                <p class="text-gray-600 text-sm mt-1">
+                                    <%= animal.species %><% if (animal.breed) { %> • <%= animal.breed %><% } %>
+                                </p>
+                            </div>
+
+                            <!-- Status Badge -->
+                            <% if (isHealthy) { %>
+                                <span class="status-healthy">
+                                    <i class="fas fa-check-circle"></i>
+                                    Healthy
+                                </span>
+                            <% } else if (isWithdrawal) { %>
+                                <span class="status-locked">
+                                    <i class="fas fa-lock"></i>
+                                    Locked
+                                </span>
+                            <% } else { %>
+                                <span class="status-quarantine">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Monitoring
+                                </span>
+                            <% } %>
+                        </div>
+
+                        <!-- Health Score Bar -->
+                        <div class="mb-5">
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-gray-600 text-sm font-semibold">Health Score</span>
+                                <span class="font-display font-bold text-lg"
+                                    style="color: <%= animal.healthScore >= 70 ? '#10b981' : animal.healthScore >= 40 ? '#f59e0b' : '#ef4444' %>">
+                                    <%= animal.healthScore %>/100
+                                </span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                                <div class="h-full transition-all duration-500" 
+                                    style="width: <%= animal.healthScore %>%; background: <%= animal.healthScore >= 70 ? '#10b981' : animal.healthScore >= 40 ? '#f59e0b' : '#ef4444' %>;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Withdrawal Warning / Health Status -->
+                        <% if (isWithdrawal && animal.withdrawalEndsAt) { %>
+                            <% const now = new Date(); %>
+                            <% const diff = new Date(animal.withdrawalEndsAt) - now; %>
+                            <% const daysRemaining = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24))); %>
+                            <div class="p-3 rounded-lg mb-5 bg-red-50 border border-red-200">
+                                <p class="text-red-700 font-semibold text-sm">
+                                    <i class="fas fa-clock text-red-600 mr-2"></i><%= daysRemaining %> day<%= daysRemaining !== 1 ? 's' : '' %> remaining
+                                </p>
+                            </div>
+                        <% } else if (isHealthy) { %>
+                            <div class="p-3 rounded-lg mb-5 bg-green-50 border border-green-200">
+                                <p class="text-green-700 font-semibold text-sm">
+                                    <i class="fas fa-check-circle text-green-600 mr-2"></i>Ready for production
+                                </p>
+                            </div>
+                        <% } %>
+
+                        <!-- Action Buttons -->
+                        <div class="grid grid-cols-2 gap-3 pt-4 border-t border-gray-200">
+                            <a href="/animals/<%= animal._id %>"
+                                class="btn-outline btn-sm text-center justify-center text-xs py-2">
+                                <i class="fas fa-eye mr-1"></i>View
+                            </a>
+                            <a href="/animals/<%= animal._id %>/add-medicine"
+                                class="btn-secondary btn-sm text-center justify-center text-xs py-2">
+                                <i class="fas fa-pills mr-1"></i>Medicine
+                            </a>
+                            <button onclick="openWeightModal('<%= animal._id %>', '<%= animal.tagId %>')"
+                                class="btn-primary btn-sm text-center text-xs py-2">
+                                <i class="fas fa-weight mr-1"></i>Weight
+                            </button>
+                            <button onclick="openFeedModal('<%= animal._id %>', '<%= animal.tagId %>')"
+                                class="btn-secondary btn-sm text-center text-xs py-2">
+                                <i class="fas fa-leaf mr-1"></i>Feed
+                            </button>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
     </main>
 
     <!-- Weight Logging Modal -->
-    <div id="weightModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">📊 Log Animal Weight</h2>
+    <div id="weightModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div class="card-lg rounded-2xl max-w-md w-full p-8 shadow-2xl">
+            <h2 class="heading-md mb-6 flex items-center gap-2">
+                <i class="fas fa-weight text-emerald-600"></i>
+                Log Animal Weight
+            </h2>
             <form id="weightForm">
                 <input type="hidden" id="weightAnimalId">
-                <input type="hidden" id="weightAnimalName">
+                <input type="hidden" id="weightAnimalTag">
 
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Weight (kg)</label>
-                    <input type="number" id="weightValue" step="0.1" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
+                <div class="mb-5">
+                    <label class="form-label">Weight (kg)</label>
+                    <input type="number" id="weightValue" step="0.1" required placeholder="e.g., 500"
+                        class="input-field">
                 </div>
 
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                <div class="mb-5">
+                    <label class="form-label">Date</label>
                     <input type="date" id="weightDate" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
+                        class="input-field">
                 </div>
 
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
-                    <textarea id="weightNotes" rows="2"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500"></textarea>
+                    <label class="form-label">Notes (Optional)</label>
+                    <textarea id="weightNotes" rows="3" placeholder="Any observations..."
+                        class="input-field"></textarea>
                 </div>
 
-                <div class="flex justify-end gap-4">
+                <div class="flex gap-3">
                     <button type="button" onclick="closeWeightModal()"
-                        class="px-8 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-semibold">
-                        Cancel
-                    </button>
+                        class="btn-secondary flex-1">Cancel</button>
                     <button type="submit"
-                        class="px-8 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-semibold">
-                        Save Weight
-                    </button>
+                        class="btn-primary flex-1">Save Weight</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Feed Logging Modal -->
-    <div id="feedModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">🌾 Log Feed Consumption</h2>
+    <div id="feedModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div class="card-lg rounded-2xl max-w-md w-full p-8 shadow-2xl">
+            <h2 class="heading-md mb-6 flex items-center gap-2">
+                <i class="fas fa-leaf text-emerald-600"></i>
+                Log Feed Consumption
+            </h2>
             <form id="feedForm">
                 <input type="hidden" id="feedAnimalId">
-                <input type="hidden" id="feedAnimalName">
+                <input type="hidden" id="feedAnimalTag">
 
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Feed Amount (kg)</label>
-                    <input type="number" id="feedAmount" step="0.1" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500">
+                <div class="mb-5">
+                    <label class="form-label">Feed Amount (kg)</label>
+                    <input type="number" id="feedAmount" step="0.1" required placeholder="e.g., 25"
+                        class="input-field">
                 </div>
 
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Feed Type</label>
-                    <select id="feedType"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500">
+                <div class="mb-5">
+                    <label class="form-label">Feed Type</label>
+                    <select id="feedType" class="input-field">
                         <option value="Standard Feed">Standard Feed</option>
                         <option value="Protein Mix">Protein Mix</option>
                         <option value="Grains">Grains</option>
@@ -498,62 +450,84 @@
                     </select>
                 </div>
 
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                <div class="mb-5">
+                    <label class="form-label">Date</label>
                     <input type="date" id="feedDate" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500">
+                        class="input-field">
                 </div>
 
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
-                    <textarea id="feedNotes" rows="2"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500"></textarea>
+                    <label class="form-label">Notes (Optional)</label>
+                    <textarea id="feedNotes" rows="3" placeholder="Any observations..."
+                        class="input-field"></textarea>
                 </div>
 
-                <div class="flex justify-end gap-4">
+                <div class="flex gap-3">
                     <button type="button" onclick="closeFeedModal()"
-                        class="px-8 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-semibold">
-                        Cancel
-                    </button>
+                        class="btn-secondary flex-1">Cancel</button>
                     <button type="submit"
-                        class="px-8 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition font-bold shadow-md">
-                        Save Feed Record
-                    </button>
+                        class="btn-primary flex-1">Save Feed Record</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        // Set today's date as default
-        document.getElementById('weightDate').valueAsDate = new Date();
-        document.getElementById('feedDate').valueAsDate = new Date();
+        // Initialize date inputs to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('weightDate').value = today;
+        document.getElementById('feedDate').value = today;
+
+        // Health Score Accordion Toggle
+        function toggleHealthInfo() {
+            const panel = document.getElementById('healthInfoPanel');
+            const icon = document.getElementById('healthInfoIcon');
+
+            if (panel.classList.contains('hidden')) {
+                panel.classList.remove('hidden');
+                icon.innerHTML = '<i class="fas fa-chevron-up"></i>';
+            } else {
+                panel.classList.add('hidden');
+                icon.innerHTML = '<i class="fas fa-chevron-down"></i>';
+            }
+        }
 
         // Weight Modal Functions
-        function openWeightModal(animalId, animalName) {
+        function openWeightModal(animalId, animalTag) {
             document.getElementById('weightAnimalId').value = animalId;
-            document.getElementById('weightAnimalName').value = animalName;
+            document.getElementById('weightAnimalTag').value = animalTag;
             document.getElementById('weightModal').classList.remove('hidden');
         }
 
         function closeWeightModal() {
             document.getElementById('weightModal').classList.add('hidden');
             document.getElementById('weightForm').reset();
+            document.getElementById('weightDate').value = today;
         }
 
         // Feed Modal Functions
-        function openFeedModal(animalId, animalName) {
+        function openFeedModal(animalId, animalTag) {
             document.getElementById('feedAnimalId').value = animalId;
-            document.getElementById('feedAnimalName').value = animalName;
+            document.getElementById('feedAnimalTag').value = animalTag;
             document.getElementById('feedModal').classList.remove('hidden');
         }
 
         function closeFeedModal() {
             document.getElementById('feedModal').classList.add('hidden');
             document.getElementById('feedForm').reset();
+            document.getElementById('feedDate').value = today;
         }
 
-        // Handle Weight Form Submission
+        // Close modals when clicking outside
+        ['weightModal', 'feedModal'].forEach(modalId => {
+            document.getElementById(modalId).addEventListener('click', (e) => {
+                if (e.target.id === modalId) {
+                    e.target.classList.add('hidden');
+                }
+            });
+        });
+
+        // Weight Form Submission
         document.getElementById('weightForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -574,9 +548,7 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    alert('✅ Weight recorded successfully! Page will refresh to update dashboard.');
                     closeWeightModal();
-                    // Reload page to update dashboard
                     window.location.reload();
                 } else {
                     alert(`❌ ${result.error}`);
@@ -587,7 +559,7 @@
             }
         });
 
-        // Handle Feed Form Submission
+        // Feed Form Submission
         document.getElementById('feedForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -609,9 +581,7 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    alert('✅ Feed consumption recorded successfully! Page will refresh to update dashboard.');
                     closeFeedModal();
-                    // Reload page to update dashboard
                     window.location.reload();
                 } else {
                     alert(`❌ ${result.error}`);
@@ -622,38 +592,77 @@
             }
         });
 
-        // Mobile menu toggle for dashboard
-        const dashboardMenuBtn = document.getElementById('dashboardMenuBtn');
-        const dashboardMenu = document.getElementById('dashboardMenu');
+        // Dropdown logic
+        document.querySelectorAll('.dropdown-container').forEach(container => {
+            const trigger = container.querySelector('.dropdown-trigger');
+            const menu = container.querySelector('.dropdown-menu');
+            const arrow = trigger.querySelector('.dd-arrow');
+            let timeout;
 
-        if (dashboardMenuBtn && dashboardMenu) {
-            dashboardMenuBtn.addEventListener('click', function (e) {
+            container.addEventListener('mouseenter', () => {
+                clearTimeout(timeout);
+                menu.classList.add('active');
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+            });
+
+            container.addEventListener('mouseleave', () => {
+                timeout = setTimeout(() => {
+                    menu.classList.remove('active');
+                    if (arrow) arrow.style.transform = 'rotate(0deg)';
+                }, 150);
+            });
+
+            trigger.addEventListener('click', (e) => {
                 e.stopPropagation();
-                dashboardMenu.classList.toggle('hidden');
-                dashboardMenu.classList.toggle('active');
-                dashboardMenuBtn.classList.toggle('active');
+                const isActive = menu.classList.contains('active');
+                document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('active'));
+                if (!isActive) menu.classList.add('active');
             });
+        });
 
-            // Close menu when clicking outside
-            document.addEventListener('click', function (e) {
-                if (dashboardMenu && !dashboardMenu.contains(e.target) && !dashboardMenuBtn.contains(e.target)) {
-                    dashboardMenu.classList.add('hidden');
-                    dashboardMenu.classList.remove('active');
-                    dashboardMenuBtn.classList.remove('active');
-                }
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('active'));
+            document.querySelectorAll('.dd-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+        });
+
+        // Mobile menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenuBtn.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                mobileMenu.classList.toggle('hidden');
             });
-
-            // Close menu when clicking a link
-            const dashboardLinks = dashboardMenu.querySelectorAll('a');
-            dashboardLinks.forEach(link => {
-                link.addEventListener('click', function () {
-                    dashboardMenu.classList.add('hidden');
-                    dashboardMenu.classList.remove('active');
-                    dashboardMenuBtn.classList.remove('active');
+            mobileMenu.querySelectorAll('a, button[type="submit"]').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenuBtn.classList.remove('active');
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('active');
                 });
             });
         }
     </script>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-leaf text-white text-xs"></i>
+                    </div>
+                    <span class="font-bold text-white">JeevBandhu</span>
+                </div>
+                <p class="text-sm">&copy; 2026 JeevBandhu. Ensuring Bio-Safe Livestock Products.</p>
+                <div class="flex gap-4 text-sm">
+                    <a href="/marketplace" class="hover:text-emerald-400 transition">Marketplace</a>
+                    <a href="/guide/medicine-guide" class="hover:text-emerald-400 transition">Guide</a>
+                    <a href="/community" class="hover:text-emerald-400 transition">Community</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>
