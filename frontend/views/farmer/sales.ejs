@@ -5,333 +5,646 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Dashboard - JeevBandhu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #16a34a;
+            --secondary: #22c55e;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --line: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 70;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(8px);
+        }
+
+        .topbar-inner {
+            width: min(1240px, 94vw);
+            margin: 0 auto;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand {
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #334155;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: .9rem;
+            transition: .2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #ecfdf5;
+            color: #15803d;
+        }
+
+        .logout-btn {
+            border: 0;
+            background: transparent;
+            color: #dc2626;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .menu-btn {
+            display: none;
+            border: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            color: #334155;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            width: min(1240px, 94vw);
+            margin: 0 auto 10px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: #fff;
+            padding: 10px;
+        }
+
+        .mobile-menu.open { display: grid; gap: 6px; }
+
+        .page {
+            width: min(1240px, 94vw);
+            margin: 22px auto;
+            display: grid;
+            gap: 14px;
+        }
+
+        .card {
+            border: 1px solid var(--line);
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, .05);
+        }
+
+        .header-card {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .title {
+            margin: 0;
+            font-size: clamp(1.7rem, 4vw, 2.15rem);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            margin: 7px 0 0;
+            color: var(--muted);
+            font-size: .96rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .select,
+        .btn {
+            min-height: 42px;
+            border-radius: 12px;
+            border: 1px solid #d1d5db;
+            padding: 0 12px;
+            font-weight: 700;
+            font-size: .86rem;
+            background: #fff;
+            color: #334155;
+        }
+
+        .btn {
+            border: 0;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: .2s ease;
+        }
+
+        .btn:hover { transform: translateY(-1px); }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .kpi {
+            padding: 14px;
+            border-radius: 16px;
+            border: 1px solid var(--line);
+            background: #fff;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, .05);
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .kpi.revenue { background: linear-gradient(135deg, #ecfdf5, #f0fdf4); border-color: #86efac; }
+        .kpi.orders { background: linear-gradient(135deg, #eff6ff, #f8fafc); border-color: #bfdbfe; }
+        .kpi.pending { background: linear-gradient(135deg, #fffbeb, #fefce8); border-color: #fde68a; }
+
+        .kpi-label { margin: 0; color: #475569; font-size: .83rem; font-weight: 700; }
+        .kpi-value { margin: 4px 0 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; }
+        .kpi-trend { margin: 6px 0 0; font-size: .78rem; font-weight: 700; color: #166534; }
+
+        .kpi-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            font-size: 1.25rem;
+            color: #166534;
+            background: rgba(255, 255, 255, .72);
+            border: 1px solid #d1fae5;
+        }
+
+        .chart-card {
+            padding: 16px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 14px 34px rgba(15, 23, 42, .08);
+        }
+
+        .chart-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .chart-title {
+            margin: 0;
+            font-size: 1.14rem;
+            font-weight: 800;
+        }
+
+        .chart-sub {
+            margin: 4px 0 0;
+            color: #64748b;
+            font-size: .88rem;
+        }
+
+        .chart-legend {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid #d1fae5;
+            background: #ecfdf5;
+            font-size: .82rem;
+            font-weight: 700;
+            color: #166534;
+        }
+
+        .chart-legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
+        }
+
+        .chart-wrap {
+            margin-top: 12px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            padding: 14px;
+            min-height: 340px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-wrap::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 85% 0%, rgba(34, 197, 94, 0.12), rgba(34, 197, 94, 0) 56%);
+            pointer-events: none;
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 320px;
+            display: block;
+            position: relative;
+            z-index: 1;
+        }
+
+        .chart-tooltip {
+            position: absolute;
+            z-index: 3;
+            pointer-events: none;
+            transform: translate(-50%, calc(-100% - 12px));
+            background: rgba(15, 23, 42, 0.95);
+            color: #fff;
+            padding: 7px 10px;
+            border-radius: 10px;
+            font-size: .78rem;
+            line-height: 1.35;
+            box-shadow: 0 10px 22px rgba(2, 6, 23, 0.3);
+            opacity: 0;
+            transition: opacity .14s ease;
+        }
+
+        .chart-tooltip.show {
+            opacity: 1;
+        }
+
+        .chart-tooltip strong {
+            display: block;
+            font-size: .86rem;
+            margin-top: 2px;
+        }
+
+        .table-card { overflow: hidden; }
+        .table-head {
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+            background: linear-gradient(90deg, #f8fafc, #f1f5f9);
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .table-title { margin: 0; font-size: 1.05rem; font-weight: 800; }
+        .table-sub { margin: 4px 0 0; color: #64748b; font-size: .83rem; }
+
+        .table-wrap { overflow-x: auto; max-height: 470px; }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 980px;
+        }
+
+        .orders-table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background: #f8fafc;
+            color: #475569;
+            font-size: .74rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .orders-table tbody tr:nth-child(odd) { background: #ffffff; }
+        .orders-table tbody tr:nth-child(even) { background: #f8fafc; }
+        .orders-table tbody tr:hover { background: #ecfdf5; }
+
+        .orders-table td {
+            padding: 10px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: top;
+        }
+
+        .badge {
+            font-size: .72rem;
+            font-weight: 700;
+            border-radius: 999px;
+            padding: 4px 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .badge.delivered { background: #dcfce7; color: #166534; }
+        .badge.confirmed { background: #dbeafe; color: #1d4ed8; }
+        .badge.cancelled { background: #fee2e2; color: #991b1b; }
+        .badge.pending { background: #fef3c7; color: #92400e; }
+
+        .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            border: 0;
+            border-radius: 9px;
+            min-height: 30px;
+            padding: 0 10px;
+            font-size: .75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .action-btn:hover { transform: translateY(-1px); }
+
+        .btn-confirm { background: #16a34a; color: #fff; }
+        .btn-cancel { background: #dc2626; color: #fff; }
+        .btn-deliver { background: #0ea5e9; color: #fff; }
+        .btn-view { background: #e2e8f0; color: #334155; }
+        .btn-reorder { background: #f1f5f9; color: #334155; }
+
+        .mobile-orders {
+            display: none;
+            padding: 12px;
+            gap: 10px;
+        }
+
+        .mobile-order {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: #fff;
+            padding: 10px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .empty {
+            padding: 40px 16px;
+            text-align: center;
+        }
+
+        @media (max-width: 980px) {
+            .nav-links { display: none; }
+            .menu-btn { display: inline-flex; align-items: center; justify-content: center; }
+            .table-wrap { display: none; }
+            .mobile-orders { display: grid; }
+        }
+
+        @media (max-width: 700px) {
+            .header-actions { width: 100%; }
+            .select, .btn { width: 100%; }
+            .actions { flex-direction: column; }
+            .action-btn { width: 100%; justify-content: center; }
+            .chart-wrap {
+                min-height: 300px;
+                padding: 10px;
+            }
+            .chart-canvas {
+                height: 280px;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-gradient-to-br from-emerald-50 via-white to-blue-50 min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-md">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="/dashboard" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
-
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="/dashboard" class="text-gray-700 hover:text-emerald-600 transition">Dashboard</a>
-                    <a href="/my-products" class="text-gray-700 hover:text-emerald-600 transition">My Products</a>
-                    <a href="/orders/sales" class="text-emerald-600 font-semibold">Sales</a>
-                    <span class="text-gray-600">Hi, <%= user.name %></span>
-                    <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-red-600 hover:text-red-700 transition">Logout</button>
-                    </form>
-                </div>
-
-                <!-- Mobile Hamburger Button -->
-                <button id="salesMenuBtn"
-                    class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative">
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700"></span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Menu Overlay -->
-        <div id="salesMenu"
-            class="mobile-menu hidden fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-40 md:hidden overflow-y-auto">
-            <div class="flex flex-col p-6 pt-20 space-y-4">
-                <a href="/dashboard"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">🏠
-                    Dashboard</a>
-                <a href="/my-products"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">📦 My
-                    Products</a>
-                <a href="/orders/sales" class="text-emerald-600 font-semibold py-2 border-b border-gray-200">💰
-                    Sales</a>
-                <a href="/marketplace"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">🛒
-                    Marketplace</a>
-                <span class="text-gray-600 px-3 py-2 bg-emerald-50 rounded-full text-center text-sm">Hi, <%= user.name
-                        %></span>
+<body>
+    <nav class="topbar">
+        <div class="topbar-inner">
+            <a href="/dashboard" class="brand">🐄 JeevBandhu</a>
+            <div class="nav-links">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/my-products" class="nav-link">My Products</a>
+                <a href="/orders/sales" class="nav-link active">Sales</a>
+                <span class="nav-link" style="background:#f1f5f9;cursor:default;">Hi, <%= user.name %></span>
                 <form action="/logout" method="POST" class="inline">
-                    <button type="submit"
-                        class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2">Logout</button>
+                    <button type="submit" class="logout-btn">Logout</button>
                 </form>
             </div>
+            <button id="salesMenuBtn" class="menu-btn" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></button>
+        </div>
+
+        <div id="salesMenu" class="mobile-menu">
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/my-products" class="nav-link">My Products</a>
+            <a href="/orders/sales" class="nav-link active">Sales</a>
+            <a href="/marketplace" class="nav-link">Marketplace</a>
+            <form action="/logout" method="POST" class="inline">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
         </div>
     </nav>
 
-    <main class="max-w-full xl:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">📊 Sales Dashboard</h1>
-            <p class="text-gray-600 mt-2">Track your orders and revenue</p>
-        </div>
+    <main class="page">
+        <section class="card header-card">
+            <div>
+                <h1 class="title">Sales Dashboard</h1>
+                <p class="subtitle">Track your revenue, orders, and performance.</p>
+            </div>
+            <div class="header-actions">
+                <select id="dateFilter" class="select">
+                    <option value="all">All Time</option>
+                    <option value="7d">Last 7 Days</option>
+                    <option value="30d">Last 30 Days</option>
+                    <option value="90d">Last 90 Days</option>
+                </select>
+                <button type="button" class="btn" onclick="exportSalesCsv()"><i class="fa-solid fa-file-arrow-down"></i> Export</button>
+            </div>
+        </section>
 
-        <!-- Statistics Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div
-                class="bg-white rounded-xl shadow-lg border-2 border-emerald-200 p-6 hover:shadow-xl transition-shadow">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-semibold text-gray-600 mb-1">💰 Total Revenue</p>
-                        <p class="text-3xl font-bold text-emerald-600">₹<%= stats.totalRevenue.toFixed(2) %>
-                        </p>
-                    </div>
-                    <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center">
-                        <span class="text-3xl">💰</span>
-                    </div>
+        <section class="kpi-grid">
+            <article class="kpi revenue">
+                <div>
+                    <p class="kpi-label">Total Revenue</p>
+                    <p class="kpi-value">₹<%= stats.totalRevenue.toFixed(2) %></p>
+                    <p class="kpi-trend">+12% this week</p>
+                </div>
+                <div class="kpi-icon">💰</div>
+            </article>
+
+            <article class="kpi orders">
+                <div>
+                    <p class="kpi-label">Total Orders</p>
+                    <p class="kpi-value" style="color:#1d4ed8;"><%= stats.totalOrders %></p>
+                    <p class="kpi-trend" style="color:#1d4ed8;">+6% this week</p>
+                </div>
+                <div class="kpi-icon" style="color:#1d4ed8;border-color:#bfdbfe;">📦</div>
+            </article>
+
+            <article class="kpi pending">
+                <div>
+                    <p class="kpi-label">Pending Orders</p>
+                    <p class="kpi-value" style="color:#a16207;"><%= stats.pendingOrders %></p>
+                    <p class="kpi-trend" style="color:#a16207;">Needs quick action</p>
+                </div>
+                <div class="kpi-icon" style="color:#a16207;border-color:#fde68a;">⏳</div>
+            </article>
+        </section>
+
+        <section class="card chart-card">
+            <div class="chart-head">
+                <div>
+                    <h2 class="chart-title">Revenue Trend (Last 7 Days)</h2>
+                    <p class="chart-sub">Track revenue performance over the past week.</p>
+                </div>
+                <div class="chart-legend"><span class="chart-legend-dot"></span>Revenue</div>
+            </div>
+            <div class="chart-wrap">
+                <canvas id="revenueChart" class="chart-canvas"></canvas>
+                <div id="revenueTooltip" class="chart-tooltip" aria-hidden="true"></div>
+            </div>
+        </section>
+
+        <section class="card table-card">
+            <div class="table-head">
+                <div>
+                    <h2 class="table-title">Recent Orders</h2>
+                    <p class="table-sub">Live order management table with status actions.</p>
                 </div>
             </div>
-            <div class="bg-white rounded-xl shadow-lg border-2 border-blue-200 p-6 hover:shadow-xl transition-shadow">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-semibold text-gray-600 mb-1">📦 Total Orders</p>
-                        <p class="text-3xl font-bold text-blue-600">
-                            <%= stats.totalOrders %>
-                        </p>
-                    </div>
-                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span class="text-3xl">📦</span>
-                    </div>
+
+            <% if (orders.length === 0) { %>
+                <div class="empty">
+                    <h3 style="margin:0;">No Sales Yet</h3>
+                    <p style="margin:8px 0 0;color:#64748b;">List products to start receiving orders.</p>
                 </div>
-            </div>
-            <div class="bg-white rounded-xl shadow-lg border-2 border-yellow-200 p-6 hover:shadow-xl transition-shadow">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-semibold text-gray-600 mb-1">⏳ Pending Orders</p>
-                        <p class="text-3xl font-bold text-yellow-600">
-                            <%= stats.pendingOrders %>
-                        </p>
-                    </div>
-                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center">
-                        <span class="text-3xl">⏳</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Orders List -->
-        <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-            <div class="px-6 py-6 border-b border-gray-200 bg-gradient-to-r from-emerald-50 to-blue-50">
-                <h2 class="text-2xl font-bold text-gray-900">📋 Recent Orders</h2>
-            </div>
-
-            <% if (orders.length===0) { %>
-                <div class="text-center py-16">
-                    <div class="text-6xl mb-4">📦</div>
-                    <h3 class="text-xl font-bold text-gray-700 mb-2">No Sales Yet</h3>
-                    <p class="text-gray-600">List products to start receiving orders!</p>
-                </div>
-                <% } else { %>
-                    <!-- Desktop Table View (hidden on mobile) -->
-                    <div class="hidden md:block overflow-x-auto p-6">
-                        <table class="min-w-full table-auto">
-                            <thead class="bg-gray-50 border-b-2 border-gray-200">
-                                <tr>
-                                    <th
-                                        class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                        Order ID</th>
-                                    <th
-                                        class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                        Product</th>
-                                    <th
-                                        class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                        Quantity</th>
-                                    <th
-                                        class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                        Amount</th>
-                                    <th
-                                        class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                        Status</th>
-                                    <th
-                                        class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                        Date</th>
-                                    <th
-                                        class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                        Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white">
-                                <% orders.forEach((order, index)=> { %>
-                                    <tr
-                                        class="border-b border-gray-100 hover:bg-emerald-50 transition-colors <%= index % 2 === 0 ? 'bg-white' : 'bg-gray-50' %>">
-                                        <td class="px-4 py-4 whitespace-nowrap">
-                                            <span class="text-sm font-bold text-gray-900">#<%=
-                                                    order._id.toString().substring(0, 8).toUpperCase() %></span>
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-semibold text-gray-900 mb-1">
-                                                <%= order.productType %>
-                                            </div>
-                                            <div class="text-xs text-gray-500">🏷️ <%= order.animalTagId %>
-                                            </div>
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap">
-                                            <span class="text-sm text-gray-900 font-medium">
-                                                <%= order.quantity %>
-                                                    <%= order.unit %>
-                                            </span>
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap">
-                                            <span class="text-lg font-bold text-emerald-600">₹<%=
-                                                    order.totalPrice.toFixed(2) %></span>
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap">
-                                            <% if (order.status==='pending' ) { %>
-                                                <span
-                                                    class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">⏳
-                                                    Pending</span>
-                                                <% } else if (order.status==='confirmed' ) { %>
-                                                    <span
-                                                        class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">✅
-                                                        Confirmed</span>
-                                                    <% } else if (order.status==='delivered' ) { %>
-                                                        <span
-                                                            class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">🎉
-                                                            Delivered</span>
-                                                        <% } else if (order.status==='cancelled' ) { %>
-                                                            <span
-                                                                class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-red-100 text-red-800">❌
-                                                                Cancelled</span>
-                                                            <% } %>
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap">
-                                            <span class="text-sm text-gray-600">
-                                                <%= new Date(order.createdAt).toLocaleDateString('en-IN') %>
-                                            </span>
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap">
-                                            <% if (order.status==='pending' ) { %>
-                                                <div class="flex flex-col space-y-2">
-                                                    <button onclick="updateStatus('<%= order._id %>', 'confirmed')"
-                                                        class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium text-xs transition shadow-sm">✅
-                                                        Confirm</button>
-                                                    <button onclick="updateStatus('<%= order._id %>', 'cancelled')"
-                                                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium text-xs transition shadow-sm">❌
-                                                        Cancel</button>
-                                                </div>
-                                                </h4>
-                                                <p class="text-sm text-gray-700">
-                                                    <span class="font-medium">Method:</span>
-                                                    <%= order.paymentMethod || 'Cash on Delivery' %>
-                                                </p>
-                                                <p class="text-sm text-gray-700 mt-1">
-                                                    <span class="font-medium">Status:</span>
-                                                    <% if (order.paymentStatus==='completed' ) { %>
-                                                        <span class="text-green-600 font-semibold">✅
-                                                            Completed</span>
-                                                        <% } else if (order.paymentStatus==='failed' ) { %>
-                                                            <span class="text-red-600 font-semibold">❌
-                                                                Failed</span>
-                                                            <% } else { %>
-                                                                <span class="text-yellow-600 font-semibold">⏳
-                                                                    Pending</span>
-                                                                <% } %>
-                                                </p>
-                    </div>
-        </div>
-        </td>
-        </tr>
-        <% } else if (order.status==='confirmed' ) { %>
-            <div class="mt-3 pt-3 border-t border-gray-200">
-                <button onclick="updateStatus('<%= order._id %>', 'delivered')"
-                    class="w-full px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium text-sm transition shadow-sm">🎉
-                    Mark Delivered</button>
-            </div>
-            <% } %>
-                </td>
-                </tr>
-                <% }) %>
-                    </tbody>
-                    </table>
-                    </div>
-
-
-                    <!-- Mobile Card View (hidden on desktop) -->
-                    <div class="md:hidden p-4 space-y-4">
-                        <%orders.forEach((order, index)=> { %>
-                            <div
-                                class="bg-white border-2 border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow">
-                                <div class="flex justify-between items-start mb-3 pb-3 border-b border-gray-200">
-                                    <div>
-                                        <div class="text-xs text-gray-500 mb-1">Order ID</div>
-                                        <div class="text-sm font-bold text-gray-900">#
-                                            <%=order._id.toString().substring(0, 8).toUpperCase() %>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <% if (order.status==='pending' ) { %>
-                                            <span
-                                                class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">⏳
-                                                Pending</span>
-                                            <% } else if (order.status==='confirmed' ) { %>
-                                                <span
-                                                    class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">✅
-                                                    Confirmed</span>
-                                                <% } else if (order.status==='delivered' ) { %>
-                                                    <span
-                                                        class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">🎉
-                                                        Delivered</span>
-                                                    <% } else if (order.status==='cancelled' ) { %>
-                                                        <span
-                                                            class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-red-100 text-red-800">❌
-                                                            Cancelled</span>
-                                                        <% } %>
-                                    </div>
-                                </div>
-                                <div class="space-y-2 mb-3">
-                                    <div class="flex justify-between"><span
-                                            class="text-sm text-gray-600">Product:</span><span
-                                            class="text-sm font-semibold text-gray-900">
-                                            <%=order.productType %>
-                                        </span></div>
-                                    <div class="flex justify-between"><span
-                                            class="text-sm text-gray-600">Source:</span><span
-                                            class="text-sm text-gray-700">🏷️ <%=order.animalTagId %></span></div>
-                                    <div class="flex justify-between"><span
-                                            class="text-sm text-gray-600">Quantity:</span><span
-                                            class="text-sm font-medium text-gray-900">
-                                            <%=order.quantity %>
-                                                <%=order.unit %>
-                                        </span></div>
-                                    <div class="flex justify-between"><span
-                                            class="text-sm text-gray-600">Amount:</span><span
-                                            class="text-lg font-bold text-emerald-600">₹<%=order.totalPrice.toFixed(2)
-                                                %></span></div>
-                                    <div class="flex justify-between"><span
-                                            class="text-sm text-gray-600">Date:</span><span
-                                            class="text-sm text-gray-700">
-                                            <%=new Date(order.createdAt).toLocaleDateString('en-IN') %>
-                                        </span></div>
-                                </div>
-                                <% if (order.status==='pending' ) { %>
-                                    <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-gray-200">
-                                        <button onclick="updateStatus('<%=order._id %>', 'confirmed')"
-                                            class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium text-sm transition shadow-sm">✅
-                                            Confirm</button>
-                                        <button onclick="updateStatus('<%=order._id %>', 'cancelled')"
-                                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium text-sm transition shadow-sm">❌
-                                            Cancel</button>
-                                    </div>
-                                    <% } else if (order.status==='confirmed' ) { %>
-                                        <div class="mt-3 pt-3 border-t border-gray-200">
-                                            <button onclick="updateStatus('<%=order._id %>', 'delivered')"
-                                                class="w-full px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium text-sm transition shadow-sm">🎉
-                                                Mark Delivered</button>
-                                        </div>
+            <% } else { %>
+                <div class="table-wrap">
+                    <table class="orders-table" id="ordersTable">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% orders.forEach((order) => { %>
+                                <tr data-created-at="<%= new Date(order.createdAt).toISOString() %>">
+                                    <td><strong>#<%= order._id.toString().substring(0, 8).toUpperCase() %></strong></td>
+                                    <td>
+                                        <div style="font-weight:700;"><%= order.productType %></div>
+                                        <div style="font-size:.78rem;color:#64748b;">🏷️ <%= order.animalTagId %></div>
+                                    </td>
+                                    <td><%= order.quantity %> <%= order.unit %></td>
+                                    <td style="font-weight:800;color:#166534;">₹<%= order.totalPrice.toFixed(2) %></td>
+                                    <td>
+                                        <% if (order.status === 'delivered') { %>
+                                            <span class="badge delivered"><i class="fa-solid fa-circle-check"></i> Delivered</span>
+                                        <% } else if (order.status === 'confirmed') { %>
+                                            <span class="badge confirmed"><i class="fa-solid fa-circle-check"></i> Confirmed</span>
+                                        <% } else if (order.status === 'cancelled') { %>
+                                            <span class="badge cancelled"><i class="fa-solid fa-circle-xmark"></i> Cancelled</span>
+                                        <% } else { %>
+                                            <span class="badge pending"><i class="fa-solid fa-clock"></i> Pending</span>
                                         <% } %>
-                            </div>
+                                    </td>
+                                    <td><%= new Date(order.createdAt).toLocaleDateString('en-IN') %></td>
+                                    <td>
+                                        <div class="actions">
+                                            <% if (order.status === 'pending') { %>
+                                                <button onclick="updateStatus('<%= order._id %>', 'confirmed')" class="action-btn btn-confirm"><i class="fa-solid fa-check"></i> Confirm</button>
+                                                <button onclick="updateStatus('<%= order._id %>', 'cancelled')" class="action-btn btn-cancel"><i class="fa-solid fa-ban"></i> Cancel</button>
+                                            <% } else if (order.status === 'confirmed') { %>
+                                                <button onclick="updateStatus('<%= order._id %>', 'delivered')" class="action-btn btn-deliver"><i class="fa-solid fa-truck"></i> Mark Delivered</button>
+                                            <% } %>
+                                            <button type="button" class="action-btn btn-view"><i class="fa-solid fa-circle-info"></i> View Details</button>
+                                            <button type="button" class="action-btn btn-reorder"><i class="fa-solid fa-repeat"></i> Reorder</button>
+                                        </div>
+                                    </td>
+                                </tr>
                             <% }) %>
-                    </div>
-                    <% } %>
-                        </div>
-    </main>
+                        </tbody>
+                    </table>
+                </div>
 
-    <footer class="bg-gray-800 text-white mt-12 py-6">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>&copy; 2025 JeevBandhu. Building trust through transparency.</p>
-        </div>
-    </footer>
+                <div class="mobile-orders" id="mobileOrders">
+                    <% orders.forEach((order) => { %>
+                        <article class="mobile-order" data-created-at="<%= new Date(order.createdAt).toISOString() %>">
+                            <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start;">
+                                <div>
+                                    <div style="font-weight:800;">#<%= order._id.toString().substring(0, 8).toUpperCase() %></div>
+                                    <div style="font-size:.82rem;color:#64748b;"><%= order.productType %> • <%= new Date(order.createdAt).toLocaleDateString('en-IN') %></div>
+                                </div>
+                                <% if (order.status === 'delivered') { %>
+                                    <span class="badge delivered">Delivered</span>
+                                <% } else if (order.status === 'confirmed') { %>
+                                    <span class="badge confirmed">Confirmed</span>
+                                <% } else if (order.status === 'cancelled') { %>
+                                    <span class="badge cancelled">Cancelled</span>
+                                <% } else { %>
+                                    <span class="badge pending">Pending</span>
+                                <% } %>
+                            </div>
+
+                            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;">
+                                <div><span style="font-size:.76rem;color:#64748b;">Quantity</span><div style="font-weight:700;"><%= order.quantity %> <%= order.unit %></div></div>
+                                <div><span style="font-size:.76rem;color:#64748b;">Amount</span><div style="font-weight:800;color:#166534;">₹<%= order.totalPrice.toFixed(2) %></div></div>
+                            </div>
+
+                            <div class="actions">
+                                <% if (order.status === 'pending') { %>
+                                    <button onclick="updateStatus('<%= order._id %>', 'confirmed')" class="action-btn btn-confirm"><i class="fa-solid fa-check"></i> Confirm</button>
+                                    <button onclick="updateStatus('<%= order._id %>', 'cancelled')" class="action-btn btn-cancel"><i class="fa-solid fa-ban"></i> Cancel</button>
+                                <% } else if (order.status === 'confirmed') { %>
+                                    <button onclick="updateStatus('<%= order._id %>', 'delivered')" class="action-btn btn-deliver"><i class="fa-solid fa-truck"></i> Mark Delivered</button>
+                                <% } %>
+                                <button type="button" class="action-btn btn-view"><i class="fa-solid fa-circle-info"></i> View Details</button>
+                                <button type="button" class="action-btn btn-reorder"><i class="fa-solid fa-repeat"></i> Reorder</button>
+                            </div>
+                        </article>
+                    <% }) %>
+                </div>
+            <% } %>
+        </section>
+    </main>
 
     <script>
         async function updateStatus(orderId, newStatus) {
@@ -359,35 +672,321 @@
             }
         }
 
-        // Mobile menu toggle
+        function exportSalesCsv() {
+            const rows = Array.from(document.querySelectorAll('#ordersTable tbody tr'));
+            if (!rows.length) {
+                alert('No orders to export');
+                return;
+            }
+
+            const headers = ['Order ID', 'Product', 'Quantity', 'Amount', 'Status', 'Date'];
+            const data = rows
+                .filter((row) => row.style.display !== 'none')
+                .map((row) => {
+                    const cells = row.querySelectorAll('td');
+                    return [
+                        cells[0]?.innerText.trim() || '',
+                        cells[1]?.innerText.split('\n')[0].trim() || '',
+                        cells[2]?.innerText.trim() || '',
+                        cells[3]?.innerText.trim() || '',
+                        cells[4]?.innerText.trim() || '',
+                        cells[5]?.innerText.trim() || ''
+                    ];
+                });
+
+            const csv = [headers, ...data]
+                .map((line) => line.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(','))
+                .join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `sales-export-${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function applyDateFilter() {
+            const value = document.getElementById('dateFilter')?.value || 'all';
+            const now = new Date();
+            let days = null;
+            if (value === '7d') days = 7;
+            if (value === '30d') days = 30;
+            if (value === '90d') days = 90;
+
+            const tableRows = document.querySelectorAll('#ordersTable tbody tr');
+            const mobileRows = document.querySelectorAll('#mobileOrders .mobile-order');
+
+            function isVisible(dateIso) {
+                if (days === null) return true;
+                const created = new Date(dateIso);
+                const diffMs = now - created;
+                return diffMs <= days * 24 * 60 * 60 * 1000;
+            }
+
+            tableRows.forEach((row) => {
+                row.style.display = isVisible(row.dataset.createdAt) ? '' : 'none';
+            });
+
+            mobileRows.forEach((row) => {
+                row.style.display = isVisible(row.dataset.createdAt) ? '' : 'none';
+            });
+        }
+
+        const revenueChartState = {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            values: [420, 680, 520, 780, 640, 900, 720],
+            points: [],
+            hoverIndex: -1,
+            animationFrame: null
+        };
+
+        function formatCurrency(value) {
+            return `₹${Number(value || 0).toLocaleString('en-IN')}`;
+        }
+
+        function drawSmoothPath(ctx, points, progress) {
+            if (!points.length) return;
+
+            const limit = Math.max(1, Math.floor(points.length * progress));
+            const visible = points.slice(0, limit);
+            if (visible.length < 2) {
+                ctx.beginPath();
+                ctx.arc(points[0].x, points[0].y, 0.5, 0, Math.PI * 2);
+                return;
+            }
+
+            ctx.beginPath();
+            ctx.moveTo(visible[0].x, visible[0].y);
+
+            for (let i = 0; i < visible.length - 1; i++) {
+                const current = visible[i];
+                const next = visible[i + 1];
+                const midX = (current.x + next.x) / 2;
+                ctx.bezierCurveTo(midX, current.y, midX, next.y, next.x, next.y);
+            }
+        }
+
+        function renderRevenueChart(animate = false) {
+            const canvas = document.getElementById('revenueChart');
+            const tooltip = document.getElementById('revenueTooltip');
+            if (!canvas || !canvas.getContext) return;
+
+            const dpr = window.devicePixelRatio || 1;
+            const cssWidth = canvas.clientWidth;
+            const cssHeight = canvas.clientHeight;
+
+            canvas.width = Math.floor(cssWidth * dpr);
+            canvas.height = Math.floor(cssHeight * dpr);
+
+            const ctx = canvas.getContext('2d');
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            const labels = revenueChartState.labels;
+            const values = revenueChartState.values;
+
+            const pad = { top: 26, right: 22, bottom: 46, left: 62 };
+            const w = Math.max(10, cssWidth - pad.left - pad.right);
+            const h = Math.max(10, cssHeight - pad.top - pad.bottom);
+
+            const maxValue = Math.max(...values, 1000);
+            const yMax = Math.ceil(maxValue / 100) * 100;
+            const yMin = 0;
+            const ySteps = 5;
+
+            const getX = (i) => pad.left + (w / (labels.length - 1)) * i;
+            const getY = (v) => pad.top + h - ((v - yMin) / (yMax - yMin)) * h;
+
+            revenueChartState.points = values.map((v, i) => ({ x: getX(i), y: getY(v), value: v, label: labels[i] }));
+
+            const draw = (progress = 1, hoverIndex = revenueChartState.hoverIndex) => {
+                ctx.clearRect(0, 0, cssWidth, cssHeight);
+
+                ctx.strokeStyle = '#e2e8f0';
+                ctx.lineWidth = 1;
+                for (let i = 0; i <= ySteps; i++) {
+                    const y = pad.top + (h / ySteps) * i;
+                    ctx.beginPath();
+                    ctx.moveTo(pad.left, y);
+                    ctx.lineTo(pad.left + w, y);
+                    ctx.stroke();
+                }
+
+                ctx.fillStyle = '#64748b';
+                ctx.font = '12px Inter, sans-serif';
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'middle';
+                for (let i = 0; i <= ySteps; i++) {
+                    const y = pad.top + (h / ySteps) * i;
+                    const value = Math.round(yMax - (yMax / ySteps) * i);
+                    ctx.fillText(`₹${value}`, pad.left - 10, y);
+                }
+
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                labels.forEach((label, i) => {
+                    ctx.fillText(label, getX(i), pad.top + h + 12);
+                });
+
+                ctx.save();
+                drawSmoothPath(ctx, revenueChartState.points, progress);
+                const strokeGradient = ctx.createLinearGradient(0, pad.top, 0, pad.top + h);
+                strokeGradient.addColorStop(0, '#16a34a');
+                strokeGradient.addColorStop(1, '#22c55e');
+                ctx.strokeStyle = strokeGradient;
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.stroke();
+
+                ctx.lineTo(revenueChartState.points[Math.max(0, Math.floor((revenueChartState.points.length - 1) * progress))].x, pad.top + h);
+                ctx.lineTo(revenueChartState.points[0].x, pad.top + h);
+                ctx.closePath();
+
+                const fillGradient = ctx.createLinearGradient(0, pad.top, 0, pad.top + h);
+                fillGradient.addColorStop(0, '#22c55e');
+                fillGradient.addColorStop(1, 'rgba(34,197,94,0.05)');
+                ctx.fillStyle = fillGradient;
+                ctx.globalAlpha = 0.28;
+                ctx.fill();
+                ctx.restore();
+
+                const visibleCount = Math.max(1, Math.floor(revenueChartState.points.length * progress));
+                revenueChartState.points.slice(0, visibleCount).forEach((pt, index) => {
+                    const active = index === hoverIndex;
+                    ctx.beginPath();
+                    ctx.fillStyle = active ? '#16a34a' : '#ffffff';
+                    ctx.strokeStyle = '#16a34a';
+                    ctx.lineWidth = active ? 4 : 3;
+                    ctx.arc(pt.x, pt.y, active ? 6 : 4.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    if (active) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = 'rgba(22, 163, 74, 0.16)';
+                        ctx.lineWidth = 10;
+                        ctx.arc(pt.x, pt.y, 8.5, 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+                });
+
+                ctx.save();
+                ctx.translate(16, pad.top + h / 2);
+                ctx.rotate(-Math.PI / 2);
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                ctx.fillStyle = '#475569';
+                ctx.font = '700 12px Inter, sans-serif';
+                ctx.fillText('Revenue (₹)', 0, 0);
+                ctx.restore();
+
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'alphabetic';
+                ctx.fillStyle = '#475569';
+                ctx.font = '700 12px Inter, sans-serif';
+                ctx.fillText('Days (Mon–Sun)', pad.left + w / 2, cssHeight - 6);
+            };
+
+            if (revenueChartState.animationFrame) {
+                cancelAnimationFrame(revenueChartState.animationFrame);
+                revenueChartState.animationFrame = null;
+            }
+
+            if (animate) {
+                const start = performance.now();
+                const duration = 900;
+                const step = (now) => {
+                    const t = Math.min(1, (now - start) / duration);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    draw(eased);
+                    if (t < 1) {
+                        revenueChartState.animationFrame = requestAnimationFrame(step);
+                    }
+                };
+                revenueChartState.animationFrame = requestAnimationFrame(step);
+            } else {
+                draw(1);
+            }
+
+            const parentRect = canvas.parentElement?.getBoundingClientRect();
+            const tooltipEl = tooltip;
+            if (!tooltipEl || !parentRect) return;
+
+            canvas.onmousemove = (event) => {
+                const rect = canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+
+                let nearest = -1;
+                let minDist = Infinity;
+
+                revenueChartState.points.forEach((pt, idx) => {
+                    const dx = pt.x - x;
+                    const dy = pt.y - y;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist < minDist) {
+                        minDist = dist;
+                        nearest = idx;
+                    }
+                });
+
+                if (nearest !== -1 && minDist <= 26) {
+                    revenueChartState.hoverIndex = nearest;
+                    draw(1, nearest);
+
+                    const pt = revenueChartState.points[nearest];
+                    tooltipEl.innerHTML = `${pt.label}<strong>${formatCurrency(pt.value)}</strong>`;
+                    tooltipEl.style.left = `${pt.x}px`;
+                    tooltipEl.style.top = `${pt.y}px`;
+                    tooltipEl.classList.add('show');
+                    tooltipEl.setAttribute('aria-hidden', 'false');
+                } else {
+                    revenueChartState.hoverIndex = -1;
+                    draw(1, -1);
+                    tooltipEl.classList.remove('show');
+                    tooltipEl.setAttribute('aria-hidden', 'true');
+                }
+            };
+
+            canvas.onmouseleave = () => {
+                revenueChartState.hoverIndex = -1;
+                draw(1, -1);
+                tooltipEl.classList.remove('show');
+                tooltipEl.setAttribute('aria-hidden', 'true');
+            };
+        }
+
         const salesMenuBtn = document.getElementById('salesMenuBtn');
         const salesMenu = document.getElementById('salesMenu');
 
         if (salesMenuBtn && salesMenu) {
             salesMenuBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
-                salesMenu.classList.toggle('hidden');
-                salesMenu.classList.toggle('active');
-                salesMenuBtn.classList.toggle('active');
+                salesMenu.classList.toggle('open');
             });
 
             document.addEventListener('click', function (e) {
-                if (salesMenu && !salesMenu.contains(e.target) && !salesMenuBtn.contains(e.target)) {
-                    salesMenu.classList.add('hidden');
-                    salesMenu.classList.remove('active');
-                    salesMenuBtn.classList.remove('active');
+                if (!salesMenu.contains(e.target) && !salesMenuBtn.contains(e.target)) {
+                    salesMenu.classList.remove('open');
                 }
             });
 
             const salesLinks = salesMenu.querySelectorAll('a');
             salesLinks.forEach(link => {
                 link.addEventListener('click', function () {
-                    salesMenu.classList.add('hidden');
-                    salesMenu.classList.remove('active');
-                    salesMenuBtn.classList.remove('active');
+                    salesMenu.classList.remove('open');
                 });
             });
         }
+
+        document.getElementById('dateFilter')?.addEventListener('change', applyDateFilter);
+        window.addEventListener('resize', () => renderRevenueChart(false));
+        applyDateFilter();
+        renderRevenueChart(true);
     </script>
 </body>
 

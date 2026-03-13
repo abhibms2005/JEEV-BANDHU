@@ -5,162 +5,472 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Products - JeevBandhu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
+    <style>
+        :root {
+            --primary: #16a34a;
+            --secondary: #22c55e;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --line: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(8px);
+        }
+
+        .topbar-inner {
+            width: min(1240px, 94vw);
+            margin: 0 auto;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            font-size: 1.75rem;
+        }
+
+        .desktop-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #334155;
+            font-size: 0.92rem;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 999px;
+            transition: .2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #ecfdf5;
+            color: #15803d;
+        }
+
+        .logout-btn {
+            border: 0;
+            background: transparent;
+            color: #dc2626;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .menu-btn {
+            display: none;
+            border: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            color: #334155;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            width: min(1240px, 94vw);
+            margin: 0 auto 10px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: #fff;
+            padding: 10px;
+        }
+
+        .mobile-menu.open {
+            display: grid;
+            gap: 6px;
+        }
+
+        .page {
+            width: min(1240px, 94vw);
+            margin: 22px auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: clamp(1.7rem, 4vw, 2.2rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .page-subtitle {
+            margin: 6px 0 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .add-btn {
+            text-decoration: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 14px;
+            font-weight: 700;
+            box-shadow: 0 12px 22px rgba(22, 163, 74, 0.28);
+            transition: .2s ease;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .product-card {
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: var(--card);
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+            padding: 14px;
+            transition: transform .2s ease, box-shadow .2s ease;
+            display: grid;
+            gap: 12px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 28px rgba(15, 23, 42, 0.12);
+        }
+
+        .product-top {
+            display: grid;
+            grid-template-columns: 56px 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .product-image {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ecfdf5, #dcfce7);
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            display: grid;
+            place-items: center;
+            font-size: 1.15rem;
+            font-weight: 800;
+        }
+
+        .product-name {
+            margin: 0;
+            font-size: 1.28rem;
+            letter-spacing: -0.01em;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .tags {
+            margin-top: 5px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border: 1px solid;
+        }
+
+        .tag-verified { color: #166534; background: #ecfdf5; border-color: #86efac; }
+        .tag-organic { color: #155e75; background: #ecfeff; border-color: #a5f3fc; }
+        .tag-antibiotic { color: #1d4ed8; background: #eff6ff; border-color: #93c5fd; }
+
+        .price-row {
+            border: 1px solid #bbf7d0;
+            background: #f0fdf4;
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 10px;
+        }
+
+        .price-label { font-size: 0.8rem; color: #166534; font-weight: 700; }
+        .price-value { font-size: 1.55rem; font-weight: 800; color: var(--primary); line-height: 1; }
+        .price-unit { font-size: 0.88rem; color: #166534; font-weight: 700; }
+
+        .inventory {
+            border-top: 1px solid #f1f5f9;
+            border-bottom: 1px solid #f1f5f9;
+            padding: 10px 0;
+        }
+
+        .inventory-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            align-items: center;
+            font-size: 0.84rem;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .progress-track {
+            height: 9px;
+            border-radius: 999px;
+            background: #e2e8f0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .meta {
+            display: grid;
+            gap: 3px;
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .meta strong { color: #1f2937; }
+
+        .card-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            border-radius: 10px;
+            min-height: 34px;
+            padding: 0 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .btn-edit {
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            color: #334155;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-edit:hover {
+            border-color: #86efac;
+            color: #166534;
+            background: #f8fafc;
+        }
+
+        .btn-delete {
+            border: 1px solid #fca5a5;
+            background: #fff;
+            color: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background: #fef2f2;
+            border-color: #ef4444;
+        }
+
+        .empty {
+            border: 1px dashed #cbd5e1;
+            border-radius: 16px;
+            background: #fff;
+            text-align: center;
+            padding: 38px 14px;
+        }
+
+        .empty-btn {
+            margin-top: 12px;
+            text-decoration: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 700;
+            display: inline-flex;
+            min-height: 40px;
+            align-items: center;
+            padding: 0 12px;
+        }
+
+        @media (max-width: 980px) {
+            .desktop-nav { display: none; }
+            .menu-btn { display: inline-flex; align-items: center; justify-content: center; }
+            .page-header { flex-direction: column; align-items: flex-start; }
+            .add-btn { width: 100%; justify-content: center; }
+        }
+    </style>
 </head>
 
-<body class="bg-gray-50">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-md">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="/dashboard" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
+<body>
+    <nav class="topbar">
+        <div class="topbar-inner">
+            <a href="/dashboard" class="brand">🐄 JeevBandhu</a>
 
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="/dashboard" class="text-gray-700 hover:text-emerald-600 transition">Dashboard</a>
-                    <a href="/list-product" class="text-gray-700 hover:text-emerald-600 transition">List Product</a>
-                    <a href="/marketplace" class="text-gray-700 hover:text-emerald-600 transition">Marketplace</a>
-                    <span class="text-gray-600">Hi, <%= user.name %></span>
-                    <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-red-600 hover:text-red-700 transition">Logout</button>
-                    </form>
-                </div>
-
-                <!-- Mobile Hamburger Button -->
-                <button id="myProductsMenuBtn"
-                    class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative">
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700"></span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Menu Overlay -->
-        <div id="myProductsMenu"
-            class="mobile-menu hidden fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-40 md:hidden overflow-y-auto">
-            <div class="flex flex-col p-6 pt-20 space-y-4">
-                <a href="/dashboard"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">🏠
-                    Dashboard</a>
-                <a href="/list-product"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">➕ List
-                    Product</a>
-                <a href="/my-products" class="text-emerald-600 font-semibold py-2 border-b border-gray-200">📦 My
-                    Products</a>
-                <a href="/orders/sales"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">💰 Sales</a>
-                <a href="/marketplace"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">🛒
-                    Marketplace</a>
-                <span class="text-gray-600 px-3 py-2 bg-emerald-50 rounded-full text-center text-sm">Hi, <%= user.name
-                        %></span>
+            <div class="desktop-nav">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/list-product" class="nav-link">List Product</a>
+                <a href="/marketplace" class="nav-link">Marketplace</a>
+                <a href="/my-products" class="nav-link active">My Products</a>
+                <span class="nav-link" style="background:#f1f5f9;cursor:default;">Hi, <%= user.name %></span>
                 <form action="/logout" method="POST" class="inline">
-                    <button type="submit"
-                        class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2">Logout</button>
+                    <button type="submit" class="logout-btn">Logout</button>
                 </form>
             </div>
+
+            <button id="myProductsMenuBtn" class="menu-btn" aria-label="Toggle Menu">☰</button>
+        </div>
+
+        <div id="myProductsMenu" class="mobile-menu">
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/list-product" class="nav-link">List Product</a>
+            <a href="/marketplace" class="nav-link">Marketplace</a>
+            <a href="/my-products" class="nav-link active">My Products</a>
+            <span class="nav-link" style="background:#f1f5f9;cursor:default;">Hi, <%= user.name %></span>
+            <form action="/logout" method="POST" class="inline">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
         </div>
     </nav>
 
-    <main class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">My Products</h1>
-            <p class="text-gray-600 mt-2">Manage your marketplace listings</p>
-        </div>
+    <main class="page">
+        <header class="page-header">
+            <div>
+                <h1 class="page-title">My Products</h1>
+                <p class="page-subtitle">Manage and monitor your marketplace listings.</p>
+            </div>
+            <a href="/list-product" class="add-btn">➕ Add Product</a>
+        </header>
 
         <% if (products.length===0) { %>
-            <div class="text-center py-16">
-                <div class="text-6xl mb-4">📦</div>
-                <h2 class="text-2xl font-bold text-gray-900 mb-2">No products listed yet</h2>
-                <p class="text-gray-600 mb-6">Start selling by listing your first product</p>
-                <a href="/list-product" class="btn-primary">List Product</a>
+            <div class="empty">
+                <div style="font-size:2.4rem;">📦</div>
+                <h2 style="margin:8px 0 0;font-size:1.5rem;">No products listed yet</h2>
+                <p style="margin:8px 0 0;color:#64748b;">Start selling by listing your first product.</p>
+                <a href="/list-product" class="empty-btn">List Product</a>
             </div>
-            <% } else { %>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <% products.forEach(product=> { %>
-                        <div class="card">
-                            <div class="flex justify-between items-start mb-3">
-                                <h3 class="text-xl font-bold text-gray-900">
-                                    <%= product.productType %>
-                                </h3>
-                                <span class="badge-verified">✅ Verified</span>
-                            </div>
-
-                            <div class="space-y-2 text-sm mb-4">
-                                <% // Handle both old and new product schemas const
-                                    hasQuantitySystem=product.pricePerUnit !==undefined && product.totalQuantity
-                                    !==undefined; const availableQty=hasQuantitySystem ? (product.totalQuantity -
-                                    (product.quantitySold || 0)) : null; %>
-
-                                    <% if (hasQuantitySystem) { %>
-                                        <!-- New quantity-based system -->
-                                        <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 mb-2">
-                                            <div class="flex justify-between items-center">
-                                                <span class="text-gray-700">Price per <%= product.unit %>:</span>
-                                                <span class="font-bold text-emerald-600 text-lg">₹<%=
-                                                        product.pricePerUnit.toFixed(2) %></span>
-                                            </div>
-                                            <div class="flex justify-between items-center mt-2">
-                                                <span class="text-gray-700">Stock Status:</span>
-                                                <span
-                                                    class="font-semibold <%= availableQty < product.totalQuantity * 0.2 ? 'text-red-600' : 'text-gray-900' %>">
-                                                    <%= availableQty.toFixed(1) %> / <%= product.totalQuantity %>
-                                                            <%= product.unit %>
-                                                </span>
-                                            </div>
-                                            <% if (product.quantitySold> 0) { %>
-                                                <div class="text-xs text-gray-600 mt-1">
-                                                    Sold: <%= product.quantitySold %>
-                                                        <%= product.unit %>
-                                                </div>
-                                                <% } %>
-                                        </div>
-                                        <% } else { %>
-                                            <!-- Old fixed-price system (backwards compatibility) -->
-                                            <div class="text-gray-600">
-                                                <span>Quantity:</span>
-                                                <span class="font-semibold ml-2">
-                                                    <%= product.quantity %>
-                                                        <%= product.unit %>
-                                                </span>
-                                            </div>
-                                            <div class="text-gray-600">
-                                                <span>Price:</span>
-                                                <span class="font-semibold ml-2 text-lg">₹<%= product.price.toFixed(2)
-                                                        %></span>
-                                            </div>
-                                            <% } %>
-
-                                                <% if (product.animal) { %>
-                                                    <div class="text-gray-600">
-                                                        <span>Source:</span>
-                                                        <span class="font-semibold ml-2">
-                                                            <%= product.animal.tagId %>
-                                                        </span>
-                                                    </div>
-                                                    <% } %>
-
-                                                        <% if (product.description) { %>
-                                                            <p class="text-gray-600 mt-2">
-                                                                <%= product.description %>
-                                                            </p>
-                                                            <% } %>
-                            </div>
-
-                            <div class="flex justify-between items-center">
-                                <div class="text-xs text-gray-500">
-                                    Listed: <%= new Date(product.createdAt).toLocaleDateString() %>
+        <% } else { %>
+            <section class="products-grid">
+                <% products.forEach(product=> { %>
+                    <% 
+                        const hasQuantitySystem = product.pricePerUnit !== undefined && product.totalQuantity !== undefined;
+                        const availableQty = hasQuantitySystem ? (product.totalQuantity - (product.quantitySold || 0)) : null;
+                        const totalQty = hasQuantitySystem ? product.totalQuantity : (product.quantity || 0);
+                        const remainingQty = hasQuantitySystem ? availableQty : (product.quantity || 0);
+                        const unitLabel = product.unit || 'unit';
+                        const priceDisplay = hasQuantitySystem ? product.pricePerUnit : product.price;
+                        const stockPercent = totalQty > 0 ? Math.max(0, Math.min(100, (remainingQty / totalQty) * 100)) : 0;
+                        const stockColor = stockPercent < 20 ? '#dc2626' : '#0f172a';
+                        const productText = `${product.productType || ''} ${product.description || ''}`.toLowerCase();
+                        const showOrganic = /organic/.test(productText);
+                        const showAntibioticFree = /antibiotic[- ]?free|no antibiotics/.test(productText);
+                    %>
+                    <article class="product-card">
+                        <div class="product-top">
+                            <div class="product-image">📦</div>
+                            <div>
+                                <h3 class="product-name"><%= product.productType %></h3>
+                                <div class="tags">
+                                    <span class="tag tag-verified">Verified</span>
+                                    <% if (showOrganic) { %><span class="tag tag-organic">Organic</span><% } %>
+                                    <% if (showAntibioticFree) { %><span class="tag tag-antibiotic">Antibiotic-Free</span><% } %>
                                 </div>
-                                <button onclick="deleteProduct('<%= product._id %>', '<%= product.productType %>')"
-                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition text-sm font-medium">
-                                    🗑️ Delete
-                                </button>
                             </div>
                         </div>
-                        <% }) %>
-                </div>
-                <% } %>
+
+                        <div class="price-row">
+                            <div>
+                                <div class="price-label">Price</div>
+                                <div class="price-value">₹<%= Number(priceDisplay || 0).toFixed(2) %></div>
+                            </div>
+                            <div class="price-unit">/ <%= unitLabel %></div>
+                        </div>
+
+                        <div class="inventory">
+                            <div class="inventory-head">
+                                <span>Stock</span>
+                                <strong class="stock-value" data-stock-color="<%= stockColor %>"><%= Number(remainingQty || 0).toFixed(1) %> / <%= Number(totalQty || 0) %> <%= unitLabel %></strong>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill" data-stock-width="<%= stockPercent %>"></div>
+                            </div>
+                            <% if (hasQuantitySystem && product.quantitySold > 0) { %>
+                                <div style="margin-top:6px;font-size:0.78rem;color:#64748b;">Sold: <%= product.quantitySold %> <%= unitLabel %></div>
+                            <% } %>
+                        </div>
+
+                        <div class="meta">
+                            <% if (product.animal) { %>
+                                <div>Source: <strong><%= product.animal.tagId %></strong></div>
+                            <% } else { %>
+                                <div>Source: <strong>N/A</strong></div>
+                            <% } %>
+                            <div>Listed: <%= new Date(product.createdAt).toLocaleDateString() %></div>
+                            <% if (product.description) { %>
+                                <div style="color:#475569;"><%= product.description %></div>
+                            <% } %>
+                        </div>
+
+                        <div class="card-actions">
+                            <a href="/list-product" class="btn-edit">Edit Product</a>
+                            <button onclick="deleteProduct('<%= product._id %>', '<%= product.productType %>')" class="btn-delete">Delete Product</button>
+                        </div>
+                    </article>
+                <% }) %>
+            </section>
+        <% } %>
     </main>
 
     <script>
@@ -190,35 +500,39 @@
             }
         }
 
-        // Mobile menu toggle
         const myProductsMenuBtn = document.getElementById('myProductsMenuBtn');
         const myProductsMenu = document.getElementById('myProductsMenu');
 
         if (myProductsMenuBtn && myProductsMenu) {
             myProductsMenuBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
-                myProductsMenu.classList.toggle('hidden');
-                myProductsMenu.classList.toggle('active');
-                myProductsMenuBtn.classList.toggle('active');
+                myProductsMenu.classList.toggle('open');
             });
 
             document.addEventListener('click', function (e) {
                 if (myProductsMenu && !myProductsMenu.contains(e.target) && !myProductsMenuBtn.contains(e.target)) {
-                    myProductsMenu.classList.add('hidden');
-                    myProductsMenu.classList.remove('active');
-                    myProductsMenuBtn.classList.remove('active');
+                    myProductsMenu.classList.remove('open');
                 }
             });
 
             const myProductsLinks = myProductsMenu.querySelectorAll('a');
             myProductsLinks.forEach(link => {
                 link.addEventListener('click', function () {
-                    myProductsMenu.classList.add('hidden');
-                    myProductsMenu.classList.remove('active');
-                    myProductsMenuBtn.classList.remove('active');
+                    myProductsMenu.classList.remove('open');
                 });
             });
         }
+
+        const stockBars = document.querySelectorAll('[data-stock-width]');
+        stockBars.forEach((bar) => {
+            const width = Math.max(0, Math.min(100, parseFloat(bar.dataset.stockWidth || '0')));
+            bar.style.width = `${width}%`;
+        });
+
+        const stockValues = document.querySelectorAll('[data-stock-color]');
+        stockValues.forEach((item) => {
+            item.style.color = item.dataset.stockColor || '#0f172a';
+        });
     </script>
 </body>
 

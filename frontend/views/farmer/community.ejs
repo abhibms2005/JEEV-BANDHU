@@ -5,380 +5,1133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community - JeevBandhu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Dropdown menu styles - reusable for all dropdowns */
-        .dropdown {
-            position: relative;
-            display: inline-block;
+        :root {
+            --primary: #16a34a;
+            --secondary: #22c55e;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --line: #e2e8f0;
         }
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: white;
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            z-index: 100;
-            top: 100%;
-            left: 0;
-            margin-top: 0px;
-            /* Remove gap */
-            padding-top: 8px;
-            /* Add internal padding instead */
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #f8fafc 0%, #eef7f1 100%);
+            color: var(--text);
         }
 
-        .dropdown-content a {
-            color: #374151;
-            padding: 12px 16px;
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 80;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(8px);
+        }
+
+        .topbar-inner {
+            width: min(1320px, 95vw);
+            margin: 0 auto;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand {
             text-decoration: none;
-            display: block;
-            transition: background-color 0.2s;
+            color: var(--primary);
+            font-size: 1.72rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .dropdown-content a:hover {
-            background-color: #f3f4f6;
-            color: #059669;
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .dropdown-content a:first-child {
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
+        .nav-link {
+            text-decoration: none;
+            color: #334155;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            transition: 0.2s ease;
         }
 
-        .dropdown-content a:last-child {
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
+        .nav-link:hover,
+        .nav-link.active {
+            background: #ecfdf5;
+            color: #15803d;
         }
 
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown-trigger {
+        .logout-btn {
+            border: 0;
+            background: transparent;
+            color: #dc2626;
+            font-weight: 600;
             cursor: pointer;
-            user-select: none;
         }
 
-        /* Ensure dropdown stays visible when hovering over content */
-        .dropdown-content:hover {
+        .menu-btn {
+            display: none;
+            border: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            color: #334155;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            width: min(1320px, 95vw);
+            margin: 0 auto 10px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: #fff;
+            padding: 10px;
+        }
+
+        .mobile-menu.open { display: grid; gap: 6px; }
+
+        .page {
+            width: min(1320px, 95vw);
+            margin: 18px auto 24px;
+            display: grid;
+            grid-template-columns: 260px 1fr 280px;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .panel {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+        }
+
+        .left-toggle {
+            display: none;
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: #fff;
+            color: #334155;
+            font-weight: 700;
+            padding: 10px 12px;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .left-col,
+        .right-col {
+            position: sticky;
+            top: 86px;
+            display: grid;
+            gap: 24px;
+        }
+
+        .left-card,
+        .right-card {
+            padding: 20px;
+        }
+
+        .left-card {
+            overflow: hidden;
+        }
+
+        .side-card-head {
+            margin: -20px -20px 14px;
+            padding: 12px 20px;
+            border-bottom: 1px solid #d1fae5;
+            background: #f0fdf4;
+        }
+
+        .side-card-head.trending {
+            background: #f8fafc;
+            border-bottom-color: #e2e8f0;
+        }
+
+        .section-title {
+            margin: 0;
+            font-size: 0.82rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #475569;
+        }
+
+        .side-links {
+            margin-top: 8px;
+            display: grid;
+            gap: 6px;
+        }
+
+        .side-link {
+            text-decoration: none;
+            color: #334155;
+            font-size: 0.92rem;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 8px 10px;
+            transition: 0.2s ease;
+        }
+
+        .side-link:hover,
+        .side-link.active {
+            background: #ecfdf5;
+            color: #166534;
+        }
+
+        .mini-list {
+            margin: 8px 0 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            gap: 8px;
+        }
+
+        .mini-item {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 10px;
+            background: #fff;
+            transition: 0.22s ease;
+        }
+
+        .mini-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+        }
+
+        .mini-item-title {
+            margin: 0;
+            font-size: 0.84rem;
+            color: #1f2937;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .mini-item-sub {
+            margin: 4px 0 0;
+            font-size: 0.76rem;
+            color: #64748b;
+        }
+
+        .contributor {
+            display: grid;
+            grid-template-columns: 32px 1fr;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .avatar-mini {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            display: grid;
+            place-items: center;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 8px 16px rgba(22, 163, 74, 0.24);
+        }
+
+        .stats-grid {
+            margin-top: 8px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .stat-box {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: #fff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            font-size: 0.88rem;
+        }
+
+        .stat-icon.posts { background: #dcfce7; color: #166534; }
+        .stat-icon.replies { background: #dbeafe; color: #1d4ed8; }
+        .stat-icon.today { background: #fef3c7; color: #92400e; }
+        .stat-icon.people { background: #ede9fe; color: #6d28d9; }
+
+        .stat-meta {
+            min-width: 0;
+        }
+
+        .stat-label {
+            margin: 0;
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .stat-value {
+            margin: 4px 0 0;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .main {
+            display: grid;
+            gap: 24px;
+        }
+
+        .hero-card {
+            padding: 20px;
+            background: linear-gradient(135deg, #e8f7ee, #f5fbf7);
+            border-color: #cfeedd;
+            box-shadow: 0 16px 32px rgba(22, 163, 74, 0.1);
+        }
+
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .hero-title {
+            margin: 0;
+            font-size: clamp(1.85rem, 3.4vw, 2.45rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #064e3b;
+        }
+
+        .hero-sub {
+            margin: 7px 0 0;
+            color: #0f766e;
+            font-size: 1rem;
+        }
+
+        .new-post-btn {
+            border: 0;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 800;
+            padding: 11px 16px;
+            cursor: pointer;
+            box-shadow: 0 12px 24px rgba(22, 163, 74, 0.28);
+            transition: 0.2s ease;
+            white-space: nowrap;
+            min-height: 44px;
+        }
+
+        .new-post-btn:hover {
+            transform: translateY(-2px) scale(1.01);
+        }
+
+        .search-wrap {
+            margin-top: 12px;
+            position: relative;
+        }
+
+        .search-wrap i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 48px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: #fff;
+            color: #1f2937;
+            font-size: 0.92rem;
+            outline: none;
+            padding: 0 16px 0 40px;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+        }
+
+        .search-input:focus {
+            border-color: #86efac;
+            box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.28);
+        }
+
+        .chip-row {
+            margin-top: 14px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.79rem;
+            font-weight: 700;
+            padding: 5px 11px;
+            border: 1px solid #d1d5db;
+            color: #475569;
+            background: #fff;
+            transition: 0.2s ease;
+        }
+
+        .chip:hover,
+        .chip.active {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(15, 23, 42, 0.08);
+        }
+
+        .chip.all.active { background: #ecfdf5; color: #166534; border-color: #86efac; }
+        .chip.disease.active { background: #fef2f2; color: #b91c1c; border-color: #fca5a5; }
+        .chip.feed.active { background: #eff6ff; color: #1d4ed8; border-color: #93c5fd; }
+        .chip.breeding.active { background: #f5f3ff; color: #6d28d9; border-color: #c4b5fd; }
+
+        .post-card {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 62px 1fr;
+            gap: 16px;
+            transition: 0.22s ease;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+        }
+
+        .post-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .vote-col {
+            display: grid;
+            justify-items: center;
+            gap: 8px;
+            align-content: start;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            display: grid;
+            place-items: center;
+            font-size: 0.84rem;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 8px 16px rgba(34, 197, 94, 0.28);
+        }
+
+        .vote-stack {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            width: 46px;
+            padding: 4px 0;
+            display: grid;
+            justify-items: center;
+            gap: 4px;
+            background: #f0fdf4;
+        }
+
+        .vote-btn {
+            border: 1px solid var(--line);
+            background: #f0fdf4;
+            color: #475569;
+            border-radius: 8px;
+            width: 32px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vote-btn:hover {
+            border-color: #86efac;
+            color: #166534;
+            background: #f8fafc;
+        }
+
+        .vote-count {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: #15803d;
+        }
+
+        .pin-btn {
+            border: 1px solid var(--line);
+            background: #f8fafc;
+            color: #475569;
+            border-radius: 9px;
+            width: 40px;
+            height: 26px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: 0.2s ease;
+        }
+
+        .pin-btn:hover {
+            border-color: #86efac;
+            color: #166534;
+            background: #f8fafc;
+        }
+
+        .post-title {
+            margin: 0;
+            font-size: 1.27rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            color: #0f172a;
+        }
+
+        .post-meta {
+            margin-top: 6px;
+            display: flex;
+            gap: 7px;
+            align-items: center;
+            flex-wrap: wrap;
+            color: #64748b;
+            font-size: 0.82rem;
+        }
+
+        .tag {
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 9px;
+            border: 1px solid transparent;
+        }
+
+        .tag.disease { background: #fef2f2; color: #b91c1c; border-color: #fca5a5; }
+        .tag.feed { background: #fffbeb; color: #92400e; border-color: #fcd34d; }
+        .tag.breeding { background: #ecfdf5; color: #166534; border-color: #86efac; }
+        .tag.general { background: #ecfdf5; color: #166534; border-color: #86efac; }
+
+        .post-preview {
+            margin-top: 8px;
+            color: #334155;
+            line-height: 1.55;
+            font-size: 0.92rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            white-space: pre-wrap;
+        }
+
+        .post-preview.expanded {
             display: block;
+            -webkit-line-clamp: unset;
+            line-clamp: unset;
+        }
+
+        .read-more-btn {
+            margin-top: 3px;
+            border: 0;
+            background: transparent;
+            color: #2563eb;
+            font-size: 0.84rem;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .post-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            border: 1px solid #d1d5db;
+            background: #fff;
+            color: #334155;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 10px;
+            transition: 0.2s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 16px rgba(15, 23, 42, 0.1);
+        }
+
+        .action-btn.like {
+            border-color: #cbd5e1;
+            color: #334155;
+            background: #fff;
+        }
+
+        .action-btn.like:hover {
+            border-color: #94a3b8;
+            color: #0f172a;
+        }
+
+        .action-btn.reply {
+            border-color: #bfdbfe;
+            color: #1d4ed8;
+            background: #eff6ff;
+        }
+
+        .action-btn.reply:hover {
+            border-color: #93c5fd;
+            background: #dbeafe;
+        }
+
+        .action-btn.pin {
+            border-color: #e2e8f0;
+            color: #475569;
+            background: #f8fafc;
+            padding-inline: 9px;
+        }
+
+        .action-btn.pin:hover {
+            border-color: #cbd5e1;
+            color: #334155;
+        }
+
+        .action-btn.delete {
+            border-color: #fecaca;
+            color: #dc2626;
+            background: #fff;
+        }
+
+        .action-btn.delete:hover {
+            border-color: #fca5a5;
+            background: #fef2f2;
+        }
+
+        .replies {
+            margin-top: 11px;
+            border-top: 1px solid var(--line);
+            padding-top: 11px;
+        }
+
+        .reply-input {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            padding: 9px 10px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .reply-input:focus {
+            border-color: #86efac;
+            box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.35);
+        }
+
+        .reply-btn {
+            margin-top: 7px;
+            border: 0;
+            border-radius: 10px;
+            background: #2563eb;
+            color: #fff;
+            font-weight: 700;
+            padding: 8px 11px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .reply-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.22);
+        }
+
+        .reply-card {
+            margin-top: 8px;
+            background: #f8fafc;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .right-card.top-contrib {
+            background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 30%);
+            border-color: #bbf7d0;
+        }
+
+        .right-card.trending-topics {
+            background: linear-gradient(180deg, #fffbeb 0%, #ffffff 30%);
+            border-color: #fde68a;
+        }
+
+        .right-card.community-stats {
+            background: linear-gradient(180deg, #eff6ff 0%, #ffffff 30%);
+            border-color: #bfdbfe;
+        }
+
+        .empty-card {
+            padding: 40px 16px;
+            text-align: center;
+        }
+
+        .hidden { display: none !important; }
+
+        .modal-wrap {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.5);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-wrap.show {
+            display: flex;
+        }
+
+        .modal-card {
+            width: min(720px, 94vw);
+            background: #fff;
+            border-radius: 14px;
+            padding: 20px;
+            border: 1px solid var(--line);
+        }
+
+        .field {
+            margin-top: 12px;
+            display: grid;
+            gap: 6px;
+        }
+
+        .field label {
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 0.94rem;
+            outline: none;
+        }
+
+        .form-textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .modal-actions {
+            margin-top: 16px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-ghost,
+        .btn-primary {
+            border: 0;
+            border-radius: 10px;
+            font-weight: 700;
+            padding: 10px 14px;
+            cursor: pointer;
+        }
+
+        .btn-ghost { background: #e2e8f0; color: #334155; }
+        .btn-primary { background: #16a34a; color: #fff; }
+
+        @media (max-width: 1180px) {
+            .page { grid-template-columns: 260px 1fr; }
+            .right-col { display: none; }
+        }
+
+        @media (max-width: 960px) {
+            .nav-links { display: none; }
+            .menu-btn { display: inline-flex; align-items: center; justify-content: center; }
+            .page { grid-template-columns: 1fr; }
+            .left-toggle { display: inline-flex; }
+            .left-col {
+                position: static;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height .25s ease;
+            }
+            .left-col.open { max-height: 900px; }
+            .hero-top {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .new-post-btn {
+                width: 100%;
+                justify-content: center;
+                display: inline-flex;
+            }
+            .post-card { grid-template-columns: 1fr; }
+            .vote-col { grid-template-columns: repeat(3, auto); justify-content: flex-start; align-items: center; }
         }
     </style>
 </head>
 
-<body class="bg-gray-50">
-    <!-- Enhanced Navigation with Organized Dropdowns -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="/dashboard" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
+<body>
+    <% 
+        const categoryColors = {
+            disease: 'disease',
+            feed: 'feed',
+            breeding: 'breeding',
+            general: 'general'
+        };
 
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="/dashboard" class="text-gray-700 hover:text-emerald-600 transition">🏠 Dashboard</a>
+        const contributorCounts = {};
+        posts.forEach((p) => {
+            const key = p.authorName || 'Unknown';
+            contributorCounts[key] = (contributorCounts[key] || 0) + 1;
+        });
 
-                    <!-- Farm Management Dropdown -->
-                    <div class="dropdown">
-                        <span class="dropdown-trigger text-gray-700 hover:text-emerald-600 transition">🌾 Farm ▾</span>
-                        <div class="dropdown-content">
-                            <a href="/animals/add">➕ Add Animal</a>
-                            <a href="/dashboard">📊 My Animals</a>
+        const topContributors = Object.keys(contributorCounts)
+            .map((name) => ({ name, count: contributorCounts[name] }))
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 6);
 
-                            <a href="/ai-assistant">🩺 AI Diagnosis</a>
-                            <a href="/guide/medicine-guide">💊 Medicine Guide</a>
-                            <a href="/compliance">✅ Biosecurity</a>
-                        </div>
-                    </div>
+        const trendingPosts = [...posts]
+            .sort((a, b) => ((b.likeCount || 0) + (b.replyCount || 0)) - ((a.likeCount || 0) + (a.replyCount || 0)))
+            .slice(0, 6);
 
-                    <!-- Commerce Dropdown -->
-                    <div class="dropdown">
-                        <span class="dropdown-trigger text-gray-700 hover:text-emerald-600 transition">💼 Commerce
-                            ▾</span>
-                        <div class="dropdown-content">
-                            <a href="/marketplace">🛒 Browse Marketplace</a>
-                            <a href="/list-product">➕ List Product</a>
-                            <a href="/my-products">📦 My Products</a>
-                            <a href="/orders/sales">💰 Sales</a>
-                        </div>
-                    </div>
+        function getInitials(name) {
+            if (!name) return 'JB';
+            const parts = String(name).trim().split(/\s+/).filter(Boolean);
+            if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+            return (parts[0][0] + parts[1][0]).toUpperCase();
+        }
 
-                    <a href="/community" class="text-emerald-600 font-semibold">👥 Community</a>
-                    <span class="text-gray-600">Hi, <%= user.name %></span>
-                    <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-red-600 hover:text-red-700 transition">Logout</button>
-                    </form>
-                </div>
+        const todayPostsCount = posts.filter((p) => {
+            const created = new Date(p.createdAt);
+            const now = new Date();
+            return created.toDateString() === now.toDateString();
+        }).length;
 
-                <!-- Mobile Hamburger Button -->
-                <button id="communityMenuBtn"
-                    class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative">
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700"></span>
-                </button>
-            </div>
-        </div>
+        const totalReplies = posts.reduce((acc, p) => acc + (p.replyCount || 0), 0);
+    %>
 
-        <!-- Mobile Menu Overlay -->
-        <div id="communityMenu"
-            class="mobile-menu hidden fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-40 md:hidden overflow-y-auto">
-            <div class="flex flex-col p-6 pt-20 space-y-4">
-                <a href="/dashboard"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">🏠
-                    Dashboard</a>
-
-                <div class="text-gray-500 text-xs font-semibold uppercase mt-2">Farm Management</div>
-                <a href="/animals/add"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">➕ Add
-                    Animal</a>
-                <a href="/dashboard"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">📊 My
-                    Animals</a>
-                <a href="/ai-assistant"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">🩺 AI
-                    Diagnosis</a>
-                <a href="/guide/medicine-guide"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">💊
-                    Medicine Guide</a>
-                <a href="/compliance"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-200">✅
-                    Biosecurity</a>
-
-                <div class="text-gray-500 text-xs font-semibold uppercase mt-2">Commerce</div>
-                <a href="/marketplace"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">🛒
-                    Browse Marketplace</a>
-                <a href="/list-product"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">➕ List
-                    Product</a>
-                <a href="/my-products"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">📦 My
-                    Products</a>
-                <a href="/orders/sales"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-200">💰
-                    Sales</a>
-
-                <a href="/community" class="text-emerald-600 font-semibold py-2 border-b border-gray-200">👥
-                    Community</a>
-                <span class="text-gray-600 px-3 py-2 bg-emerald-50 rounded-full text-center text-sm">Hi, <%= user.name
-                        %></span>
+    <nav class="topbar">
+        <div class="topbar-inner">
+            <a href="/dashboard" class="brand"><i class="fa-solid fa-cow"></i><span>JeevBandhu</span></a>
+            <div class="nav-links">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/ai-assistant" class="nav-link">AI Diagnosis</a>
+                <a href="/guide/medicine-guide" class="nav-link">Medicine Guide</a>
+                <a href="/community" class="nav-link active">Community</a>
+                <a href="/marketplace" class="nav-link">Marketplace</a>
+                <a href="/orders/sales" class="nav-link">Sales</a>
+                <span class="nav-link" style="background:#f1f5f9;cursor:default;"><%= user.name %></span>
                 <form action="/logout" method="POST" class="inline">
-                    <button type="submit"
-                        class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2">Logout</button>
+                    <button type="submit" class="logout-btn">Logout</button>
                 </form>
             </div>
+            <button id="menuBtn" class="menu-btn" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></button>
+        </div>
+        <div id="mobileMenu" class="mobile-menu">
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/ai-assistant" class="nav-link">AI Diagnosis</a>
+            <a href="/guide/medicine-guide" class="nav-link">Medicine Guide</a>
+            <a href="/community" class="nav-link active">Community</a>
+            <a href="/marketplace" class="nav-link">Marketplace</a>
+            <a href="/orders/sales" class="nav-link">Sales</a>
+            <form action="/logout" method="POST" class="inline">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
         </div>
     </nav>
 
-    <main class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Header with New Post Button -->
-        <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
-            <div>
-                <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Farmer Community Forum</h1>
-                <p class="text-gray-600 mt-1 text-sm md:text-base">Connect, share, and learn with fellow farmers</p>
-            </div>
-            <button onclick="openNewPostModal()"
-                class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-bold text-base shadow-lg flex items-center justify-center gap-2 w-full md:w-auto">
-                ➕ New Post
+    <main class="page">
+        <div>
+            <button id="leftToggle" type="button" class="left-toggle">
+                <span><i class="fa-solid fa-table-columns"></i> Browse Categories</span>
+                <i class="fa-solid fa-chevron-down"></i>
             </button>
+
+            <aside id="leftCol" class="left-col">
+                <section class="panel left-card">
+                    <div class="side-card-head">
+                        <h3 class="section-title">Categories</h3>
+                    </div>
+                    <div class="side-links">
+                        <a href="/community?category=All" class="side-link <%= currentCategory === 'All' ? 'active' : '' %>">All Posts</a>
+                        <a href="/community?category=Disease" class="side-link <%= currentCategory === 'Disease' ? 'active' : '' %>">Disease</a>
+                        <a href="/community?category=Feed" class="side-link <%= currentCategory === 'Feed' ? 'active' : '' %>">Feed</a>
+                        <a href="/community?category=Breeding" class="side-link <%= currentCategory === 'Breeding' ? 'active' : '' %>">Breeding</a>
+                    </div>
+                </section>
+
+                <section class="panel left-card">
+                    <div class="side-card-head trending">
+                        <h3 class="section-title">Trending Posts</h3>
+                    </div>
+                    <ul class="mini-list">
+                        <% if (trendingPosts.length === 0) { %>
+                            <li class="mini-item"><p class="mini-item-sub">No trending posts yet.</p></li>
+                        <% } else { %>
+                            <% trendingPosts.forEach(tp => { %>
+                                <li class="mini-item">
+                                    <p class="mini-item-title"><%= tp.title || 'Untitled Post' %></p>
+                                    <p class="mini-item-sub"><%= tp.likeCount || 0 %> likes • <%= tp.replyCount || 0 %> replies</p>
+                                </li>
+                            <% }) %>
+                        <% } %>
+                    </ul>
+                </section>
+            </aside>
         </div>
 
-        <!-- Search and Category Filters -->
-        <div class="card mb-6">
-            <div class="flex flex-col gap-4">
-                <!-- Search Bar -->
-                <div class="w-full">
-                    <input type="text" id="searchInput" placeholder="🔍 Search posts..." value="<%= searchQuery %>"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 text-base">
+        <section class="main">
+            <section class="panel hero-card">
+                <div class="hero-top">
+                    <div>
+                        <h1 class="hero-title">Farmer Community Forum</h1>
+                        <p class="hero-sub">Ask questions, share knowledge, and help other farmers.</p>
+                    </div>
+                    <button type="button" class="new-post-btn" onclick="openNewPostModal()"><i class="fa-solid fa-plus"></i> New Post</button>
                 </div>
 
-                <!-- Category Filters -->
-                <div class="flex gap-2 flex-wrap w-full">
-                    <a href="/community?category=All"
-                        class="px-4 py-2 rounded-lg text-sm font-semibold transition <%= currentCategory === 'All' ? 'bg-emerald-600 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' %>">
-                        All
-                    </a>
-                    <a href="/community?category=Disease"
-                        class="px-4 py-2 rounded-lg text-sm font-semibold transition <%= currentCategory === 'Disease' ? 'bg-emerald-600 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' %>">
-                        Disease
-                    </a>
-                    <a href="/community?category=Feed"
-                        class="px-4 py-2 rounded-lg text-sm font-semibold transition <%= currentCategory === 'Feed' ? 'bg-emerald-600 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' %>">
-                        Feed
-                    </a>
-                    <a href="/community?category=Breeding"
-                        class="px-4 py-2 rounded-lg text-sm font-semibold transition <%= currentCategory === 'Breeding' ? 'bg-emerald-600 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' %>">
-                        Breeding
-                    </a>
+                <div class="search-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input id="searchInput" type="text" class="search-input" placeholder="Search questions..." value="<%= searchQuery %>">
                 </div>
-            </div>
-        </div>
 
-        <!-- Posts Feed -->
-        <div id="postsFeed">
-            <% if (posts.length===0) { %>
-                <div class="card text-center py-12">
-                    <div class="text-6xl mb-4">💬</div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">No posts yet</h3>
-                    <p class="text-gray-600">Be the first to share something with the community!</p>
+                <div class="chip-row">
+                    <a href="/community?category=All" class="chip all <%= currentCategory === 'All' ? 'active' : '' %>">All</a>
+                    <a href="/community?category=Disease" class="chip disease <%= currentCategory === 'Disease' ? 'active' : '' %>">Disease</a>
+                    <a href="/community?category=Feed" class="chip feed <%= currentCategory === 'Feed' ? 'active' : '' %>">Feed</a>
+                    <a href="/community?category=Breeding" class="chip breeding <%= currentCategory === 'Breeding' ? 'active' : '' %>">Breeding</a>
                 </div>
+            </section>
+
+            <div id="postsFeed">
+                <% if (posts.length === 0) { %>
+                    <div class="empty-card panel">
+                        <h3 style="margin:0;">No posts yet</h3>
+                        <p style="margin:8px 0 0;color:#64748b;">Be the first to share something with the community.</p>
+                    </div>
                 <% } else { %>
-                    <% posts.forEach(post=> { %>
-                        <div class="card mb-6 hover:shadow-lg transition-shadow">
-                            <!-- Post Header -->
-                            <div class="flex justify-between items-start mb-3">
-                                <h2 class="text-2xl font-bold text-gray-900">
-                                    <%= post.title || 'Untitled Post' %>
-                                </h2>
-                                <% if (post.authorId.toString()===user.id) { %>
-                                    <button onclick="deletePost('<%= post._id %>')"
-                                        class="text-red-600 hover:text-red-700 text-sm font-semibold">
-                                        🗑️ Delete
-                                    </button>
+                    <% posts.forEach(post => { %>
+                        <% const categoryKey = (post.category || 'General').toLowerCase(); %>
+                        <article class="post-card panel">
+                            <div class="vote-col">
+                                <div class="avatar"><%= getInitials(post.authorName) %></div>
+                                <div class="vote-stack">
+                                    <button class="vote-btn" onclick="toggleLike('<%= post._id %>')" title="Upvote"><i class="fa-solid fa-chevron-up"></i></button>
+                                    <span id="like-count-<%= post._id %>" class="vote-count"><%= post.likeCount || 0 %></span>
+                                    <button class="vote-btn" onclick="toggleLike('<%= post._id %>')" title="Downvote"><i class="fa-solid fa-chevron-down"></i></button>
+                                </div>
+                                <button class="pin-btn" type="button" title="Pin (UI only)"><i class="fa-solid fa-thumbtack"></i></button>
+                            </div>
+
+                            <div>
+                                <h2 class="post-title"><%= post.title || 'Untitled Post' %></h2>
+
+                                <div class="post-meta">
+                                    <strong style="color:#111827;"><%= post.authorName %></strong>
+                                    <span>•</span>
+                                    <span><%= new Date(post.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' }) %></span>
+                                    <span class="tag <%= categoryColors[categoryKey] || 'general' %>"><%= post.category || 'General' %></span>
+                                </div>
+
+                                <p id="preview-<%= post._id %>" class="post-preview"><%= post.content %></p>
+                                <% if ((post.content || '').length > 170) { %>
+                                    <button type="button" class="read-more-btn" onclick="toggleReadMore('<%= post._id %>', this)">Read More</button>
+                                <% } %>
+
+                                <div class="post-actions">
+                                    <button onclick="toggleLike('<%= post._id %>')" class="action-btn like"><i class="fa-regular fa-thumbs-up"></i> Like</button>
+                                    <button onclick="showReplies('<%= post._id %>')" class="action-btn reply"><i class="fa-regular fa-comment"></i> Reply (<span id="reply-count-<%= post._id %>"><%= post.replyCount || 0 %></span>)</button>
+                                    <button type="button" class="action-btn pin" title="Pin"><i class="fa-solid fa-thumbtack"></i></button>
+                                    <% if (post.authorId.toString() === user.id) { %>
+                                        <button onclick="deletePost('<%= post._id %>')" class="action-btn delete"><i class="fa-regular fa-trash-can"></i> Delete</button>
                                     <% } %>
-                            </div>
-
-                            <!-- Post Content -->
-                            <p class="text-gray-800 mb-4 whitespace-pre-wrap">
-                                <%= post.content %>
-                            </p>
-
-                            <!-- Post Meta -->
-                            <div
-                                class="flex items-center justify-between text-sm text-gray-600 mb-4 pb-4 border-b border-gray-200">
-                                <div class="flex items-center gap-4">
-                                    <span class="font-semibold text-gray-900">
-                                        <%= post.authorName %>
-                                    </span>
-                                    <span>•</span>
-                                    <span>
-                                        <%= new Date(post.createdAt).toLocaleDateString('en-IN', { day: '2-digit' ,
-                                            month: '2-digit' , year: 'numeric' }) %>
-                                    </span>
-                                    <span>•</span>
-                                    <span
-                                        class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-xs font-semibold">
-                                        <%= post.category %>
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- Like and Reply Actions -->
-                            <div class="flex items-center gap-6">
-                                <button onclick="toggleLike('<%= post._id %>')"
-                                    class="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition">
-                                    <span class="text-xl">👍</span>
-                                    <span id="like-count-<%= post._id %>">
-                                        <%= post.likeCount || 0 %>
-                                    </span>
-                                </button>
-                                <button onclick="showReplies('<%= post._id %>')"
-                                    class="flex items-center gap-2 text-gray-600 hover:text-blue  -600 transition">
-                                    <span class="text-xl">💬</span>
-                                    <span id="reply-count-<%= post._id %>">
-                                        <%= post.replyCount || 0 %> replies
-                                    </span>
-                                </button>
-                            </div>
-
-                            <!-- Replies Section (Hidden by default) -->
-                            <div id="replies-<%= post._id %>"
-                                class="hidden mt-4 pt-4 border-t border-gray-200 pl-0 md:pl-4">
-                                <h4 class="font-semibold text-gray-900 mb-3 text-base md:text-lg">Replies</h4>
-
-                                <!-- Reply Form -->
-                                <div class="mb-4">
-                                    <textarea id="reply-input-<%= post._id %>" rows="2"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 text-sm"
-                                        placeholder="Write a reply..."></textarea>
-                                    <button onclick="addReply('<%= post._id %>')"
-                                        class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-semibold w-full md:w-auto">
-                                        Post Reply
-                                    </button>
                                 </div>
 
-                                <!-- Existing Replies -->
-                                <div id="reply-list-<%= post._id %>" class="space-y-2">
-                                    <% if (post.replies && post.replies.length> 0) { %>
-                                        <% post.replies.forEach(reply=> { %>
-                                            <div class="bg-gray-50 p-3 md:p-4 rounded-lg">
-                                                <div class="flex items-center gap-2 mb-1 flex-wrap">
-                                                    <span class="font-semibold text-sm text-gray-900">
-                                                        <%= reply.authorName %>
-                                                    </span>
-                                                    <span class="text-xs text-gray-500">
-                                                        <%= new Date(reply.createdAt).toLocaleDateString('en-IN') %>
-                                                    </span>
+                                <div id="replies-<%= post._id %>" class="replies hidden">
+                                    <h4 style="margin:0 0 8px;font-size:0.95rem;">Replies</h4>
+                                    <div>
+                                        <textarea id="reply-input-<%= post._id %>" rows="2" class="reply-input" placeholder="Write a reply..."></textarea>
+                                        <button onclick="addReply('<%= post._id %>')" class="reply-btn">Post Reply</button>
+                                    </div>
+
+                                    <div id="reply-list-<%= post._id %>">
+                                        <% if (post.replies && post.replies.length > 0) { %>
+                                            <% post.replies.forEach(reply => { %>
+                                                <div class="reply-card">
+                                                    <div style="display:flex;gap:7px;flex-wrap:wrap;font-size:0.78rem;color:#64748b;">
+                                                        <strong style="color:#111827;"><%= reply.authorName %></strong>
+                                                        <span><%= new Date(reply.createdAt).toLocaleDateString('en-IN') %></span>
+                                                    </div>
+                                                    <p style="margin:6px 0 0;font-size:0.88rem;color:#1f2937;"><%= reply.content %></p>
                                                 </div>
-                                                <p class="text-sm text-gray-700 break-words">
-                                                    <%= reply.content %>
-                                                </p>
-                                            </div>
                                             <% }) %>
-                                                <% } %>
+                                        <% } %>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </article>
+                    <% }) %>
+                <% } %>
+            </div>
+        </section>
+
+        <aside class="right-col">
+            <section class="panel right-card top-contrib">
+                <h3 class="section-title">Top Contributors</h3>
+                <ul class="mini-list">
+                    <% if (topContributors.length === 0) { %>
+                        <li class="mini-item"><p class="mini-item-sub">No contributors yet.</p></li>
+                    <% } else { %>
+                        <% topContributors.forEach(tc => { %>
+                            <li class="mini-item">
+                                <div class="contributor">
+                                    <span class="avatar-mini"><%= getInitials(tc.name) %></span>
+                                    <div>
+                                        <p class="mini-item-title"><%= tc.name %></p>
+                                        <p class="mini-item-sub"><%= tc.count %> posts</p>
+                                    </div>
+                                </div>
+                            </li>
                         <% }) %>
-                            <% } %>
-        </div>
+                    <% } %>
+                </ul>
+            </section>
+
+            <section class="panel right-card trending-topics">
+                <h3 class="section-title">Trending Topics</h3>
+                <ul class="mini-list">
+                    <% if (trendingPosts.length === 0) { %>
+                        <li class="mini-item"><p class="mini-item-sub">No topics trending right now.</p></li>
+                    <% } else { %>
+                        <% trendingPosts.slice(0, 4).forEach(tp => { %>
+                            <li class="mini-item">
+                                <p class="mini-item-title"><%= tp.title || 'Untitled Post' %></p>
+                                <p class="mini-item-sub"><%= tp.replyCount || 0 %> discussions</p>
+                            </li>
+                        <% }) %>
+                    <% } %>
+                </ul>
+            </section>
+
+            <section class="panel right-card community-stats">
+                <h3 class="section-title">Community Stats</h3>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-icon posts"><i class="fa-regular fa-file-lines"></i></span>
+                        <div class="stat-meta">
+                            <p class="stat-label">Total Posts</p>
+                            <p class="stat-value"><%= posts.length %></p>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-icon replies"><i class="fa-regular fa-comments"></i></span>
+                        <div class="stat-meta">
+                            <p class="stat-label">Replies</p>
+                            <p class="stat-value"><%= totalReplies %></p>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-icon today"><i class="fa-regular fa-calendar"></i></span>
+                        <div class="stat-meta">
+                            <p class="stat-label">Today</p>
+                            <p class="stat-value"><%= todayPostsCount %></p>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-icon people"><i class="fa-solid fa-users"></i></span>
+                        <div class="stat-meta">
+                            <p class="stat-label">Contributors</p>
+                            <p class="stat-value"><%= topContributors.length %></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </aside>
     </main>
 
-    <!-- New Post Modal -->
-    <div id="newPostModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-        <div class="bg-white rounded-xl p-8 max-w-2xl w-full mx-4">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Create New Post</h2>
+    <div id="newPostModal" class="modal-wrap">
+        <div class="modal-card">
+            <h2 style="margin:0;">Create New Post</h2>
             <form id="newPostForm">
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
-                    <input type="text" id="postTitle"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500"
-                        placeholder="e.g., My piglets have diarrhea - what should I do?">
+                <div class="field">
+                    <label for="postTitle">Title</label>
+                    <input type="text" id="postTitle" class="form-input" placeholder="e.g., My calves show fever and low appetite">
                 </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                    <select id="postCategory"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
+                <div class="field">
+                    <label for="postCategory">Category</label>
+                    <select id="postCategory" class="form-select">
                         <option value="General">General</option>
                         <option value="Disease">Disease</option>
                         <option value="Feed">Feed</option>
                         <option value="Breeding">Breeding</option>
                     </select>
                 </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Content</label>
-                    <textarea id="postContent" rows="6"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500"
-                        placeholder="Describe your question or share your experience..."></textarea>
+                <div class="field">
+                    <label for="postContent">Content</label>
+                    <textarea id="postContent" class="form-textarea" placeholder="Describe your issue or share your experience..."></textarea>
                 </div>
-                <div class="flex justify-end gap-4">
-                    <button type="button" onclick="closeNewPostModal()"
-                        class="px-8 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-semibold text-base">
-                        Cancel
-                    </button>
-                    <button type="submit"
-                        class="px-8 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-semibold text-base">
-                        Post to Community
-                    </button>
+                <div class="modal-actions">
+                    <button type="button" class="btn-ghost" onclick="closeNewPostModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Post to Community</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        // New Post Modal
         function openNewPostModal() {
-            document.getElementById('newPostModal').classList.remove('hidden');
+            document.getElementById('newPostModal').classList.add('show');
         }
 
         function closeNewPostModal() {
-            document.getElementById('newPostModal').classList.add('hidden');
+            document.getElementById('newPostModal').classList.remove('show');
             document.getElementById('newPostForm').reset();
         }
 
-        // Handle new post creation
         document.getElementById('newPostForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -387,7 +1140,7 @@
             const category = document.getElementById('postCategory').value;
 
             if (!content) {
-                alert('❌ Please write something before posting');
+                alert('Please write something before posting');
                 return;
             }
 
@@ -399,53 +1152,53 @@
                 });
 
                 const result = await response.json();
-
                 if (result.success) {
-                    alert('✅ Post created successfully!');
+                    alert('Post created successfully');
                     window.location.reload();
                 } else {
-                    alert(`❌ ${result.error}`);
+                    alert(result.error || 'Failed to create post');
                 }
             } catch (error) {
-                alert('❌ Failed to create post. Please try again.');
+                alert('Failed to create post. Please try again.');
             }
         });
 
-        // Toggle like on post
         async function toggleLike(postId) {
             try {
-                const response = await fetch(`/api/community/post/${postId}/like`, {
-                    method: 'POST'
-                });
-
+                const response = await fetch(`/api/community/post/${postId}/like`, { method: 'POST' });
                 const result = await response.json();
-
                 if (result.success) {
-                    // Update like count
                     const countElement = document.getElementById(`like-count-${postId}`);
-                    const currentCount = parseInt(countElement.textContent);
-                    countElement.textContent = result.liked ? currentCount + 1 : currentCount - 1;
+                    const currentCount = parseInt(countElement.textContent, 10) || 0;
+                    countElement.textContent = result.liked ? currentCount + 1 : Math.max(0, currentCount - 1);
                 } else {
-                    alert(`❌ ${result.error}`);
+                    alert(result.error || 'Failed to like post');
                 }
             } catch (error) {
-                alert('❌ Failed to like post. Please try again.');
+                alert('Failed to like post. Please try again.');
             }
         }
 
-        // Show/hide replies
         function showReplies(postId) {
             const repliesDiv = document.getElementById(`replies-${postId}`);
             repliesDiv.classList.toggle('hidden');
         }
 
-        // Add reply to post
+        function toggleReadMore(postId, buttonEl) {
+            const preview = document.getElementById(`preview-${postId}`);
+            const btn = buttonEl || null;
+            if (!preview || !btn) return;
+
+            preview.classList.toggle('expanded');
+            btn.textContent = preview.classList.contains('expanded') ? 'Read Less' : 'Read More';
+        }
+
         async function addReply(postId) {
             const input = document.getElementById(`reply-input-${postId}`);
             const content = input.value.trim();
 
             if (!content) {
-                alert('❌ Please write a reply');
+                alert('Please write a reply');
                 return;
             }
 
@@ -457,79 +1210,67 @@
                 });
 
                 const result = await response.json();
-
                 if (result.success) {
-                    alert('✅ Reply added successfully!');
+                    alert('Reply added successfully');
                     window.location.reload();
                 } else {
-                    alert(`❌ ${result.error}`);
+                    alert(result.error || 'Failed to add reply');
                 }
             } catch (error) {
-                alert('❌ Failed to add reply. Please try again.');
+                alert('Failed to add reply. Please try again.');
             }
         }
 
-        // Delete post
         async function deletePost(postId) {
-            if (!confirm('Are you sure you want to delete this post?')) {
-                return;
-            }
+            if (!confirm('Are you sure you want to delete this post?')) return;
 
             try {
-                const response = await fetch(`/api/community/post/${postId}`, {
-                    method: 'DELETE'
-                });
-
+                const response = await fetch(`/api/community/post/${postId}`, { method: 'DELETE' });
                 const result = await response.json();
-
                 if (result.success) {
-                    alert('✅ Post deleted successfully!');
+                    alert('Post deleted successfully');
                     window.location.reload();
                 } else {
-                    alert(`❌ ${result.error}`);
+                    alert(result.error || 'Failed to delete post');
                 }
             } catch (error) {
-                alert('❌ Failed to delete post. Please try again.');
+                alert('Failed to delete post. Please try again.');
             }
         }
 
-        // Search functionality
         let searchTimeout;
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                const search = e.target.value;
-                window.location.href = `/community?search=${encodeURIComponent(search)}`;
-            }, 500);
-        });
+        const searchInput = document.getElementById('searchInput');
 
-        // Mobile menu toggle
-        const communityMenuBtn = document.getElementById('communityMenuBtn');
-        const communityMenu = document.getElementById('communityMenu');
+        function applySearchAndFilter() {
+            const search = (searchInput?.value || '').trim();
+            const params = new URLSearchParams();
+            const currentCategory = new URLSearchParams(window.location.search).get('category') || 'All';
 
-        if (communityMenuBtn && communityMenu) {
-            communityMenuBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                communityMenu.classList.toggle('hidden');
-                communityMenu.classList.toggle('active');
-                communityMenuBtn.classList.toggle('active');
+            if (search) params.set('search', search);
+            if (currentCategory && currentCategory !== 'All') params.set('category', currentCategory);
+            window.location.href = `/community${params.toString() ? `?${params.toString()}` : ''}`;
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(applySearchAndFilter, 500);
             });
+        }
 
-            document.addEventListener('click', function (e) {
-                if (communityMenu && !communityMenu.contains(e.target) && !communityMenuBtn.contains(e.target)) {
-                    communityMenu.classList.add('hidden');
-                    communityMenu.classList.remove('active');
-                    communityMenuBtn.classList.remove('active');
-                }
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
             });
+        }
 
-            const communityLinks = communityMenu.querySelectorAll('a');
-            communityLinks.forEach(link => {
-                link.addEventListener('click', function () {
-                    communityMenu.classList.add('hidden');
-                    communityMenu.classList.remove('active');
-                    communityMenuBtn.classList.remove('active');
-                });
+        const leftToggle = document.getElementById('leftToggle');
+        const leftCol = document.getElementById('leftCol');
+        if (leftToggle && leftCol) {
+            leftToggle.addEventListener('click', () => {
+                leftCol.classList.toggle('open');
             });
         }
     </script>

@@ -5,334 +5,780 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marketplace - JeevBandhu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #16a34a;
+            --secondary: #22c55e;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --line: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 80;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(8px);
+        }
+
+        .topbar-inner {
+            width: min(1240px, 94vw);
+            margin: 0 auto;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand {
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #334155;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: .9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: .2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #ecfdf5;
+            color: #15803d;
+        }
+
+        .logout-btn {
+            border: 0;
+            background: transparent;
+            color: #dc2626;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .menu-btn {
+            display: none;
+            border: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            color: #334155;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            width: min(1240px, 94vw);
+            margin: 0 auto 10px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: #fff;
+            padding: 10px;
+        }
+
+        .mobile-menu.open {
+            display: grid;
+            gap: 6px;
+        }
+
+        .page {
+            width: min(1240px, 94vw);
+            margin: 22px auto;
+            display: grid;
+            gap: 14px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #16a34a 0%, #22c55e 60%, #4ade80 100%);
+            color: #fff;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 16px 32px rgba(22, 163, 74, .26);
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            margin: 10px 0 0;
+            color: #dcfce7;
+        }
+
+        .panel {
+            border: 1px solid var(--line);
+            background: #fff;
+            border-radius: 16px;
+            padding: 14px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, .04);
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .field {
+            display: grid;
+            gap: 6px;
+        }
+
+        .field label {
+            font-size: .8rem;
+            font-weight: 700;
+            color: #475569;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .input,
+        .select {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            padding: 10px 11px;
+            font-size: .92rem;
+            background: #fff;
+        }
+
+        .input:focus,
+        .select:focus {
+            outline: none;
+            border-color: #86efac;
+            box-shadow: 0 0 0 3px rgba(134, 239, 172, .35);
+        }
+
+        .range-wrap {
+            display: grid;
+            gap: 6px;
+        }
+
+        .range-head {
+            display: flex;
+            justify-content: space-between;
+            color: #475569;
+            font-size: .8rem;
+            font-weight: 700;
+        }
+
+        .range {
+            accent-color: var(--primary);
+            width: 100%;
+        }
+
+        .btn-muted {
+            border: 0;
+            border-radius: 12px;
+            background: #334155;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            cursor: pointer;
+            transition: .2s ease;
+            min-height: 44px;
+        }
+
+        .btn-muted:hover { transform: translateY(-1px); }
+
+        .count-strip {
+            color: #64748b;
+            font-size: .92rem;
+            margin: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .product-card {
+            border: 1px solid var(--line);
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: 0 8px 22px rgba(15, 23, 42, .05);
+            overflow: hidden;
+            display: grid;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 28px rgba(15, 23, 42, .12);
+        }
+
+        .product-image {
+            height: 170px;
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            display: grid;
+            place-items: center;
+            border-bottom: 1px solid #dcfce7;
+            position: relative;
+        }
+
+        .product-emoji {
+            font-size: 3rem;
+            filter: drop-shadow(0 6px 10px rgba(15, 23, 42, .2));
+        }
+
+        .verified {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: .72rem;
+            font-weight: 700;
+            border-radius: 999px;
+            border: 1px solid #86efac;
+            background: #ecfdf5;
+            color: #166534;
+            padding: 4px 10px;
+        }
+
+        .product-body {
+            padding: 12px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .product-name {
+            margin: 0;
+            font-size: 1.2rem;
+            letter-spacing: -0.01em;
+            font-weight: 800;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .price {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .unit {
+            font-size: .84rem;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .meta {
+            color: #475569;
+            font-size: .85rem;
+            display: grid;
+            gap: 4px;
+        }
+
+        .score-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border-radius: 999px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1d4ed8;
+            padding: 4px 10px;
+            font-size: .76rem;
+            font-weight: 700;
+            width: fit-content;
+        }
+
+        .order-btn {
+            border: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            font-weight: 800;
+            min-height: 42px;
+            cursor: pointer;
+            transition: .2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .order-btn:hover { transform: translateY(-1px); }
+
+        .empty {
+            text-align: center;
+            padding: 40px 16px;
+        }
+
+        .modal-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: 120;
+            background: rgba(2, 6, 23, .55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-wrap.show {
+            display: flex;
+        }
+
+        .modal {
+            width: min(640px, 100%);
+            background: #fff;
+            border-radius: 16px;
+            border: 1px solid var(--line);
+            box-shadow: 0 22px 40px rgba(15, 23, 42, .20);
+            overflow: hidden;
+        }
+
+        .modal-head {
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 800;
+        }
+
+        .close-btn {
+            border: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            color: #334155;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 14px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .summary {
+            border: 1px solid #bbf7d0;
+            background: #f0fdf4;
+            border-radius: 12px;
+            padding: 10px;
+            display: grid;
+            gap: 5px;
+            font-size: .9rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            color: #334155;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #86efac;
+            padding-top: 7px;
+            color: #166534;
+            font-weight: 800;
+        }
+
+        .confirm-btn {
+            border: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            font-weight: 800;
+            min-height: 46px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        @media (max-width: 980px) {
+            .nav-links { display: none; }
+            .menu-btn { display: inline-flex; align-items: center; justify-content: center; }
+            .filters { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 
-<body class="bg-gradient-to-br from-blue-50 via-white to-emerald-50">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="/marketplace" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
+<body>
+    <% 
+        function productEmoji(type) {
+            const t = String(type || '').toLowerCase();
+            if (t.includes('milk')) return '🥛';
+            if (t.includes('egg')) return '🥚';
+            if (t.includes('cheese')) return '🧀';
+            if (t.includes('meat')) return '🍖';
+            if (t.includes('ghee')) return '🫙';
+            return '📦';
+        }
 
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="/marketplace" class="text-emerald-600 font-semibold">Marketplace</a>
-                    <% if (user.role==='buyer' ) { %>
-                        <a href="/orders/my-orders" class="text-gray-700 hover:text-emerald-600 transition">My
-                            Orders</a>
-                        <% } %>
-                            <% if (user.role==='farmer' ) { %>
-                                <a href="/dashboard"
-                                    class="text-gray-700 hover:text-emerald-600 transition">Dashboard</a>
-                                <% } %>
-                                    <span class="text-gray-600">Hi, <%= user.name %></span>
-                                    <form action="/logout" method="POST" class="inline">
-                                        <button type="submit"
-                                            class="text-red-600 hover:text-red-700 transition">Logout</button>
-                                    </form>
-                </div>
+        const priceValues = products.map(p => Number(p.pricePerUnit || p.price || 0)).filter(v => Number.isFinite(v));
+        const maxPriceValue = priceValues.length ? Math.ceil(Math.max(...priceValues)) : 1000;
+    %>
 
-                <!-- Mobile Hamburger Button -->
-                <button id="marketplaceMenuBtn"
-                    class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative">
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700"></span>
-                </button>
+    <nav class="topbar">
+        <div class="topbar-inner">
+            <a href="/marketplace" class="brand"><i class="fa-solid fa-store"></i><span>JeevBandhu</span></a>
+            <div class="nav-links">
+                <a href="/marketplace" class="nav-link active"><i class="fa-solid fa-shop"></i> Marketplace</a>
+                <% if (user.role === 'buyer') { %>
+                    <a href="/orders/my-orders" class="nav-link"><i class="fa-solid fa-box"></i> My Orders</a>
+                <% } %>
+                <% if (user.role === 'farmer') { %>
+                    <a href="/dashboard" class="nav-link"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <% } %>
+                <span class="nav-link" style="background:#f1f5f9;cursor:default;"><i class="fa-solid fa-circle-user"></i> <%= user.name %></span>
+                <form action="/logout" method="POST" class="inline">
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
             </div>
+            <button id="menuBtn" class="menu-btn" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></button>
         </div>
-
-        <!-- Mobile Menu Overlay -->
-        <div id="marketplaceMenu"
-            class="mobile-menu hidden fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-40 md:hidden overflow-y-auto">
-            <div class="flex flex-col p-6 pt-20 space-y-4">
-                <a href="/marketplace" class="text-emerald-600 font-semibold py-2 border-b border-gray-200">🛒
-                    Marketplace</a>
-                <% if (user.role==='buyer' ) { %>
-                    <a href="/orders/my-orders"
-                        class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">📦 My
-                        Orders</a>
-                    <% } %>
-                        <% if (user.role==='farmer' ) { %>
-                            <a href="/dashboard"
-                                class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">🏠
-                                Dashboard</a>
-                            <% } %>
-                                <span class="text-gray-600 px-3 py-2 bg-emerald-50 rounded-full text-center text-sm">Hi,
-                                    <%= user.name %>
-                                </span>
-                                <form action="/logout" method="POST" class="inline">
-                                    <button type="submit"
-                                        class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2">Logout</button>
-                                </form>
-            </div>
+        <div id="mobileMenu" class="mobile-menu">
+            <a href="/marketplace" class="nav-link active"><i class="fa-solid fa-shop"></i> Marketplace</a>
+            <% if (user.role === 'buyer') { %>
+                <a href="/orders/my-orders" class="nav-link"><i class="fa-solid fa-box"></i> My Orders</a>
+            <% } %>
+            <% if (user.role === 'farmer') { %>
+                <a href="/dashboard" class="nav-link"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <% } %>
+            <form action="/logout" method="POST" class="inline">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
         </div>
     </nav>
 
-    <main class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Hero Banner -->
-        <div class="bg-gradient-to-r from-emerald-600 to-green-600 rounded-xl p-8 mb-8 text-white">
-            <h1 class="text-3xl font-bold mb-2">🛡️ Bio-Safe Verified Marketplace</h1>
-            <p class="text-emerald-50">All products are verified antibiotic-free with complete medical transparency</p>
-        </div>
+    <main class="page">
+        <section class="hero">
+            <h1>Bio-Safe Verified Marketplace</h1>
+            <p>Buy and sell traceable livestock products with transparent quality details.</p>
+        </section>
 
-        <!-- Search and Filters -->
-        <div class="card mb-8 bg-gradient-to-r from-blue-50 to-emerald-50">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">🔍 Search & Filter Products</h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Search Bar -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
-                    <input type="text" id="searchInput" placeholder="Search by product type..."
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
+        <section class="panel">
+            <h2 style="margin:0 0 10px;">Search and Filter Products</h2>
+            <div class="filters">
+                <div class="field">
+                    <label for="searchInput"><i class="fa-solid fa-magnifying-glass"></i> Search</label>
+                    <input type="text" id="searchInput" class="input" placeholder="Search by product type...">
                 </div>
 
-                <!-- Price Range -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Max Price (₹)</label>
-                    <input type="number" id="priceFilter" placeholder="Max price..."
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
+                <div class="field range-wrap">
+                    <div class="range-head"><span><i class="fa-solid fa-indian-rupee-sign"></i> Max Price</span><span id="priceValue">Rs <%= maxPriceValue %></span></div>
+                    <input type="range" id="priceFilter" class="range" min="0" max="<%= maxPriceValue %>" step="1" value="<%= maxPriceValue %>">
                 </div>
 
-                <!-- Min Quantity Available -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Min Available Quantity</label>
-                    <input type="number" id="quantityFilter" placeholder="Min quantity..."
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
+                <div class="field">
+                    <label for="quantityFilter"><i class="fa-solid fa-boxes-stacked"></i> Min Quantity</label>
+                    <input type="number" id="quantityFilter" class="input" placeholder="Min available quantity">
                 </div>
 
-                <!-- Clear Filters Button -->
-                <div class="flex items-end">
-                    <button onclick="clearFilters()"
-                        class="w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition font-semibold">
-                        Clear Filters
-                    </button>
-                </div>
+                <button type="button" class="btn-muted" onclick="clearFilters()">Clear Filters</button>
             </div>
-        </div>
+        </section>
 
-        <% if (products.length===0) { %>
-            <div class="text-center py-16 card">
-                <div class="text-6xl mb-4">🛒</div>
-                <h2 class="text-2xl font-bold text-gray-900 mb-2">No products available yet</h2>
-                <p class="text-gray-600">Check back soon for verified livestock products</p>
-            </div>
-            <% } else { %>
-                <div class="mb-6" id="productCount">
-                    <p class="text-gray-600">Showing <span id="visibleCount">
-                            <%= products.length %>
-                        </span> of <%= products.length %> verified product<%= products.length !==1 ? 's' : '' %>
-                    </p>
-                </div>
+        <% if (products.length === 0) { %>
+            <section class="panel empty">
+                <h2 style="margin:0;">No products available yet</h2>
+                <p style="margin:8px 0 0;color:#64748b;">Check back soon for verified livestock products.</p>
+            </section>
+        <% } else { %>
+            <section class="panel" style="padding:12px 16px;">
+                <p class="count-strip">Showing <span id="visibleCount"><%= products.length %></span> of <%= products.length %> products</p>
+            </section>
 
-                <!-- Product Grid -->
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <% products.forEach(product=> { %>
-                        <% // Backwards compatibility: handle old products without quantity fields const
-                            hasQuantitySystem=product.pricePerUnit !==undefined && product.totalQuantity !==undefined;
-                            const availableQty=hasQuantitySystem ? (product.totalQuantity - (product.quantitySold || 0))
-                            : (product.quantity || 0); %>
-                            <div class="card hover:shadow-xl transition-all duration-300 product-card"
-                                data-product-type="<%= product.productType.toLowerCase() %>"
-                                data-price="<%= product.pricePerUnit || product.price || 0 %>"
-                                data-quantity="<%= availableQty %>">
-                                <!-- Verified Badge -->
-                                <div class="flex justify-between items-start mb-4">
-                                    <h3 class="text-2xl font-bold text-gray-900">
-                                        <%= product.productType %>
-                                    </h3>
-                                    <span class="badge-verified">✅ Verified</span>
-                                </div>
+            <section class="grid">
+                <% products.forEach(product => { %>
+                    <% const hasQuantitySystem = product.pricePerUnit !== undefined && product.totalQuantity !== undefined; %>
+                    <% const availableQty = hasQuantitySystem ? (product.totalQuantity - (product.quantitySold || 0)) : (product.quantity || 0); %>
+                    <% const unit = product.unit || 'units'; %>
+                    <% const unitSingle = unit.endsWith('s') ? unit.slice(0, -1) : unit; %>
+                    <% const price = Number(product.pricePerUnit || product.price || 0); %>
+                    <% const minQty = Number(product.minOrderQuantity || 1); %>
+                    <article class="product-card product-filter-item"
+                        data-product-id="<%= product._id %>"
+                        data-product-type="<%= product.productType.toLowerCase() %>"
+                        data-product-name="<%= product.productType %>"
+                        data-price="<%= price %>"
+                        data-quantity="<%= availableQty %>"
+                        data-unit="<%= unit %>"
+                        data-min-qty="<%= minQty %>">
+                        <div class="product-image">
+                            <span class="verified">Verified</span>
+                            <span class="product-emoji"><%= productEmoji(product.productType) %></span>
+                        </div>
 
-                                <!-- Pricing Info -->
-                                <% if (hasQuantitySystem) { %>
-                                    <!-- New quantity-based system -->
-                                    <div class="bg-emerald-50 border-2 border-emerald-200 rounded-lg p-4 mb-4">
-                                        <div class="flex justify-between items-center mb-2">
-                                            <span class="text-gray-700 text-sm">Price per <%= product.unit.slice(0, -1)
-                                                    %></span>
-                                            <span class="text-2xl font-bold text-emerald-600">₹<%=
-                                                    product.pricePerUnit.toFixed(2) %></span>
-                                        </div>
-                                        <div class="flex justify-between items-center text-sm">
-                                            <span class="text-gray-600">Available:</span>
-                                            <span
-                                                class="font-semibold <%= availableQty < product.totalQuantity * 0.2 ? 'text-red-600' : 'text-gray-900' %>">
-                                                <%= availableQty.toFixed(1) %> / <%= product.totalQuantity %>
-                                                        <%= product.unit %>
-                                            </span>
-                                        </div>
-                                        <% if (product.minOrderQuantity && product.minOrderQuantity> 1) { %>
-                                            <div class="text-xs text-gray-600 mt-1">Min order: <%=
-                                                    product.minOrderQuantity %>
-                                                    <%= product.unit %>
-                                            </div>
-                                            <% } %>
-                                    </div>
-                                    <% } else { %>
-                                        <!-- Old fixed-price system (backwards compatibility) -->
-                                        <div class="bg-emerald-50 border-2 border-emerald-200 rounded-lg p-4 mb-4">
-                                            <div class="flex justify-between items-center">
-                                                <span class="text-gray-700 text-sm">Price</span>
-                                                <span class="text-2xl font-bold text-emerald-600">₹<%= (product.price ||
-                                                        0).toFixed(2) %></span>
-                                            </div>
-                                            <% if (product.quantity) { %>
-                                                <div class="text-sm text-gray-600 mt-1">Quantity: <%= product.quantity
-                                                        %>
-                                                        <%= product.unit %>
-                                                </div>
-                                                <% } %>
-                                        </div>
-                                        <% } %>
-                                            <!-- Order Section (Buyers Only) -->
-                                            <% if (user.role==='buyer' ) { %>
-                                                <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                                                    <label class="block text-sm font-medium text-gray-700 mb-2">Quantity
-                                                        to
-                                                        order:</label>
-                                                    <div class="flex items-center space-x-2">
-                                                        <input type="number" id="qty-<%= product._id %>"
-                                                            min="<%= product.minOrderQuantity %>"
-                                                            max="<%= availableQty %>" step="0.1"
-                                                            value="<%= product.minOrderQuantity %>"
-                                                            class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500"
-                                                            oninput="updateTotal('<%= product._id %>', <%= product.pricePerUnit %>, '<%= product.unit %>')">
-                                                        <span class="text-gray-600">
-                                                            <%= product.unit %>
-                                                        </span>
-                                                    </div>
-                                                    <div class="mt-2 text-center">
-                                                        <span class="text-sm text-gray-600">Total: </span>
-                                                        <span id="total-<%= product._id %>"
-                                                            class="text-lg font-bold text-emerald-600">
-                                                            ₹<%= (product.minOrderQuantity *
-                                                                product.pricePerUnit).toFixed(2) %>
-                                                        </span>
-                                                    </div>
-                                                </div>
+                        <div class="product-body">
+                            <h3 class="product-name"><%= product.productType %></h3>
 
-                                                <!-- Delivery Address -->
-                                                <div class="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                                                    <label class="block text-sm font-medium text-gray-700 mb-2">📍
-                                                        Delivery Address *</label>
-                                                    <textarea id="address-<%= product._id %>" rows="3"
-                                                        placeholder="Enter your complete delivery address..."
-                                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 resize-none"
-                                                        required></textarea>
-                                                    <p class="text-xs text-gray-600 mt-1">Estimated delivery: 5 business
-                                                        days</p>
-                                                </div>
-
-                                                <!-- Payment Method -->
-                                                <div class="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-                                                    <label class="block text-sm font-medium text-gray-700 mb-2">💳
-                                                        Payment Method</label>
-                                                    <select id="payment-<%= product._id %>"
-                                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
-                                                        <option value="Cash on Delivery">Cash on Delivery</option>
-                                                        <option value="UPI">UPI</option>
-                                                        <option value="Bank Transfer">Bank Transfer</option>
-                                                        <option value="Card Payment">Card Payment</option>
-                                                    </select>
-                                                </div>
-                                                <% } %>
-
-                                                    <!-- Source Animal Info -->
-                                                    <% if (product.animal) { %>
-                                                        <div
-                                                            class="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-                                                            <div class="text-xs text-gray-600 mb-1">🐮 Source Animal
-                                                            </div>
-                                                            <div class="font-semibold text-gray-900">
-                                                                <%= product.animal.tagId %>
-                                                            </div>
-                                                            <div class="text-sm text-gray-600">
-                                                                <%= product.animal.species %>
-                                                                    <%= product.animal.breed ? '- ' +
-                                                                        product.animal.breed : '' %>
-                                                            </div>
-                                                            <div class="mt-2">
-                                                                <div class="text-xs text-gray-600 mb-1">Health Score
-                                                                </div>
-                                                                <div class="flex items-center space-x-2">
-                                                                    <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                                                        <div class="h-2 rounded-full bg-health-good"
-                                                                            style="width: <%= product.animal.healthScore %>%">
-                                                                        </div>
-                                                                    </div>
-                                                                    <span
-                                                                        class="text-sm font-semibold text-emerald-600">
-                                                                        <%= product.animal.healthScore %>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <% } %>
-
-                                                            <% if (product.description) { %>
-                                                                <p class="text-gray-600 text-sm mb-4">
-                                                                    <%= product.description %>
-                                                                </p>
-                                                                <% } %>
-
-                                                                    <!-- Actions -->
-                                                                    <% if (user.role==='buyer' ) { %>
-                                                                        <button
-                                                                            onclick="placeOrder('<%= product._id %>')"
-                                                                            class="w-full px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-semibold">
-                                                                            Order 🛒
-                                                                        </button>
-                                                                        <% } %>
-
-                                                                            <div
-                                                                                class="mt-3 text-xs text-gray-500 text-center">
-                                                                                Listed <%= new
-                                                                                    Date(product.createdAt).toLocaleDateString('en-IN')
-                                                                                    %>
-                                                                            </div>
+                            <div class="price-row">
+                                <span class="price">Rs <%= price.toFixed(2) %></span>
+                                <span class="unit">/ <%= unitSingle %></span>
                             </div>
-                            <% }) %>
-                </div>
-                <% } %>
+
+                            <div class="meta">
+                                <div>Available: <strong><%= Number(availableQty).toFixed(1) %> <%= unit %></strong></div>
+                                <% if (product.animal) { %>
+                                    <span class="score-pill"><i class="fa-solid fa-heart-pulse"></i> Health Score: <%= product.animal.healthScore %></span>
+                                <% } %>
+                            </div>
+
+                            <% if (product.description) { %>
+                                <p style="margin:0;color:#475569;font-size:.88rem;"><%= product.description %></p>
+                            <% } %>
+
+                            <% if (user.role === 'buyer') { %>
+                                <button type="button" class="order-btn" onclick="openOrderModal('<%= product._id %>')"><i class="fa-solid fa-cart-shopping"></i> Order</button>
+                            <% } %>
+
+                            <p style="margin:0;color:#94a3b8;font-size:.78rem;">Listed <%= new Date(product.createdAt).toLocaleDateString('en-IN') %></p>
+                        </div>
+                    </article>
+                <% }) %>
+            </section>
+        <% } %>
     </main>
 
-    <footer class="bg-gray-800 text-white mt-12 py-6">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>&copy; 2025 JeevBandhu. Building trust through transparency.</p>
+    <% if (user.role === 'buyer') { %>
+    <div id="orderModalWrap" class="modal-wrap">
+        <div class="modal">
+            <div class="modal-head">
+                <h3 id="modalTitle" class="modal-title">Place Order</h3>
+                <button type="button" class="close-btn" onclick="closeOrderModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="field">
+                    <label for="modalQuantity"><i class="fa-solid fa-weight-scale"></i> Quantity</label>
+                    <input type="number" id="modalQuantity" class="input" min="1" step="0.1">
+                </div>
+
+                <div class="field">
+                    <label for="modalAddress"><i class="fa-solid fa-location-dot"></i> Delivery Address</label>
+                    <textarea id="modalAddress" rows="3" class="input" style="resize:vertical;" placeholder="Enter complete delivery address..."></textarea>
+                </div>
+
+                <div class="field">
+                    <label for="modalPayment"><i class="fa-solid fa-credit-card"></i> Payment Method</label>
+                    <select id="modalPayment" class="select">
+                        <option value="Cash on Delivery">Cash on Delivery</option>
+                        <option value="UPI">UPI</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                        <option value="Card Payment">Card Payment</option>
+                    </select>
+                </div>
+
+                <div class="summary">
+                    <div class="summary-row"><span>Product</span><strong id="summaryProduct">-</strong></div>
+                    <div class="summary-row"><span>Price per unit</span><strong id="summaryPrice">Rs 0.00</strong></div>
+                    <div class="summary-row"><span>Quantity</span><strong id="summaryQty">0</strong></div>
+                    <div class="summary-total"><span>Total</span><span id="summaryTotal">Rs 0.00</span></div>
+                </div>
+
+                <button type="button" id="confirmOrderBtn" class="confirm-btn" onclick="placeOrder()"><i class="fa-solid fa-bag-shopping"></i> Confirm Order</button>
+            </div>
         </div>
-    </footer>
+    </div>
+    <% } %>
 
     <script>
-        function updateTotal(productId, pricePerUnit, unit) {
-            const qtyInput = document.getElementById(`qty-${productId}`);
-            const totalSpan = document.getElementById(`total-${productId}`);
-            const qty = parseFloat(qtyInput.value) || 0;
-            const total = qty * pricePerUnit;
-            totalSpan.textContent = `₹${total.toFixed(2)}`;
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+            });
         }
 
-        async function placeOrder(productId) {
-            const qtyInput = document.getElementById(`qty-${productId}`);
-            const quantity = parseFloat(qtyInput.value);
-            const addressInput = document.getElementById(`address-${productId}`);
+        const searchInput = document.getElementById('searchInput');
+        const priceFilter = document.getElementById('priceFilter');
+        const quantityFilter = document.getElementById('quantityFilter');
+        const priceValue = document.getElementById('priceValue');
+
+        function filterProducts() {
+            const searchTerm = (searchInput?.value || '').toLowerCase();
+            const maxPrice = parseFloat(priceFilter?.value || '0') || Infinity;
+            const minQuantity = parseFloat(quantityFilter?.value || '0') || 0;
+            const productCards = document.querySelectorAll('.product-filter-item');
+            let visible = 0;
+
+            productCards.forEach(card => {
+                const productType = card.dataset.productType;
+                const price = parseFloat(card.dataset.price || '0');
+                const quantity = parseFloat(card.dataset.quantity || '0');
+
+                const matchesSearch = productType.includes(searchTerm);
+                const matchesPrice = price <= maxPrice;
+                const matchesQuantity = quantity >= minQuantity;
+
+                if (matchesSearch && matchesPrice && matchesQuantity) {
+                    card.style.display = 'grid';
+                    visible++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            const visibleCount = document.getElementById('visibleCount');
+            if (visibleCount) visibleCount.textContent = visible;
+        }
+
+        function clearFilters() {
+            if (searchInput) searchInput.value = '';
+            if (quantityFilter) quantityFilter.value = '';
+            if (priceFilter) {
+                priceFilter.value = priceFilter.max;
+                if (priceValue) priceValue.textContent = `Rs ${priceFilter.value}`;
+            }
+            filterProducts();
+        }
+
+        searchInput?.addEventListener('input', filterProducts);
+        quantityFilter?.addEventListener('input', filterProducts);
+        priceFilter?.addEventListener('input', () => {
+            if (priceValue) priceValue.textContent = `Rs ${priceFilter.value}`;
+            filterProducts();
+        });
+
+        let selectedProduct = null;
+
+        function openOrderModal(productId) {
+            const card = document.querySelector(`.product-filter-item[data-product-id="${productId}"]`);
+            if (!card) return;
+
+            selectedProduct = {
+                productId,
+                name: card.dataset.productName,
+                unit: card.dataset.unit || 'units',
+                price: parseFloat(card.dataset.price || '0') || 0,
+                maxQty: parseFloat(card.dataset.quantity || '0') || 0,
+                minQty: parseFloat(card.dataset.minQty || '1') || 1
+            };
+
+            const modalWrap = document.getElementById('orderModalWrap');
+            const modalTitle = document.getElementById('modalTitle');
+            const qtyInput = document.getElementById('modalQuantity');
+            const summaryProduct = document.getElementById('summaryProduct');
+            const summaryPrice = document.getElementById('summaryPrice');
+
+            if (!modalWrap || !qtyInput || !summaryProduct || !summaryPrice) return;
+
+            modalTitle.textContent = `Order ${selectedProduct.name}`;
+            summaryProduct.textContent = selectedProduct.name;
+            summaryPrice.textContent = `Rs ${selectedProduct.price.toFixed(2)} / ${selectedProduct.unit}`;
+
+            qtyInput.min = String(selectedProduct.minQty);
+            qtyInput.max = String(selectedProduct.maxQty);
+            qtyInput.step = '0.1';
+            qtyInput.value = String(selectedProduct.minQty);
+
+            updateModalSummary();
+            modalWrap.classList.add('show');
+        }
+
+        function closeOrderModal() {
+            const modalWrap = document.getElementById('orderModalWrap');
+            if (modalWrap) modalWrap.classList.remove('show');
+            selectedProduct = null;
+        }
+
+        function updateModalSummary() {
+            if (!selectedProduct) return;
+
+            const qtyInput = document.getElementById('modalQuantity');
+            const summaryQty = document.getElementById('summaryQty');
+            const summaryTotal = document.getElementById('summaryTotal');
+            if (!qtyInput || !summaryQty || !summaryTotal) return;
+
+            const qty = parseFloat(qtyInput.value || '0') || 0;
+            const total = qty * selectedProduct.price;
+            summaryQty.textContent = `${qty} ${selectedProduct.unit}`;
+            summaryTotal.textContent = `Rs ${total.toFixed(2)}`;
+        }
+
+        document.getElementById('modalQuantity')?.addEventListener('input', updateModalSummary);
+
+        async function placeOrder() {
+            if (!selectedProduct) return;
+
+            const qtyInput = document.getElementById('modalQuantity');
+            const addressInput = document.getElementById('modalAddress');
+            const paymentSelect = document.getElementById('modalPayment');
+
+            const quantity = parseFloat(qtyInput?.value || '0');
             const deliveryAddress = addressInput ? addressInput.value.trim() : '';
-            const paymentSelect = document.getElementById(`payment-${productId}`);
             const paymentMethod = paymentSelect ? paymentSelect.value : 'Cash on Delivery';
 
             if (!quantity || quantity <= 0) {
-                alert('❌ Please enter a valid quantity');
+                alert('Please enter a valid quantity');
+                return;
+            }
+
+            if (quantity < selectedProduct.minQty) {
+                alert(`Minimum order quantity is ${selectedProduct.minQty} ${selectedProduct.unit}`);
+                return;
+            }
+
+            if (quantity > selectedProduct.maxQty) {
+                alert(`Only ${selectedProduct.maxQty} ${selectedProduct.unit} available`);
                 return;
             }
 
             if (!deliveryAddress) {
-                alert('❌ Please enter your delivery address');
-                return;
-            }
-
-            if (!confirm(`Confirm order of ${quantity} units?\nDelivery to: ${deliveryAddress}\nPayment: ${paymentMethod}`)) {
+                alert('Please enter your delivery address');
                 return;
             }
 
@@ -341,7 +787,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        productId,
+                        productId: selectedProduct.productId,
                         quantity,
                         deliveryAddress,
                         paymentMethod
@@ -349,89 +795,20 @@
                 });
 
                 const result = await response.json();
-
                 if (result.success) {
-                    alert(`✅ Order placed successfully! Total: ₹${result.totalPrice.toFixed(2)}\nEstimated delivery: 5 business days`);
+                    alert(`Order placed successfully. Total: Rs ${result.totalPrice.toFixed(2)}`);
                     window.location.reload();
                 } else {
-                    alert(`❌ ${result.error}`);
+                    alert(result.error || 'Failed to place order');
                 }
             } catch (error) {
-                alert('❌ Failed to place order. Please try again.');
+                alert('Failed to place order. Please try again.');
             }
         }
 
-        // Search and Filter Functionality
-        function filterProducts() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const maxPrice = parseFloat(document.getElementById('priceFilter').value) || Infinity;
-            const minQuantity = parseFloat(document.getElementById('quantityFilter').value) || 0;
-
-            const productCards = document.querySelectorAll('.product-card');
-            let visibleCount = 0;
-
-            productCards.forEach(card => {
-                const productType = card.dataset.productType;
-                const price = parseFloat(card.dataset.price);
-                const quantity = parseFloat(card.dataset.quantity);
-
-                const matchesSearch = productType.includes(searchTerm);
-                const matchesPrice = price <= maxPrice;
-                const matchesQuantity = quantity >= minQuantity;
-
-                if (matchesSearch && matchesPrice && matchesQuantity) {
-                    card.style.display = 'block';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
-            // Update visible count
-            document.getElementById('visibleCount').textContent = visibleCount;
-        }
-
-        function clearFilters() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('priceFilter').value = '';
-            document.getElementById('quantityFilter').value = '';
-            filterProducts();
-        }
-
-        // Attach event listeners
-        document.getElementById('searchInput')?.addEventListener('input', filterProducts);
-        document.getElementById('priceFilter')?.addEventListener('input', filterProducts);
-        document.getElementById('quantityFilter')?.addEventListener('input', filterProducts);
-
-        // Mobile menu toggle
-        const marketplaceMenuBtn = document.getElementById('marketplaceMenuBtn');
-        const marketplaceMenu = document.getElementById('marketplaceMenu');
-
-        if (marketplaceMenuBtn && marketplaceMenu) {
-            marketplaceMenuBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                marketplaceMenu.classList.toggle('hidden');
-                marketplaceMenu.classList.toggle('active');
-                marketplaceMenuBtn.classList.toggle('active');
-            });
-
-            document.addEventListener('click', function (e) {
-                if (marketplaceMenu && !marketplaceMenu.contains(e.target) && !marketplaceMenuBtn.contains(e.target)) {
-                    marketplaceMenu.classList.add('hidden');
-                    marketplaceMenu.classList.remove('active');
-                    marketplaceMenuBtn.classList.remove('active');
-                }
-            });
-
-            const marketplaceLinks = marketplaceMenu.querySelectorAll('a');
-            marketplaceLinks.forEach(link => {
-                link.addEventListener('click', function () {
-                    marketplaceMenu.classList.add('hidden');
-                    marketplaceMenu.classList.remove('active');
-                    marketplaceMenuBtn.classList.remove('active');
-                });
-            });
-        }
+        document.getElementById('orderModalWrap')?.addEventListener('click', (e) => {
+            if (e.target.id === 'orderModalWrap') closeOrderModal();
+        });
     </script>
 </body>
 

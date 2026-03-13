@@ -61,7 +61,7 @@ app.use('/', authRoutes);
 app.use('/', animalRoutes);
 app.use('/', medicalRoutes);
 app.use('/', marketplaceRoutes);
-app.use('/orders', require('./routes/guide'));
+app.use('/orders', require('./routes/orders'));
 app.use('/guide', require('./routes/guide'));
 app.use('/', aiRoutes);
 app.use('/', require('./routes/community'));
@@ -80,6 +80,18 @@ app.get('/', (req, res) => {
     }
 
     res.render('index', { user: null });
+});
+
+// Legacy order routes redirect
+app.get('/my-orders', (req, res) => {
+    if (!req.session || !req.session.userId) return res.redirect('/login');
+    if (req.session.userRole === 'farmer') return res.redirect('/orders/sales');
+    return res.redirect('/orders/my-orders');
+});
+
+app.get('/sales', (req, res) => {
+    if (!req.session || !req.session.userId) return res.redirect('/login');
+    return res.redirect('/orders/sales');
 });
 
 // 404 handler

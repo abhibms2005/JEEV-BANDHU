@@ -5,314 +5,492 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disease Diagnosis - JeevBandhu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #16a34a;
+            --secondary: #22c55e;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --line: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+        .topbar { position: sticky; top: 0; z-index: 60; background: rgba(255, 255, 255, 0.95); border-bottom: 1px solid var(--line); backdrop-filter: blur(8px); }
+        .topbar-inner { width: min(1240px, 94vw); margin: 0 auto; height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .brand { text-decoration: none; color: var(--primary); font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em; display: inline-flex; align-items: center; gap: 8px; }
+        .nav-links { display: flex; align-items: center; gap: 8px; }
+        .nav-link { text-decoration: none; color: #334155; font-weight: 600; padding: 8px 12px; border-radius: 999px; font-size: .9rem; transition: .2s ease; }
+        .nav-link:hover, .nav-link.active { background: #ecfdf5; color: #15803d; }
+        .logout-btn { border: 0; background: transparent; color: #dc2626; font-weight: 600; cursor: pointer; }
+        .menu-btn { display: none; border: 0; width: 38px; height: 38px; border-radius: 10px; background: #f1f5f9; }
+        .mobile-menu { display: none; width: min(1240px, 94vw); margin: 0 auto 10px; border: 1px solid var(--line); border-radius: 12px; background: #fff; padding: 10px; }
+        .mobile-menu.open { display: grid; gap: 6px; }
+
+        .page { width: min(1240px, 94vw); margin: 22px auto; display: grid; gap: 16px; }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 55%, #d1fae5 100%);
+            border: 1px solid #bbf7d0;
+            padding: 24px;
+            box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            right: -70px;
+            top: -80px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.20), transparent 65%);
+        }
+
+        .hero-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 14px 28px rgba(22, 163, 74, 0.25);
+            font-size: 1.55rem;
+        }
+
+        .hero h1 { margin: 0; font-size: clamp(1.7rem, 4vw, 2.35rem); letter-spacing: -0.02em; }
+        .hero p { margin: 10px 0 0; color: #334155; max-width: 760px; }
+
+        .card {
+            border: 1px solid var(--line);
+            background: var(--card);
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+        }
+
+        .card-title { margin: 0; font-size: 1.58rem; letter-spacing: -0.015em; }
+        .card-subtitle { margin: 6px 0 0; color: var(--muted); font-size: 0.95rem; }
+
+        .symptom-grid {
+            margin-top: 14px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
         .symptom-card {
-            transition: all 0.3s;
+            position: relative;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 12px;
             cursor: pointer;
-            border: 2px solid transparent;
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 10px;
         }
 
         .symptom-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+            border-color: #cbd5e1;
         }
 
         .symptom-card.selected {
-            border-color: #10b981;
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-color: var(--secondary);
+            background: #f0fdf4;
         }
 
-        .diagnosis-result {
-            animation: slideIn 0.5s ease-out;
+        .symptom-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #f1f5f9;
+            display: grid;
+            place-items: center;
+            font-size: 1.35rem;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+        .symptom-name { margin: 0; font-size: 1rem; font-weight: 800; color: var(--text); }
+        .symptom-sub { margin-top: 2px; font-size: 0.84rem; color: var(--muted); }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .checkmark {
+            width: 24px;
+            height: 24px;
+            border-radius: 999px;
+            border: 1px solid #cbd5e1;
+            color: transparent;
+            display: grid;
+            place-items: center;
+            font-size: 0.82rem;
+            transition: .2s ease;
+            background: #fff;
+        }
+
+        .symptom-card.selected .checkmark {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .actions { margin-top: 16px; text-align: center; }
+
+        .selected-indicator {
+            min-height: 23px;
+            margin: 0 0 12px;
+            color: #334155;
+            font-size: 0.93rem;
+            font-weight: 600;
+        }
+
+        .diagnose-btn {
+            min-width: min(460px, 100%);
+            border: 0;
+            height: 52px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            font-weight: 800;
+            font-size: 1rem;
+            padding: 0 18px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+        }
+
+        .diagnose-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 24px rgba(22, 163, 74, 0.30);
+        }
+
+        .diagnose-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+        .btn-spinner {
+            width: 16px;
+            height: 16px;
+            border-radius: 999px;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        .diagnose-btn.loading .btn-spinner { display: inline-block; }
+        .diagnose-btn.loading .btn-icon { display: none; }
+
+        .loading-card {
+            text-align: center;
+            padding: 22px;
+            border: 1px solid #bae6fd;
+            background: linear-gradient(135deg, #f0f9ff, #ecfeff);
         }
 
         .loading-spinner {
-            border: 3px solid #f3f4f6;
-            border-top: 3px solid #10b981;
+            border: 3px solid #dbeafe;
+            border-top: 3px solid #0ea5e9;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 46px;
+            height: 46px;
             animation: spin 1s linear infinite;
+            margin: 0 auto;
         }
 
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
+        .progress-track {
+            width: min(440px, 100%);
+            margin: 12px auto 0;
+            height: 10px;
+            border-radius: 999px;
+            background: #e0f2fe;
+            overflow: hidden;
+            border: 1px solid #bae6fd;
+        }
 
-            100% {
-                transform: rotate(360deg);
-            }
+        .progress-bar {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #0ea5e9, #22d3ee);
+            animation: indeterminate 1.3s ease-in-out infinite;
+            transform-origin: left;
+        }
+
+        .diagnosis-result { animation: slideIn .35s ease-out; }
+
+        .result-head {
+            border: 1px solid #bbf7d0;
+            background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .result-label {
+            margin: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: .88rem;
+            font-weight: 700;
+            color: #166534;
+        }
+
+        .result-disease {
+            margin: 8px 0 0;
+            font-size: clamp(1.45rem, 3vw, 2rem);
+            color: #14532d;
+            letter-spacing: -0.015em;
+        }
+
+        .result-grid {
+            margin-top: 14px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .result-card {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
+            background: #fff;
+        }
+
+        .result-card h4 {
+            margin: 0;
+            font-size: 0.96rem;
+            display: inline-flex;
+            gap: 7px;
+            align-items: center;
+            color: #0f172a;
+        }
+
+        .result-card p {
+            margin: 9px 0 0;
+            color: #334155;
+            line-height: 1.6;
+            font-size: 0.92rem;
+            white-space: pre-wrap;
+        }
+
+        .result-actions {
+            margin-top: 14px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            border: 0;
+            border-radius: 12px;
+            min-height: 48px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: .2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        .btn-primary:hover,
+        .btn-secondary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15);
+        }
+
+        .hidden { display: none !important; }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes indeterminate { 0% { transform: translateX(-100%) scaleX(0.35); } 50% { transform: translateX(0%) scaleX(0.65); } 100% { transform: translateX(150%) scaleX(0.45); } }
+
+        @media (max-width: 980px) {
+            .nav-links { display: none; }
+            .menu-btn { display: inline-flex; align-items: center; justify-content: center; }
+            .hero { grid-template-columns: 1fr; }
+            .hero-icon { width: 60px; height: 60px; }
+            .result-grid { grid-template-columns: 1fr; }
+            .result-actions { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 
-<body class="bg-gray-50">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="/dashboard" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
-
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="/dashboard" class="text-gray-700 hover:text-emerald-600 transition">Dashboard</a>
-                    <a href="/animals/add" class="text-gray-700 hover:text-emerald-600 transition">Add Animal</a>
-                    <a href="/guide/medicine-guide" class="text-gray-700 hover:text-emerald-600 transition">Medicine
-                        Guide</a>
-                    <a href="/list-product" class="text-gray-700 hover:text-emerald-600 transition">List Product</a>
-                    <a href="/my-products" class="text-gray-700 hover:text-emerald-600 transition">My Products</a>
-                    <a href="/orders/sales" class="text-gray-700 hover:text-emerald-600 transition">Sales</a>
-                    <a href="/marketplace" class="text-gray-700 hover:text-emerald-600 transition">Marketplace</a>
-                    <span class="text-gray-600">Hi, <%= user.name %></span>
-                    <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-red-600 hover:text-red-700 transition">Logout</button>
-                    </form>
-                </div>
-
-                <!-- Mobile Hamburger Button -->
-                <button id="aiMenuBtn"
-                    class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative">
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700"></span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Menu Overlay -->
-        <div id="aiMenu"
-            class="mobile-menu hidden fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-40 md:hidden overflow-y-auto">
-            <div class="flex flex-col p-6 pt-20 space-y-4">
-                <a href="/dashboard"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">🏠
-                    Dashboard</a>
-                <a href="/animals/add"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">➕ Add
-                    Animal</a>
-                <a href="/guide/medicine-guide"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">💊 Medicine
-                    Guide</a>
-                <a href="/ai-assistant" class="text-emerald-600 font-semibold py-2 border-b border-gray-200">🩺 AI
-                    Diagnosis</a>
-                <a href="/list-product"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">➕ List
-                    Product</a>
-                <a href="/my-products"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">📦 My
-                    Products</a>
-                <a href="/orders/sales"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">💰 Sales</a>
-                <a href="/marketplace"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">🛒
-                    Marketplace</a>
-                <span class="text-gray-600 px-3 py-2 bg-emerald-50 rounded-full text-center text-sm">Hi, <%= user.name
-                        %></span>
+<body>
+    <nav class="topbar">
+        <div class="topbar-inner">
+            <a href="/dashboard" class="brand"><i class="fa-solid fa-cow"></i><span>JeevBandhu</span></a>
+            <div class="nav-links">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/ai-assistant" class="nav-link active">AI Diagnosis</a>
+                <a href="/guide/medicine-guide" class="nav-link">Medicine Guide</a>
+                <a href="/community" class="nav-link">Community</a>
+                <a href="/marketplace" class="nav-link">Marketplace</a>
+                <a href="/orders/sales" class="nav-link">Sales</a>
+                <span class="nav-link" style="background:#f1f5f9;cursor:default;"> <%= user.name %> </span>
                 <form action="/logout" method="POST" class="inline">
-                    <button type="submit"
-                        class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2">Logout</button>
+                    <button type="submit" class="logout-btn">Logout</button>
                 </form>
             </div>
+            <button id="menuBtn" class="menu-btn" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></button>
+        </div>
+        <div id="mobileMenu" class="mobile-menu">
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/ai-assistant" class="nav-link active">AI Diagnosis</a>
+            <a href="/guide/medicine-guide" class="nav-link">Medicine Guide</a>
+            <a href="/community" class="nav-link">Community</a>
+            <a href="/marketplace" class="nav-link">Marketplace</a>
+            <a href="/orders/sales" class="nav-link">Sales</a>
+            <form action="/logout" method="POST" class="inline">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
         </div>
     </nav>
 
-    <main class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">🩺 AI Disease Diagnosis</h1>
-            <p class="text-gray-600 mt-2">Select the symptoms your cattle is showing to get an AI-powered diagnosis</p>
-        </div>
-
-        <!-- Instructions -->
-        <div class="card bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 mb-8">
-            <div class="flex items-start">
-                <div class="text-3xl mr-4">ℹ️</div>
-                <div>
-                    <h3 class="font-bold text-gray-900 mb-2">How it works:</h3>
-                    <ol class="text-sm text-gray-700 space-y-1">
-                        <li>1. Select one or more symptoms from the list below</li>
-                        <li>2. Click "Diagnose Disease" to get AI analysis</li>
-                        <li>3. View the diagnosis and recommended treatment</li>
-                        <li>4. Click "View Treatment" to see medicine guide</li>
-                    </ol>
-                </div>
+    <main class="page">
+        <section class="hero">
+            <div>
+                <h1>AI Disease Diagnosis</h1>
+                <p>Select symptoms your animal is experiencing and receive AI-powered diagnosis.</p>
             </div>
-        </div>
+            <div class="hero-icon" aria-hidden="true"><i class="fa-solid fa-robot"></i></div>
+        </section>
 
-        <!-- Symptom Selection -->
-        <div class="card mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Select Symptoms</h2>
+        <section class="card">
+            <h2 class="card-title">Select Symptoms</h2>
+            <p class="card-subtitle">Choose one or more symptoms to start AI diagnosis.</p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="symptomGrid">
-                <div class="symptom-card card bg-white" data-symptom="Loss of appetite">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">🍽️</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Loss of appetite</h3>
-                            <p class="text-sm text-gray-600">Not eating normally</p>
-                        </div>
-                    </div>
+            <div class="symptom-grid" id="symptomGrid">
+                <div class="symptom-card" data-symptom="Loss of appetite" data-label="Loss of appetite">
+                    <div class="symptom-icon">🍽️</div>
+                    <div><p class="symptom-name">Loss of appetite</p><p class="symptom-sub">Not eating normally</p></div>
+                    <div class="checkmark"><i class="fa-solid fa-check"></i></div>
                 </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Fever or high temperature">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">🌡️</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Fever</h3>
-                            <p class="text-sm text-gray-600">High temperature</p>
-                        </div>
-                    </div>
+                <div class="symptom-card" data-symptom="Fever or high temperature" data-label="Fever">
+                    <div class="symptom-icon">🌡️</div>
+                    <div><p class="symptom-name">Fever</p><p class="symptom-sub">High temperature</p></div>
+                    <div class="checkmark"><i class="fa-solid fa-check"></i></div>
                 </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Coughing or respiratory issues">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">🫁</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Coughing</h3>
-                            <p class="text-sm text-gray-600">Respiratory problems</p>
-                        </div>
-                    </div>
+                <div class="symptom-card" data-symptom="Coughing or respiratory issues" data-label="Coughing">
+                    <div class="symptom-icon">🫁</div>
+                    <div><p class="symptom-name">Coughing</p><p class="symptom-sub">Respiratory problems</p></div>
+                    <div class="checkmark"><i class="fa-solid fa-check"></i></div>
                 </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Diarrhea or loose stool">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">💧</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Diarrhea</h3>
-                            <p class="text-sm text-gray-600">Loose stool</p>
-                        </div>
-                    </div>
+                <div class="symptom-card" data-symptom="Diarrhea or loose stool" data-label="Diarrhea">
+                    <div class="symptom-icon">💧</div>
+                    <div><p class="symptom-name">Diarrhea</p><p class="symptom-sub">Loose stool</p></div>
+                    <div class="checkmark"><i class="fa-solid fa-check"></i></div>
                 </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Lethargy or weakness">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">😴</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Lethargy</h3>
-                            <p class="text-sm text-gray-600">Weak, not active</p>
-                        </div>
-                    </div>
+                <div class="symptom-card" data-symptom="Lethargy or weakness" data-label="Lethargy">
+                    <div class="symptom-icon">😴</div>
+                    <div><p class="symptom-name">Lethargy</p><p class="symptom-sub">Weak, not active</p></div>
+                    <div class="checkmark"><i class="fa-solid fa-check"></i></div>
                 </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Reduced milk production">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">🥛</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Low milk</h3>
-                            <p class="text-sm text-gray-600">Reduced production</p>
-                        </div>
-                    </div>
+                <div class="symptom-card" data-symptom="Reduced milk production" data-label="Low milk">
+                    <div class="symptom-icon">🥛</div>
+                    <div><p class="symptom-name">Low milk</p><p class="symptom-sub">Reduced production</p></div>
+                    <div class="checkmark"><i class="fa-solid fa-check"></i></div>
                 </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Lameness or difficulty walking">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">🦵</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Lameness</h3>
-                            <p class="text-sm text-gray-600">Difficulty walking</p>
-                        </div>
-                    </div>
+                <div class="symptom-card" data-symptom="Lameness or difficulty walking" data-label="Lameness">
+                    <div class="symptom-icon">🦵</div>
+                    <div><p class="symptom-name">Lameness</p><p class="symptom-sub">Difficulty walking</p></div>
+                    <div class="checkmark"><i class="fa-solid fa-check"></i></div>
                 </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Swelling or inflammation">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">🔴</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Swelling</h3>
-                            <p class="text-sm text-gray-600">Inflammation present</p>
-                        </div>
-                    </div>
+                <div class="symptom-card" data-symptom="Swelling or inflammation" data-label="Swelling">
+                    <div class="symptom-icon">🔴</div>
+                    <div><p class="symptom-name">Swelling</p><p class="symptom-sub">Inflammation present</p></div>
+                    <div class="checkmark"><i class="fa-solid fa-check"></i></div>
                 </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Discharge from nose or eyes">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">👁️</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Discharge</h3>
-                            <p class="text-sm text-gray-600">Nasal or eye</p>
-                        </div>
-                    </div>
+                <div class="symptom-card" data-symptom="Discharge from nose or eyes" data-label="Discharge">
+                    <div class="symptom-icon">👁️</div>
+                    <div><p class="symptom-name">Discharge</p><p class="symptom-sub">Nasal or eye</p></div>
+                    <div class="checkmark"><i class="fa-solid fa-check"></i></div>
                 </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Weight loss">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">⚖️</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Weight loss</h3>
-                            <p class="text-sm text-gray-600">Losing body mass</p>
-                        </div>
-                    </div>
+                <div class="symptom-card" data-symptom="Weight loss" data-label="Weight loss">
+                    <div class="symptom-icon">⚖️</div>
+                    <div><p class="symptom-name">Weight loss</p><p class="symptom-sub">Losing body mass</p></div>
+                    <div class="checkmark"><i class="fa-solid fa-check"></i></div>
                 </div>
             </div>
 
-            <div class="mt-6 flex justify-center">
-                <button id="diagnoseBtn" disabled
-                    class="px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-all font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
-                    <span class="text-2xl">🩺</span>
-                    <span>Diagnose Disease</span>
+            <div class="actions">
+                <p id="selectedCount" class="selected-indicator">Selected Symptoms: None</p>
+                <button id="diagnoseBtn" disabled class="diagnose-btn">
+                    <span class="btn-spinner"></span>
+                    <i class="fa-solid fa-stethoscope btn-icon"></i>
+                    <span id="diagnoseBtnText">Diagnose Disease</span>
                 </button>
             </div>
+        </section>
 
-            <p id="selectedCount" class="text-center text-gray-600 mt-3 text-sm">Select at least one symptom</p>
-        </div>
+        <section id="loadingIndicator" class="card loading-card hidden">
+            <div class="loading-spinner"></div>
+            <p style="margin:10px 0 0;font-weight:800;color:#0f172a;">Analyzing symptoms with AI...</p>
+            <p style="margin:4px 0 0;color:#475569;font-size:.9rem;">The assistant is matching selected symptoms with veterinary intelligence.</p>
+            <div class="progress-track"><div class="progress-bar"></div></div>
+        </section>
 
-        <!-- Loading Indicator -->
-        <div id="loadingIndicator" class="hidden text-center py-12">
-            <div class="loading-spinner mx-auto mb-4"></div>
-            <p class="text-gray-700 font-semibold">Analyzing symptoms...</p>
-            <p class="text-gray-600 text-sm mt-2">Our AI is reviewing medical knowledge to diagnose the condition</p>
-        </div>
+        <section id="diagnosisResult" class="card hidden diagnosis-result">
+            <h2 class="card-title">Diagnosis Result</h2>
 
-        <!-- Diagnosis Result -->
-        <div id="diagnosisResult" class="hidden diagnosis-result">
-            <div class="card bg-gradient-to-br from-green-50 to-emerald-100 border-l-4 border-green-500">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">📋 Diagnosis Result</h2>
-
-                <div class="bg-white rounded-lg p-6 mb-6 shadow-sm">
-                    <div class="mb-6">
-                        <p class="text-sm text-gray-600 mb-2 font-semibold">Disease Identified:</p>
-                        <h3 id="diseaseName" class="text-3xl font-bold text-emerald-600"></h3>
-                    </div>
-
-                    <div class="border-t pt-6 mb-6">
-                        <p class="text-sm text-gray-600 mb-3 font-semibold">Explanation:</p>
-                        <p id="diseaseExplanation" class="text-gray-900 leading-relaxed"></p>
-                    </div>
-
-                    <div class="border-t pt-6">
-                        <p class="text-sm text-gray-600 mb-3 font-semibold">Recommended Treatment:</p>
-                        <p id="treatmentInfo" class="text-gray-900 font-semibold leading-relaxed"></p>
-                    </div>
-                </div>
-
-                <div class="flex flex-col md:flex-row gap-4">
-                    <button id="viewTreatmentBtn"
-                        class="flex-1 px-8 py-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition-all duration-300 font-bold text-xl shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center justify-center gap-3">
-                        <span class="text-3xl">💊</span>
-                        <span class="text-white">View Treatment in Medicine Guide</span>
-                        <span class="text-2xl">→</span>
-                    </button>
-                    <button id="newDiagnosisBtn"
-                        class="px-8 py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all duration-300 font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center justify-center gap-2 opacity-100"
-                        style="background-color: #2563eb !important;">
-                        <span class="text-2xl">🔄</span>
-                        <span class="text-white font-bold" style="color: white !important;">New Diagnosis</span>
-                    </button>
-                </div>
+            <div class="result-head">
+                <p class="result-label"><i class="fa-solid fa-shield-heart"></i> Disease Identified</p>
+                <h3 id="diseaseName" class="result-disease"></h3>
             </div>
-        </div>
+
+            <div class="result-grid">
+                <article class="result-card">
+                    <h4><i class="fa-solid fa-file-waveform"></i> Diagnosis Summary</h4>
+                    <p id="summaryText">AI has generated an initial diagnostic direction from selected symptoms.</p>
+                </div>
+
+                <article class="result-card">
+                    <h4><i class="fa-solid fa-circle-info"></i> Explanation</h4>
+                    <p id="diseaseExplanation"></p>
+                </article>
+
+                <article class="result-card">
+                    <h4><i class="fa-solid fa-capsules"></i> Recommended Treatment</h4>
+                    <p id="treatmentInfo"></p>
+                </article>
+            </div>
+
+            <div class="result-actions">
+                <button id="viewTreatmentBtn" class="btn-primary"><i class="fa-solid fa-pills"></i> View Treatment in Medicine Guide</button>
+                <button id="newDiagnosisBtn" class="btn-secondary"><i class="fa-solid fa-rotate"></i> Start New Diagnosis</button>
+            </div>
+        </section>
     </main>
 
     <script>
@@ -322,13 +500,15 @@
         const loadingIndicator = document.getElementById('loadingIndicator');
         const diagnosisResult = document.getElementById('diagnosisResult');
         const diseaseName = document.getElementById('diseaseName');
-        // confidenceBadge removed
+        const summaryText = document.getElementById('summaryText');
         const diseaseExplanation = document.getElementById('diseaseExplanation');
         const treatmentInfo = document.getElementById('treatmentInfo');
         const viewTreatmentBtn = document.getElementById('viewTreatmentBtn');
         const newDiagnosisBtn = document.getElementById('newDiagnosisBtn');
+        const diagnoseBtnText = document.getElementById('diagnoseBtnText');
 
         let selectedSymptoms = [];
+        let selectedSymptomLabels = [];
         let currentDiagnosis = null;
 
         // Initialize knowledge base on page load
@@ -345,13 +525,16 @@
         symptomCards.forEach(card => {
             card.addEventListener('click', () => {
                 const symptom = card.dataset.symptom;
+                const symptomLabel = card.dataset.label || symptom;
 
                 if (card.classList.contains('selected')) {
                     card.classList.remove('selected');
                     selectedSymptoms = selectedSymptoms.filter(s => s !== symptom);
+                    selectedSymptomLabels = selectedSymptomLabels.filter(s => s !== symptomLabel);
                 } else {
                     card.classList.add('selected');
                     selectedSymptoms.push(symptom);
+                    selectedSymptomLabels.push(symptomLabel);
                 }
 
                 updateUI();
@@ -361,10 +544,10 @@
         function updateUI() {
             if (selectedSymptoms.length > 0) {
                 diagnoseBtn.disabled = false;
-                selectedCount.textContent = `${selectedSymptoms.length} symptom(s) selected`;
+                selectedCount.textContent = `Selected Symptoms: ${selectedSymptomLabels.join(', ')}`;
             } else {
                 diagnoseBtn.disabled = true;
-                selectedCount.textContent = 'Select at least one symptom';
+                selectedCount.textContent = 'Selected Symptoms: None';
             }
         }
 
@@ -377,6 +560,8 @@
             diagnosisResult.classList.add('hidden');
             document.getElementById('symptomGrid').parentElement.style.opacity = '0.5';
             diagnoseBtn.disabled = true;
+            diagnoseBtn.classList.add('loading');
+            diagnoseBtnText.textContent = 'Diagnosing...';
 
             try {
                 const response = await fetch('/api/ai/diagnose', {
@@ -398,6 +583,9 @@
             } finally {
                 loadingIndicator.classList.add('hidden');
                 document.getElementById('symptomGrid').parentElement.style.opacity = '1';
+                diagnoseBtn.classList.remove('loading');
+                diagnoseBtnText.textContent = 'Diagnose Disease';
+                updateUI();
             }
         });
 
@@ -405,8 +593,7 @@
             diseaseName.textContent = diagnosis.disease;
             diseaseExplanation.textContent = diagnosis.explanation;
             treatmentInfo.textContent = diagnosis.treatment;
-
-            // Confidence badge removed per user request
+            summaryText.textContent = `Based on ${selectedSymptoms.length} selected symptom(s), the AI suggests ${diagnosis.disease} as the most likely condition.`;
 
             diagnosisResult.classList.remove('hidden');
         }
@@ -424,39 +611,24 @@
             // Reset selection
             symptomCards.forEach(card => card.classList.remove('selected'));
             selectedSymptoms = [];
+            selectedSymptomLabels = [];
             currentDiagnosis = null;
             diagnosisResult.classList.add('hidden');
+            loadingIndicator.classList.add('hidden');
+            document.getElementById('symptomGrid').parentElement.style.opacity = '1';
+            diagnoseBtn.classList.remove('loading');
+            diagnoseBtnText.textContent = 'Diagnose Disease';
             updateUI();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // Mobile menu toggle
-        const aiMenuBtn = document.getElementById('aiMenuBtn');
-        const aiMenu = document.getElementById('aiMenu');
+        updateUI();
 
-        if (aiMenuBtn && aiMenu) {
-            aiMenuBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                aiMenu.classList.toggle('hidden');
-                aiMenu.classList.toggle('active');
-                aiMenuBtn.classList.toggle('active');
-            });
-
-            document.addEventListener('click', function (e) {
-                if (aiMenu && !aiMenu.contains(e.target) && !aiMenuBtn.contains(e.target)) {
-                    aiMenu.classList.add('hidden');
-                    aiMenu.classList.remove('active');
-                    aiMenuBtn.classList.remove('active');
-                }
-            });
-
-            const aiLinks = aiMenu.querySelectorAll('a');
-            aiLinks.forEach(link => {
-                link.addEventListener('click', function () {
-                    aiMenu.classList.add('hidden');
-                    aiMenu.classList.remove('active');
-                    aiMenuBtn.classList.remove('active');
-                });
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
             });
         }
     </script>

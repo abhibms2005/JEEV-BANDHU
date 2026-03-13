@@ -5,303 +5,618 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Veterinary Medicine Guide - JeevBandhu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #16a34a;
+            --secondary: #22c55e;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --line: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 60;
+            background: rgba(255, 255, 255, .95);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(8px);
+        }
+
+        .topbar-inner {
+            width: min(1280px, 95vw);
+            margin: 0 auto;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand {
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #334155;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: .9rem;
+            transition: .2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #ecfdf5;
+            color: #15803d;
+        }
+
+        .logout-btn {
+            border: 0;
+            background: transparent;
+            color: #dc2626;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .menu-btn {
+            display: none;
+            border: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            color: #334155;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            width: min(1280px, 95vw);
+            margin: 0 auto 10px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: #fff;
+            padding: 10px;
+        }
+
+        .mobile-menu.open { display: grid; gap: 6px; }
+
+        .page {
+            width: min(1280px, 95vw);
+            margin: 22px auto;
+            display: grid;
+            gap: 16px;
+            padding: 0 2px 8px;
+        }
+
+        .hero {
+            border: 1px solid #bbf7d0;
+            background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 58%, #d1fae5 100%);
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 12px 26px rgba(15, 23, 42, .06);
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(1.55rem, 3.8vw, 2.2rem);
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            margin: 9px 0 0;
+            color: #334155;
+            font-size: .95rem;
+        }
+
+        .panel {
+            border: 1px solid var(--line);
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, .05);
+            padding: 16px;
+        }
+
+        .species-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
+        .species-link {
+            text-decoration: none;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            padding: 11px;
+            text-align: center;
+            font-weight: 700;
+            color: #334155;
+            transition: .2s ease;
+            background: #fff;
+        }
+
+        .species-link.active,
+        .species-link:hover {
+            background: #ecfdf5;
+            color: #166534;
+            border-color: #86efac;
+        }
+
+        .search-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-wrap {
+            position: relative;
+        }
+
+        .search-wrap i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .search-input {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            padding: 11px 12px 11px 36px;
+            font-size: .94rem;
+            background: #fff;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #86efac;
+            box-shadow: 0 0 0 3px rgba(134, 239, 172, .35);
+        }
+
+        .counter {
+            border: 1px solid #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
+            border-radius: 12px;
+            padding: 11px 12px;
+            font-weight: 700;
+            font-size: .88rem;
+            white-space: nowrap;
+        }
+
+        .med-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 18px;
+        }
+
+        .med-card {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 24px;
+            background: #fff;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+            transition: transform .2s ease, box-shadow .2s ease;
+            display: grid;
+            gap: 14px;
+        }
+
+        .med-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 28px rgba(15, 23, 42, .1);
+        }
+
+        .med-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .med-title {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+
+        .med-desc {
+            margin: 5px 0 0;
+            color: #64748b;
+            font-size: .9rem;
+        }
+
+        .type-badge {
+            border-radius: 999px;
+            font-size: .72rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            white-space: nowrap;
+        }
+
+        .tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            border: 1px solid #bbf7d0;
+            border-radius: 999px;
+            font-size: .74rem;
+            color: #166534;
+            background: #ecfdf5;
+            padding: 3px 9px;
+            display: inline-block;
+        }
+
+        .section-title {
+            margin: 0;
+            font-size: .95rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .dose-box {
+            border: 1px solid #dbeafe;
+            background: #f8fbff;
+            border-radius: 12px;
+            padding: 12px;
+            display: grid;
+            gap: 9px;
+        }
+
+        .dose-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+        }
+
+        .dose-input {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            padding: 9px 10px;
+            font-size: .9rem;
+            background: #fff;
+        }
+
+        .dose-btn {
+            border: 0;
+            border-radius: 9px;
+            background: #16a34a;
+            color: #fff;
+            font-weight: 700;
+            padding: 9px 12px;
+            cursor: pointer;
+            min-width: 92px;
+            transition: .2s ease;
+        }
+
+        .dose-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .dose-meta {
+            margin: 0;
+            font-size: .82rem;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .withdraw-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .withdraw-box {
+            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+        }
+
+        .withdraw-label {
+            margin: 0;
+            font-size: .74rem;
+            color: #64748b;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+
+        .withdraw-value {
+            margin: 5px 0 0;
+            font-weight: 800;
+            font-size: 1.02rem;
+        }
+
+        .withdraw-box.meat .withdraw-value { color: #b91c1c; }
+        .withdraw-box.milk .withdraw-value { color: #a16207; }
+
+        .accordion-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        .acc {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .acc summary {
+            cursor: pointer;
+            list-style: none;
+            padding: 10px 12px;
+            font-size: .86rem;
+            font-weight: 700;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .acc summary::-webkit-details-marker { display: none; }
+
+        .acc summary::after {
+            content: '\25B6';
+            font-size: .72rem;
+            color: #64748b;
+            transition: transform .2s ease;
+        }
+
+        .acc[open] summary::after {
+            transform: rotate(90deg);
+        }
+
+        .acc-body {
+            padding: 0 12px 11px;
+            color: #475569;
+            font-size: .85rem;
+            line-height: 1.55;
+        }
+
+        .hidden { display: none !important; }
+
+        .result-box {
+            margin-top: 8px;
+            padding: 8px;
+            border: 1px solid #93c5fd;
+            background: #fff;
+            border-radius: 9px;
+        }
+
+        .important-list {
+            margin: 0;
+            padding-left: 18px;
+            color: #334155;
+            font-size: .9rem;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 980px) {
+            .nav-links { display: none; }
+            .menu-btn { display: inline-flex; align-items: center; justify-content: center; }
+            .search-row { grid-template-columns: 1fr; }
+            .counter { width: fit-content; }
+        }
+
+        @media (max-width: 760px) {
+            .med-grid { grid-template-columns: 1fr; }
+            .med-card { padding: 16px; }
+        }
+    </style>
 </head>
 
-<body class="bg-gradient-to-br from-emerald-50 via-white to-blue-50 min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="/dashboard" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
-
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="/dashboard" class="text-gray-700 hover:text-emerald-600 transition">Dashboard</a>
-                    <a href="/guide/medicine-guide" class="text-emerald-600 font-semibold">Medicine Guide</a>
-                    <span class="text-gray-600">Hi, <%= user.name %></span>
-                    <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-red-600 hover:text-red-700 transition">Logout</button>
-                    </form>
-                </div>
-
-                <!-- Mobile Hamburger Button -->
-                <button id="medicineMenuBtn"
-                    class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative">
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700"></span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Menu Overlay -->
-        <div id="medicineMenu"
-            class="mobile-menu hidden fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-40 md:hidden">
-            <div class="flex flex-col p-6 pt-20 space-y-4">
-                <a href="/dashboard"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">Dashboard</a>
-                <a href="/guide/medicine-guide"
-                    class="text-emerald-600 font-semibold py-2 border-b border-gray-200">Medicine Guide</a>
-                <span class="text-gray-600 px-3 py-2 bg-emerald-50 rounded-full text-center">Hi, <%= user.name %></span>
+<body>
+    <nav class="topbar">
+        <div class="topbar-inner">
+            <a href="/dashboard" class="brand"><i class="fa-solid fa-cow"></i><span>JeevBandhu</span></a>
+            <div class="nav-links">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/ai-assistant" class="nav-link">AI Diagnosis</a>
+                <a href="/guide/medicine-guide" class="nav-link active">Medicine Guide</a>
+                <a href="/compliance" class="nav-link">Biosecurity</a>
+                <a href="/community" class="nav-link">Community</a>
+                <a href="/orders/sales" class="nav-link">Sales</a>
+                <span class="nav-link" style="background:#f1f5f9;cursor:default;"> <%= user.name %> </span>
                 <form action="/logout" method="POST" class="inline">
-                    <button type="submit"
-                        class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2">Logout</button>
+                    <button type="submit" class="logout-btn">Logout</button>
                 </form>
             </div>
+            <button id="menuBtn" class="menu-btn" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></button>
+        </div>
+        <div id="mobileMenu" class="mobile-menu">
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/ai-assistant" class="nav-link">AI Diagnosis</a>
+            <a href="/guide/medicine-guide" class="nav-link active">Medicine Guide</a>
+            <a href="/compliance" class="nav-link">Biosecurity</a>
+            <a href="/community" class="nav-link">Community</a>
+            <a href="/orders/sales" class="nav-link">Sales</a>
+            <form action="/logout" method="POST" class="inline">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
         </div>
     </nav>
 
-    <main class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">💊 Veterinary Medicine Guide</h1>
-            <p class="text-gray-600 mt-2">Research-based dosage, withdrawal periods, and treatment guidelines</p>
-        </div>
+    <main class="page">
+        <section class="hero">
+            <h1>Veterinary Medicine Guide</h1>
+            <p>Clear dosage, withdrawal, and safety guidance to support safer treatment decisions.</p>
+        </section>
 
-        <!-- Species Selector -->
-        <div class="card mb-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Select Animal Species</h3>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                <a href="/guide/medicine-guide?species=cattle"
-                    class="<%= species === 'cattle' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700 hover:bg-emerald-50' %> border-2 border-emerald-600 rounded-lg p-4 text-center transition cursor-pointer">
-                    <div class="text-3xl mb-2">🐄</div>
-                    <div class="font-semibold">Cattle</div>
-                </a>
-                <a href="/guide/medicine-guide?species=buffalo"
-                    class="<%= species === 'buffalo' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700 hover:bg-emerald-50' %> border-2 border-emerald-600 rounded-lg p-4 text-center transition cursor-pointer">
-                    <div class="text-3xl mb-2">🐃</div>
-                    <div class="font-semibold">Buffalo</div>
-                </a>
-                <a href="/guide/medicine-guide?species=goat"
-                    class="<%= species === 'goat' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700 hover:bg-emerald-50' %> border-2 border-emerald-600 rounded-lg p-4 text-center transition cursor-pointer">
-                    <div class="text-3xl mb-2">🐐</div>
-                    <div class="font-semibold">Goat</div>
-                </a>
-                <a href="/guide/medicine-guide?species=sheep"
-                    class="<%= species === 'sheep' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700 hover:bg-emerald-50' %> border-2 border-emerald-600 rounded-lg p-4 text-center transition cursor-pointer">
-                    <div class="text-3xl mb-2">🐑</div>
-                    <div class="font-semibold">Sheep</div>
-                </a>
-                <a href="/guide/medicine-guide?species=poultry"
-                    class="<%= species === 'poultry' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700 hover:bg-emerald-50' %> border-2 border-emerald-600 rounded-lg p-4 text-center transition cursor-pointer">
-                    <div class="text-3xl mb-2">🐔</div>
-                    <div class="font-semibold">Poultry</div>
-                </a>
+        <section class="panel">
+            <h3 style="margin:0 0 10px;">Select Animal Species</h3>
+            <div class="species-grid">
+                <a href="/guide/medicine-guide?species=cattle" class="species-link <%= species === 'cattle' ? 'active' : '' %>">🐄 Cattle</a>
+                <a href="/guide/medicine-guide?species=buffalo" class="species-link <%= species === 'buffalo' ? 'active' : '' %>">🐃 Buffalo</a>
+                <a href="/guide/medicine-guide?species=goat" class="species-link <%= species === 'goat' ? 'active' : '' %>">🐐 Goat</a>
+                <a href="/guide/medicine-guide?species=sheep" class="species-link <%= species === 'sheep' ? 'active' : '' %>">🐑 Sheep</a>
+                <a href="/guide/medicine-guide?species=poultry" class="species-link <%= species === 'poultry' ? 'active' : '' %>">🐔 Poultry</a>
             </div>
-        </div>
+        </section>
 
-        <!-- Search Bar -->
-        <div class="card mb-6">
-            <div class="flex gap-4">
-                <input type="text" id="medicineSearch"
-                    placeholder="🔍 Search by treatment or medicine name (e.g., mastitis, pneumonia, worms...)"
-                    class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
-                <div class="flex items-center px-4 py-3 bg-emerald-50 rounded-lg">
-                    <span class="text-sm text-emerald-700 font-semibold">
-                        <span id="visibleMedicines">
-                            <%= medicines.length %>
-                        </span> of <%= medicines.length %> shown
-                    </span>
+        <section class="panel">
+            <div class="search-row">
+                <div class="search-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="medicineSearch" class="search-input" placeholder="Search by treatment or medicine name...">
                 </div>
+                <div class="counter"><span id="visibleMedicines"><%= medicines.length %></span> of <%= medicines.length %> shown</div>
             </div>
-        </div>
+        </section>
 
-        <!-- Medicine Cards -->
-        <% if (medicines.length===0) { %>
-            <div class="card text-center py-12">
-                <div class="text-6xl mb-4">💊</div>
-                <h2 class="text-2xl font-bold text-gray-700 mb-2">No medicines found</h2>
-                <p class="text-gray-600">Try a different search term</p>
-            </div>
-            <% } else { %>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="medicineGrid">
-                    <% medicines.forEach(medicine=> { %>
-                        <div class="card hover:shadow-xl transition-shadow medicine-card"
-                            data-name="<%= medicine.name.toLowerCase() %>"
-                            data-treatments="<%= medicine.treatments.map(t => t.toLowerCase()).join(',') %>"
-                            data-category="<%= medicine.category.toLowerCase() %>">
-                            <!-- Header -->
-                            <div class="flex justify-between items-start mb-4">
+        <% if (medicines.length === 0) { %>
+            <section class="panel" style="text-align:center;padding:36px 16px;">
+                <h2 style="margin:0;">No medicines found</h2>
+                <p style="margin:8px 0 0;color:#64748b;">Try a different search term.</p>
+            </section>
+        <% } else { %>
+            <section class="med-grid" id="medicineGrid">
+                <% medicines.forEach(medicine => { %>
+                    <article class="med-card medicine-card" data-name="<%= medicine.name.toLowerCase() %>" data-treatments="<%= medicine.treatments.map(t => t.toLowerCase()).join(',') %>" data-category="<%= medicine.category.toLowerCase() %>">
+                        <section>
+                            <div class="med-head">
                                 <div>
-                                    <h3 class="text-xl font-bold text-gray-900">
-                                        <%= medicine.name %>
-                                    </h3>
-                                    <p class="text-sm text-gray-600">
-                                        <%= medicine.category %>
-                                    </p>
+                                    <h3 class="med-title"><%= medicine.name %></h3>
+                                    <p class="med-desc"><%= medicine.category %></p>
                                 </div>
-                                <span class="badge
-                                <%= medicine.type === 'Antibiotic' ? 'bg-red-100 text-red-800' : '' %>
-                                <%= medicine.type === 'Anti-parasitic' ? 'bg-purple-100 text-purple-800' : '' %>
-                                <%= medicine.type === 'NSAID' ? 'bg-blue-100 text-blue-800' : '' %>
-                                <%= medicine.type === 'Vitamin Supplement' ? 'bg-green-100 text-green-800' : '' %>
-                                <%= medicine.type === 'Mineral Supplement' ? 'bg-yellow-100 text-yellow-800' : '' %>
-                                <%= medicine.type === 'Anti-protozoal' ? 'bg-pink-100 text-pink-800' : '' %>
-                            ">
-                                    <%= medicine.type %>
-                                </span>
+                                <span class="type-badge
+                                    <%= medicine.type === 'Antibiotic' ? 'bg-red-100 text-red-800' : '' %>
+                                    <%= medicine.type === 'Anti-parasitic' ? 'bg-purple-100 text-purple-800' : '' %>
+                                    <%= medicine.type === 'NSAID' ? 'bg-blue-100 text-blue-800' : '' %>
+                                    <%= medicine.type === 'Vitamin Supplement' ? 'bg-green-100 text-green-800' : '' %>
+                                    <%= medicine.type === 'Mineral Supplement' ? 'bg-yellow-100 text-yellow-800' : '' %>
+                                    <%= medicine.type === 'Anti-protozoal' ? 'bg-pink-100 text-pink-800' : '' %>
+                                "><%= medicine.type %></span>
                             </div>
-
-                            <!-- Treatments -->
-                            <div class="mb-4">
-                                <h4 class="text-sm font-semibold text-gray-700 mb-2">🎯 Treats:</h4>
-                                <div class="flex flex-wrap gap-2">
-                                    <% medicine.treatments.forEach(treatment=> { %>
-                                        <span class="px-3 py-1 bg-emerald-50 text-emerald-700 text-sm rounded-full">
-                                            <%= treatment %>
-                                        </span>
-                                        <% }) %>
-                                </div>
+                            <div class="tags" style="margin-top:10px;">
+                                <% medicine.treatments.forEach(treatment => { %>
+                                    <span class="tag"><%= treatment %></span>
+                                <% }) %>
                             </div>
+                        </section>
 
-                            <!-- Dosage Calculator -->
-                            <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-4">
-                                <h4 class="font-semibold text-gray-900 mb-3">💉 Dosage Calculator</h4>
-                                <div class="space-y-2">
-                                    <div class="flex flex-col md:flex-row items-stretch md:items-center gap-2">
-                                        <label class="text-sm text-gray-700 md:whitespace-nowrap">Animal Weight:</label>
-                                        <input type="number" id="weight-<%= medicine.id %>" min="1" step="1"
-                                            placeholder="kg" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg">
-                                        <button onclick="calculateDosage('<%= species %>', '<%= medicine.id %>')"
-                                            class="btn-primary px-4 py-2 w-full md:w-auto md:whitespace-nowrap">
-                                            Calculate
-                                        </button>
-                                    </div>
-                                    <div id="result-<%= medicine.id %>"
-                                        class="hidden mt-3 p-3 bg-white border border-blue-300 rounded-lg">
-                                        <p class="text-sm font-semibold text-gray-900 mb-1">Recommended Dosage:</p>
-                                        <p id="dosage-<%= medicine.id %>" class="text-emerald-600 font-bold"></p>
-                                    </div>
+                        <section class="dose-box">
+                            <h4 class="section-title">Dosage Calculator</h4>
+                            <div class="dose-row">
+                                <input type="number" id="weight-<%= medicine.id %>" min="1" step="1" placeholder="Animal weight" class="dose-input">
+                                <button onclick="calculateDosage('<%= species %>', '<%= medicine.id %>')" class="dose-btn">Calculate</button>
+                            </div>
+                            <div id="result-<%= medicine.id %>" class="hidden result-box">
+                                <p style="margin:0;font-size:.82rem;color:#334155;">Recommended Dosage</p>
+                                <p id="dosage-<%= medicine.id %>" style="margin:3px 0 0;font-weight:700;color:#166534;"></p>
+                            </div>
+                            <p class="dose-meta"><strong>Standard:</strong> <%= medicine.dosage.amount %> <%= medicine.dosage.unit %><br><strong>Route:</strong> <%= medicine.dosage.route %><br><strong>Frequency:</strong> <%= medicine.dosage.frequency %></p>
+                        </section>
+
+                        <section>
+                            <h4 class="section-title" style="margin-bottom:8px;">Withdrawal Period</h4>
+                            <div class="withdraw-grid">
+                                <div class="withdraw-box meat">
+                                    <p class="withdraw-label">Meat Withdrawal</p>
+                                    <p class="withdraw-value"><%= medicine.withdrawalPeriod.meat %> days</p>
                                 </div>
-                                <div class="mt-3 text-xs text-gray-600">
-                                    <p><strong>Standard Dosage:</strong>
-                                        <%= medicine.dosage.amount %>
-                                            <%= medicine.dosage.unit %>
-                                    </p>
-                                    <p><strong>Route:</strong>
-                                        <%= medicine.dosage.route %>
-                                    </p>
-                                    <p><strong>Frequency:</strong>
-                                        <%= medicine.dosage.frequency %>
-                                    </p>
+                                <div class="withdraw-box milk">
+                                    <p class="withdraw-label"><%= species === 'poultry' ? 'Egg Withdrawal' : 'Milk Withdrawal' %></p>
+                                    <p class="withdraw-value"><%= medicine.withdrawalPeriod.milk !== undefined ? medicine.withdrawalPeriod.milk + ' days' : medicine.withdrawalPeriod.eggs !== undefined ? medicine.withdrawalPeriod.eggs + ' days' : 'N/A' %></p>
                                 </div>
                             </div>
+                        </section>
 
-                            <!-- Withdrawal Period -->
-                            <div class="grid grid-cols-2 gap-3 mb-4">
-                                <div class="bg-red-50 border border-red-200 rounded-lg p-3">
-                                    <p class="text-xs text-gray-600 mb-1">🥩 Meat Withdrawal</p>
-                                    <p class="text-lg font-bold text-red-600">
-                                        <%= medicine.withdrawalPeriod.meat %> days
-                                    </p>
-                                </div>
-                                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                                    <p class="text-xs text-gray-600 mb-1">
-                                        <%= species==='poultry' ? '🥚 Egg Withdrawal' : '🥛 Milk Withdrawal' %>
-                                    </p>
-                                    <p class="text-lg font-bold text-yellow-600">
-                                        <%= medicine.withdrawalPeriod.milk !==undefined ? medicine.withdrawalPeriod.milk
-                                            + ' days' : medicine.withdrawalPeriod.eggs !==undefined ?
-                                            medicine.withdrawalPeriod.eggs + ' days' : 'N/A' %>
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Precautions & Side Effects -->
-                            <div class="space-y-2 text-sm">
-                                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded">
-                                    <p class="font-semibold text-yellow-900 mb-1">⚠️ Precautions:</p>
-                                    <p class="text-yellow-800">
-                                        <%= medicine.precautions %>
-                                    </p>
-                                </div>
+                        <section>
+                            <h4 class="section-title" style="margin-bottom:8px;">Safety Information</h4>
+                            <div class="accordion-group">
+                                <details class="acc">
+                                    <summary>Precautions</summary>
+                                    <div class="acc-body"><%= medicine.precautions %></div>
+                                </details>
                                 <% if (medicine.sideEffects) { %>
-                                    <div class="bg-orange-50 border-l-4 border-orange-500 p-3 rounded">
-                                        <p class="font-semibold text-orange-900 mb-1">Side Effects:</p>
-                                        <p class="text-orange-800">
-                                            <%= medicine.sideEffects %>
-                                        </p>
-                                    </div>
-                                    <% } %>
-                                        <% if (medicine.contraindications) { %>
-                                            <div class="bg-red-50 border-l-4 border-red-500 p-3 rounded">
-                                                <p class="font-semibold text-red-900 mb-1">🚫 Contraindications:</p>
-                                                <p class="text-red-800">
-                                                    <%= medicine.contraindications %>
-                                                </p>
-                                            </div>
-                                            <% } %>
+                                    <details class="acc">
+                                        <summary>Side Effects</summary>
+                                        <div class="acc-body"><%= medicine.sideEffects %></div>
+                                    </details>
+                                <% } %>
+                                <% if (medicine.contraindications) { %>
+                                    <details class="acc">
+                                        <summary>Contraindications</summary>
+                                        <div class="acc-body"><%= medicine.contraindications %></div>
+                                    </details>
+                                <% } %>
                             </div>
-                        </div>
-                        <% }) %>
-                </div>
-                <% } %>
+                        </section>
+                    </article>
+                <% }) %>
+            </section>
+        <% } %>
 
-                    <!-- Info Section -->
-                    <div class="mt-8 card bg-gradient-to-r from-blue-50 to-emerald-50">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-3">ℹ️ Important Information</h3>
-                        <ul class="space-y-2 text-sm text-gray-700">
-                            <li>✅ Always consult a licensed veterinarian before administering medications</li>
-                            <li>✅ Complete the full course of antibiotics even if symptoms improve</li>
-                            <li>✅ Withdrawal periods are MANDATORY for food safety - do not list products during this
-                                time</li>
-                            <li>✅ Store all medications as per manufacturer's instructions</li>
-                            <li>✅ Keep detailed records of all treatments in the medical log</li>
-                            <li>✅ Calculate dosages based on current animal weight for accuracy</li>
-                        </ul>
-                    </div>
+        <section class="panel">
+            <h3 style="margin:0 0 10px;">Important Information</h3>
+            <ul class="important-list">
+                <li>Always consult a licensed veterinarian before administering medications.</li>
+                <li>Complete the full antibiotic course even if symptoms improve.</li>
+                <li>Respect withdrawal periods for food safety before listing products.</li>
+                <li>Store medications exactly as per manufacturer instructions.</li>
+                <li>Maintain treatment records for each animal consistently.</li>
+            </ul>
+        </section>
     </main>
 
-    <footer class="bg-gray-800 text-white mt-12 py-6">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>&copy; 2025 JeevBandhu. Evidence-based veterinary information.</p>
-        </div>
-    </footer>
-
     <script>
-        // Mobile menu toggle for medicine guide
-        const medicineMenuBtn = document.getElementById('medicineMenuBtn');
-        const medicineMenu = document.getElementById('medicineMenu');
-
-        if (medicineMenuBtn && medicineMenu) {
-            medicineMenuBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                medicineMenu.classList.toggle('hidden');
-                medicineMenu.classList.toggle('active');
-                medicineMenuBtn.classList.toggle('active');
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener('click', function (e) {
-                if (medicineMenu && !medicineMenu.contains(e.target) && !medicineMenuBtn.contains(e.target)) {
-                    medicineMenu.classList.add('hidden');
-                    medicineMenu.classList.remove('active');
-                    medicineMenuBtn.classList.remove('active');
-                }
-            });
-
-            // Close menu when clicking a link
-            const medicineLinks = medicineMenu.querySelectorAll('a');
-            medicineLinks.forEach(link => {
-                link.addEventListener('click', function () {
-                    medicineMenu.classList.add('hidden');
-                    medicineMenu.classList.remove('active');
-                    medicineMenuBtn.classList.remove('active');
-                });
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
             });
         }
 
-        // Dosage calculation function
         async function calculateDosage(species, medicineId) {
             const weightInput = document.getElementById(`weight-${medicineId}`);
             const resultDiv = document.getElementById(`result-${medicineId}`);
             const dosageText = document.getElementById(`dosage-${medicineId}`);
-
             const weight = parseFloat(weightInput.value);
 
             if (!weight || weight <= 0) {
-                alert('⚠️ Please enter a valid animal weight');
+                alert('Please enter a valid animal weight');
                 return;
             }
 
@@ -313,24 +628,18 @@
                 });
 
                 const result = await response.json();
-
                 if (result.success) {
                     const info = result.dosageInfo;
-                    dosageText.innerHTML = `
-                        <strong>${info.dosage}</strong><br>
-                        <span class="text-sm text-gray-700">${info.route}</span><br>
-                        <span class="text-sm text-gray-700">${info.frequency}</span>
-                    `;
+                    dosageText.innerHTML = `<strong>${info.dosage}</strong><br><span style="font-size:.8rem;color:#475569;">${info.route}</span><br><span style="font-size:.8rem;color:#475569;">${info.frequency}</span>`;
                     resultDiv.classList.remove('hidden');
                 } else {
-                    alert(`❌ ${result.error}`);
+                    alert(result.error || 'Failed to calculate dosage');
                 }
             } catch (error) {
-                alert('❌ Failed to calculate dosage. Please try again.');
+                alert('Failed to calculate dosage. Please try again.');
             }
         }
 
-        // Real-time search functionality
         const searchInput = document.getElementById('medicineSearch');
         const medicineCards = document.querySelectorAll('.medicine-card');
         const visibleCount = document.getElementById('visibleMedicines');
@@ -344,24 +653,17 @@
                     const name = card.dataset.name;
                     const treatments = card.dataset.treatments;
                     const category = card.dataset.category;
-
-                    // Check if search term matches name, treatments, or category
-                    const matches = name.includes(searchTerm) ||
-                        treatments.includes(searchTerm) ||
-                        category.includes(searchTerm);
+                    const matches = name.includes(searchTerm) || treatments.includes(searchTerm) || category.includes(searchTerm);
 
                     if (matches || searchTerm === '') {
-                        card.style.display = 'block';
+                        card.style.display = 'grid';
                         visible++;
                     } else {
                         card.style.display = 'none';
                     }
                 });
 
-                // Update visible count
-                if (visibleCount) {
-                    visibleCount.textContent = visible;
-                }
+                if (visibleCount) visibleCount.textContent = visible;
             });
         }
     </script>

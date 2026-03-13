@@ -5,220 +5,607 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Orders - JeevBandhu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #16a34a;
+            --secondary: #22c55e;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --line: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 60;
+            background: rgba(255, 255, 255, .95);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(8px);
+        }
+
+        .topbar-inner {
+            width: min(1240px, 94vw);
+            margin: 0 auto;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand {
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #334155;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: .9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: .2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #ecfdf5;
+            color: #15803d;
+        }
+
+        .logout-btn {
+            border: 0;
+            background: transparent;
+            color: #dc2626;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .menu-btn {
+            display: none;
+            border: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            color: #334155;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            width: min(1240px, 94vw);
+            margin: 0 auto 10px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: #fff;
+            padding: 10px;
+        }
+
+        .mobile-menu.open {
+            display: grid;
+            gap: 6px;
+        }
+
+        .page {
+            width: min(1240px, 94vw);
+            margin: 22px auto;
+            display: grid;
+            gap: 12px;
+        }
+
+        .panel {
+            border: 1px solid var(--line);
+            background: #fff;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, .05);
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: clamp(1.7rem, 4vw, 2.15rem);
+            letter-spacing: -0.02em;
+            font-weight: 800;
+        }
+
+        .page-sub {
+            margin: 8px 0 0;
+            color: var(--muted);
+        }
+
+        .order-card {
+            border: 1px solid var(--line);
+            background: #fff;
+            border-radius: 18px;
+            padding: 14px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, .06);
+            transition: transform .2s ease, box-shadow .2s ease;
+            display: grid;
+            gap: 12px;
+        }
+
+        .order-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 30px rgba(15, 23, 42, .12);
+        }
+
+        .order-main {
+            display: grid;
+            grid-template-columns: 1.35fr 1fr;
+            gap: 12px;
+            align-items: start;
+        }
+
+        .left-side {
+            display: grid;
+            grid-template-columns: 88px 1fr;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .product-image {
+            width: 88px;
+            height: 88px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #ecfdf5, #dcfce7);
+            border: 1px solid #bbf7d0;
+            display: grid;
+            place-items: center;
+            font-size: 2rem;
+        }
+
+        .product-name {
+            margin: 0;
+            font-size: 1.26rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+
+        .meta-text {
+            margin: 4px 0 0;
+            color: #64748b;
+            font-size: .84rem;
+        }
+
+        .right-side {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #f8fafc;
+            padding: 10px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .badge {
+            font-size: .74rem;
+            font-weight: 700;
+            border-radius: 999px;
+            padding: 4px 10px;
+        }
+
+        .badge.pending { background: #fef3c7; color: #92400e; }
+        .badge.confirmed { background: #dbeafe; color: #1d4ed8; }
+        .badge.delivered { background: #dcfce7; color: #166534; }
+        .badge.cancelled { background: #fee2e2; color: #991b1b; }
+
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .mini-stat {
+            border-radius: 10px;
+            padding: 9px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+        }
+
+        .mini-label {
+            margin: 0;
+            font-size: .76rem;
+            color: #64748b;
+        }
+
+        .mini-value {
+            margin: 4px 0 0;
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .mini-value.total {
+            color: #166534;
+        }
+
+        .tracking {
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            background: #fff;
+            padding: 10px;
+        }
+
+        .track-label {
+            margin: 0 0 8px;
+            color: #64748b;
+            font-size: .82rem;
+            font-weight: 700;
+        }
+
+        .track-line {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            position: relative;
+        }
+
+        .track-line::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            height: 3px;
+            border-radius: 999px;
+            background: #e2e8f0;
+        }
+
+        .track-line::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            height: 3px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: var(--track-progress, 0%);
+            transition: width .25s ease;
+        }
+
+        .track-step {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            justify-items: center;
+            gap: 6px;
+            text-align: center;
+        }
+
+        .track-dot {
+            width: 17px;
+            height: 17px;
+            border-radius: 999px;
+            border: 2px solid #cbd5e1;
+            background: #fff;
+        }
+
+        .track-step.done .track-dot,
+        .track-step.active .track-dot {
+            border-color: var(--primary);
+            background: var(--primary);
+            box-shadow: 0 0 0 4px rgba(22, 163, 74, .15);
+        }
+
+        .track-step span {
+            font-size: .74rem;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .track-step.active span,
+        .track-step.done span {
+            color: #166534;
+        }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .section-card {
+            border-radius: 12px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            display: grid;
+            gap: 6px;
+        }
+
+        .section-title {
+            margin: 0;
+            font-size: .85rem;
+            color: #334155;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-text {
+            margin: 0;
+            color: #0f172a;
+            font-size: .9rem;
+        }
+
+        .section-sub {
+            margin: 0;
+            color: #64748b;
+            font-size: .8rem;
+        }
+
+        .health-track {
+            height: 8px;
+            border-radius: 999px;
+            background: #e2e8f0;
+            overflow: hidden;
+        }
+
+        .health-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 999px;
+            width: 0;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            border: 0;
+            border-radius: 10px;
+            min-height: 36px;
+            padding: 0 11px;
+            font-size: .82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: .2s ease;
+        }
+
+        .action-btn:hover { transform: translateY(-1px); }
+
+        .btn-track { background: #dbeafe; color: #1d4ed8; }
+        .btn-view { background: #f1f5f9; color: #334155; }
+        .btn-reorder { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; }
+
+        .empty {
+            margin-top: 12px;
+            border: 1px solid var(--line);
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px 16px;
+            text-align: center;
+        }
+
+        @media (max-width: 980px) {
+            .nav-links { display: none; }
+            .menu-btn { display: inline-flex; align-items: center; justify-content: center; }
+            .order-main { grid-template-columns: 1fr; }
+            .mini-grid { grid-template-columns: 1fr; }
+            .section-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 700px) {
+            .left-side { grid-template-columns: 1fr; }
+            .product-image { width: 64px; height: 64px; font-size: 1.6rem; }
+            .actions { flex-direction: column; }
+            .action-btn { width: 100%; justify-content: center; }
+        }
+    </style>
 </head>
 
-<body class="bg-gradient-to-br from-blue-50 via-white to-emerald-50 min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-md">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="/marketplace" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
+<body>
+    <% 
+        function statusClass(status) {
+            const s = String(status || '').toLowerCase();
+            if (s === 'confirmed') return 'confirmed';
+            if (s === 'delivered') return 'delivered';
+            if (s === 'cancelled') return 'cancelled';
+            return 'pending';
+        }
 
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="/marketplace" class="text-gray-700 hover:text-emerald-600 transition">Marketplace</a>
-                    <a href="/orders/my-orders" class="text-emerald-600 font-semibold">My Orders</a>
-                    <span class="text-gray-600">Hi, <%= user.name %></span>
-                    <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-red-600 hover:text-red-700 transition">Logout</button>
-                    </form>
-                </div>
+        function statusStage(status) {
+            const s = String(status || '').toLowerCase();
+            if (s === 'pending') return 1;
+            if (s === 'confirmed') return 2;
+            if (s === 'delivered') return 4;
+            if (s === 'cancelled') return 1;
+            return 1;
+        }
 
-                <!-- Mobile Hamburger Button -->
-                <button id="myOrdersMenuBtn"
-                    class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative">
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700"></span>
-                </button>
-            </div>
-        </div>
+        function trackProgress(stage) {
+            if (stage <= 1) return 0;
+            if (stage === 2) return 33;
+            if (stage === 3) return 66;
+            return 100;
+        }
 
-        <!-- Mobile Menu Overlay -->
-        <div id="myOrdersMenu"
-            class="mobile-menu hidden fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-40 md:hidden overflow-y-auto">
-            <div class="flex flex-col p-6 pt-20 space-y-4">
-                <a href="/marketplace"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">🛒
-                    Marketplace</a>
-                <a href="/orders/my-orders" class="text-emerald-600 font-semibold py-2 border-b border-gray-200">📦 My
-                    Orders</a>
-                <span class="text-gray-600 px-3 py-2 bg-emerald-50 rounded-full text-center text-sm">Hi, <%= user.name
-                        %></span>
+        function productEmoji(type) {
+            const t = String(type || '').toLowerCase();
+            if (t.includes('milk')) return '🥛';
+            if (t.includes('egg')) return '🥚';
+            if (t.includes('cheese')) return '🧀';
+            if (t.includes('meat')) return '🍖';
+            if (t.includes('ghee')) return '🫙';
+            return '📦';
+        }
+    %>
+
+    <nav class="topbar">
+        <div class="topbar-inner">
+            <a href="/marketplace" class="brand"><i class="fa-solid fa-cow"></i><span>JeevBandhu</span></a>
+            <div class="nav-links">
+                <a href="/marketplace" class="nav-link"><i class="fa-solid fa-shop"></i> Marketplace</a>
+                <a href="/orders/my-orders" class="nav-link active"><i class="fa-solid fa-box"></i> My Orders</a>
+                <span class="nav-link" style="background:#f1f5f9;cursor:default;"><i class="fa-solid fa-user"></i> <%= user.name %></span>
                 <form action="/logout" method="POST" class="inline">
-                    <button type="submit"
-                        class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2">Logout</button>
+                    <button type="submit" class="logout-btn">Logout</button>
                 </form>
             </div>
+            <button id="menuBtn" class="menu-btn" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></button>
+        </div>
+        <div id="mobileMenu" class="mobile-menu">
+            <a href="/marketplace" class="nav-link"><i class="fa-solid fa-shop"></i> Marketplace</a>
+            <a href="/orders/my-orders" class="nav-link active"><i class="fa-solid fa-box"></i> My Orders</a>
+            <form action="/logout" method="POST" class="inline">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
         </div>
     </nav>
 
-    <main class="max-w-full xl:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">🛒 My Orders</h1>
-            <p class="text-gray-600 mt-2">Track your purchases from verified farmers</p>
-        </div>
+    <main class="page">
+        <section class="panel">
+            <h1 class="page-title">My Orders</h1>
+            <p class="page-sub">Track verified purchases and delivery status from farmers.</p>
+        </section>
 
-        <% if (orders.length===0) { %>
-            <div class="card text-center py-12">
-                <div class="text-6xl mb-4">📦</div>
-                <h2 class="text-2xl font-bold text-gray-700 mb-2">No Orders Yet</h2>
-                <p class="text-gray-600 mb-6">Start shopping in the bio-safe marketplace!</p>
-                <a href="/marketplace" class="btn-primary inline-block">Browse Products</a>
-            </div>
-            <% } else { %>
-                <div class="space-y-4">
-                    <% orders.forEach(order=> { %>
-                        <div class="card">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <h3 class="text-xl font-bold text-gray-900">
-                                        <%= order.productType %>
-                                    </h3>
-                                    <p class="text-sm text-gray-600">Order ID: <%= order._id.toString().substring(0,
-                                            8).toUpperCase() %>
-                                    </p>
-                                    <p class="text-sm text-gray-600">Placed on: <%= new
-                                            Date(order.createdAt).toLocaleDateString('en-IN', { year: 'numeric' ,
-                                            month: 'long' , day: 'numeric' }) %>
-                                    </p>
-                                </div>
-                                <div>
-                                    <% if (order.status==='pending' ) { %>
-                                        <span class="badge bg-yellow-100 text-yellow-800">⏳ Pending</span>
-                                        <% } else if (order.status==='confirmed' ) { %>
-                                            <span class="badge bg-blue-100 text-blue-800">✅ Confirmed</span>
-                                            <% } else if (order.status==='delivered' ) { %>
-                                                <span class="badge bg-green-100 text-green-800">🎉 Delivered</span>
-                                                <% } else if (order.status==='cancelled' ) { %>
-                                                    <span class="badge bg-red-100 text-red-800">❌ Cancelled</span>
-                                                    <% } %>
-                                </div>
+        <% if (orders.length === 0) { %>
+            <section class="empty">
+                <h2 style="margin:0;">No orders yet</h2>
+                <p style="margin:8px 0 0;color:#64748b;">Start shopping in the bio-safe marketplace.</p>
+                <a href="/marketplace" style="display:inline-block;margin-top:10px;padding:10px 14px;border-radius:10px;background:#16a34a;color:#fff;font-weight:700;text-decoration:none;">Browse Products</a>
+            </section>
+        <% } else { %>
+            <% orders.forEach(order => { %>
+                <% const stage = statusStage(order.status); %>
+                <% const stageProgress = trackProgress(stage); %>
+                <% const estimatedDate = new Date(order.createdAt); estimatedDate.setDate(estimatedDate.getDate() + (order.estimatedDeliveryDays || 5)); %>
+                <article class="order-card">
+                    <div class="order-main">
+                        <div class="left-side">
+                            <div class="product-image"><%= productEmoji(order.productType) %></div>
+                            <div>
+                                <h3 class="product-name"><%= order.productType %></h3>
+                                <p class="meta-text">Order ID: <%= order._id.toString().substring(0, 8).toUpperCase() %></p>
+                                <p class="meta-text">Placed on: <%= new Date(order.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
                             </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                                <div class="bg-gray-50 p-4 rounded-lg">
-                                    <p class="text-sm text-gray-600">Quantity</p>
-                                    <p class="text-lg font-bold text-gray-900">
-                                        <%= order.quantity %>
-                                            <%= order.unit %>
-                                    </p>
-                                </div>
-                                <div class="bg-gray-50 p-4 rounded-lg">
-                                    <p class="text-sm text-gray-600">Price per <%= order.unit.slice(0, -1) %>
-                                    </p>
-                                    <p class="text-lg font-bold text-gray-900">₹<%= order.pricePerUnit.toFixed(2) %>
-                                    </p>
-                                </div>
-                                <div class="bg-emerald-50 p-4 rounded-lg">
-                                    <p class="text-sm text-gray-600">Total Amount</p>
-                                    <p class="text-lg font-bold text-emerald-600">₹<%= order.totalPrice.toFixed(2) %>
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Delivery Information -->
-                            <% if (order.deliveryAddress) { %>
-                                <div class="border-t pt-4 mb-4">
-                                    <h4 class="font-semibold text-gray-900 mb-2">📍 Delivery Information</h4>
-                                    <div class="bg-amber-50 p-3 rounded-lg">
-                                        <p class="text-sm text-gray-700">
-                                            <%= order.deliveryAddress %>
-                                        </p>
-                                        <% const estimatedDate=new Date(order.createdAt);
-                                            estimatedDate.setDate(estimatedDate.getDate() + (order.estimatedDeliveryDays
-                                            || 5)); %>
-                                            <p class="text-xs text-gray-600 mt-2">
-                                                Estimated Delivery: <%= estimatedDate.toLocaleDateString('en-IN', {
-                                                    year: 'numeric' , month: 'long' , day: 'numeric' }) %>
-                                            </p>
-                                    </div>
-                                </div>
-                                <% } %>
-
-                                    <!-- Payment Information -->
-                                    <div class="border-t pt-4 mb-4">
-                                        <h4 class="font-semibold text-gray-900 mb-2">💳 Payment Information</h4>
-                                        <div class="bg-green-50 p-3 rounded-lg">
-                                            <p class="text-sm text-gray-700">
-                                                <span class="font-medium">Method:</span>
-                                                <%= order.paymentMethod || 'Cash on Delivery' %>
-                                            </p>
-                                            <p class="text-sm text-gray-700 mt-1">
-                                                <span class="font-medium">Status:</span>
-                                                <% if (order.paymentStatus==='completed' ) { %>
-                                                    <span class="text-green-600 font-semibold">✅ Completed</span>
-                                                    <% } else if (order.paymentStatus==='failed' ) { %>
-                                                        <span class="text-red-600 font-semibold">❌ Failed</span>
-                                                        <% } else { %>
-                                                            <span class="text-yellow-600 font-semibold">⏳ Pending</span>
-                                                            <% } %>
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Animal Traceability -->
-                                    <div class="border-t pt-4">
-                                        <h4 class="font-semibold text-gray-900 mb-2">🐮 Source Animal Traceability</h4>
-                                        <div class="flex items-center justify-between bg-emerald-50 p-3 rounded-lg">
-                                            <div>
-                                                <p class="text-sm text-gray-600">Tag ID: <span
-                                                        class="font-semibold text-gray-900">
-                                                        <%= order.animalTagId %>
-                                                    </span></p>
-                                                <% if (order.animal) { %>
-                                                    <p class="text-sm text-gray-600">Species: <%= order.animal.species
-                                                            %> |
-                                                            Health Score: <span class="font-semibold text-emerald-600">
-                                                                <%= order.animal.healthScore %>
-                                                            </span></p>
-                                                    <% } %>
-                                            </div>
-                                        </div>
-                                    </div>
                         </div>
-                        <% }) %>
-                </div>
-                <% } %>
+
+                        <div class="right-side">
+                            <div class="status-row">
+                                <strong style="font-size:.9rem;">Order Summary</strong>
+                                <span class="badge <%= statusClass(order.status) %>"><%= order.status || 'pending' %></span>
+                            </div>
+                            <div class="mini-grid">
+                                <div class="mini-stat">
+                                    <p class="mini-label">Quantity</p>
+                                    <p class="mini-value"><%= order.quantity %> <%= order.unit %></p>
+                                </div>
+                                <div class="mini-stat">
+                                    <p class="mini-label">Price</p>
+                                    <p class="mini-value">Rs <%= order.pricePerUnit.toFixed(2) %></p>
+                                </div>
+                                <div class="mini-stat" style="background:#f0fdf4;border-color:#bbf7d0;">
+                                    <p class="mini-label">Total</p>
+                                    <p class="mini-value total">Rs <%= order.totalPrice.toFixed(2) %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tracking">
+                        <p class="track-label">Order Tracking</p>
+                        <div class="track-line" style="--track-progress:<%= stageProgress %>%;">
+                            <div class="track-step <%= stage >= 1 ? 'done' : '' %>"><span class="track-dot"></span><span>Ordered</span></div>
+                            <div class="track-step <%= stage >= 2 ? 'done' : '' %>"><span class="track-dot"></span><span>Packed</span></div>
+                            <div class="track-step <%= stage >= 3 ? 'done' : '' %>"><span class="track-dot"></span><span>Shipped</span></div>
+                            <div class="track-step <%= stage >= 4 ? 'active' : '' %>"><span class="track-dot"></span><span>Delivered</span></div>
+                        </div>
+                    </div>
+
+                    <div class="section-grid">
+                        <section class="section-card">
+                            <h4 class="section-title"><i class="fa-solid fa-location-dot"></i> Delivery Address</h4>
+                            <p class="section-text"><%= order.deliveryAddress || 'Not provided' %></p>
+                            <p class="section-sub">Estimated Delivery: <%= estimatedDate.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+                        </section>
+
+                        <section class="section-card">
+                            <h4 class="section-title"><i class="fa-solid fa-credit-card"></i> Payment</h4>
+                            <p class="section-text">Method: <%= order.paymentMethod || 'Cash on Delivery' %></p>
+                            <p class="section-sub">Status: <%= order.paymentStatus || 'pending' %></p>
+                        </section>
+
+                        <section class="section-card">
+                            <h4 class="section-title"><i class="fa-solid fa-cow"></i> Source Animal</h4>
+                            <p class="section-text">Tag: <%= order.animalTagId || 'N/A' %></p>
+                            <p class="section-sub">Species: <%= order.animal ? order.animal.species : 'N/A' %></p>
+                            <% const healthScore = order.animal ? Number(order.animal.healthScore || 0) : 0; %>
+                            <div class="health-track"><div class="health-fill" data-health-width="<%= Math.max(0, Math.min(100, healthScore)) %>"></div></div>
+                            <p class="section-sub">Health Score: <%= healthScore %>/100</p>
+                        </section>
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="action-btn btn-track"><i class="fa-solid fa-truck-fast"></i> Track Order</button>
+                        <button type="button" class="action-btn btn-view"><i class="fa-solid fa-circle-info"></i> View Details</button>
+                        <button type="button" class="action-btn btn-reorder"><i class="fa-solid fa-rotate-right"></i> Reorder</button>
+                    </div>
+                </article>
+            <% }) %>
+        <% } %>
     </main>
 
-    <footer class="bg-gray-800 text-white mt-12 py-6">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>&copy; 2025 JeevBandhu. Building trust through transparency.</p>
-        </div>
-    </footer>
-
     <script>
-        // Mobile menu toggle
-        const myOrdersMenuBtn = document.getElementById('myOrdersMenuBtn');
-        const myOrdersMenu = document.getElementById('myOrdersMenu');
-
-        if (myOrdersMenuBtn && myOrdersMenu) {
-            myOrdersMenuBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                myOrdersMenu.classList.toggle('hidden');
-                myOrdersMenu.classList.toggle('active');
-                myOrdersMenuBtn.classList.toggle('active');
-            });
-
-            document.addEventListener('click', function (e) {
-                if (myOrdersMenu && !myOrdersMenu.contains(e.target) && !myOrdersMenuBtn.contains(e.target)) {
-                    myOrdersMenu.classList.add('hidden');
-                    myOrdersMenu.classList.remove('active');
-                    myOrdersMenuBtn.classList.remove('active');
-                }
-            });
-
-            const myOrdersLinks = myOrdersMenu.querySelectorAll('a');
-            myOrdersLinks.forEach(link => {
-                link.addEventListener('click', function () {
-                    myOrdersMenu.classList.add('hidden');
-                    myOrdersMenu.classList.remove('active');
-                    myOrdersMenuBtn.classList.remove('active');
-                });
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
             });
         }
+
+        const healthBars = document.querySelectorAll('[data-health-width]');
+        healthBars.forEach((bar) => {
+            const width = Math.max(0, Math.min(100, parseFloat(bar.dataset.healthWidth || '0')));
+            bar.style.width = `${width}%`;
+        });
     </script>
 </body>
 

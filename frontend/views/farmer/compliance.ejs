@@ -5,312 +5,477 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Compliance Tracker - JeevBandhu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .dropdown {
+        :root {
+            --primary: #16a34a;
+            --secondary: #22c55e;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --line: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+        .topbar { position: sticky; top: 0; z-index: 60; background: rgba(255,255,255,.95); border-bottom: 1px solid var(--line); backdrop-filter: blur(8px); }
+        .topbar-inner { width: min(1240px, 94vw); margin: 0 auto; height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .brand { text-decoration: none; color: var(--primary); font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em; display: inline-flex; align-items: center; gap: 8px; }
+        .nav-links { display: flex; align-items: center; gap: 8px; }
+        .nav-link { text-decoration: none; color: #334155; font-weight: 600; padding: 8px 12px; border-radius: 999px; font-size: .9rem; transition: .2s ease; }
+        .nav-link:hover, .nav-link.active { background: #ecfdf5; color: #15803d; }
+        .logout-btn { border: 0; background: transparent; color: #dc2626; font-weight: 600; cursor: pointer; }
+        .menu-btn { display: none; border: 0; width: 38px; height: 38px; border-radius: 10px; background: #f1f5f9; }
+        .mobile-menu { display: none; width: min(1240px, 94vw); margin: 0 auto 10px; border: 1px solid var(--line); border-radius: 12px; background: #fff; padding: 10px; }
+        .mobile-menu.open { display: grid; gap: 6px; }
+
+        .page { width: min(1240px, 94vw); margin: 22px auto; display: grid; gap: 14px; }
+        .card { border: 1px solid var(--line); background: var(--card); border-radius: 16px; padding: 16px; box-shadow: 0 8px 24px rgba(15, 23, 42, .05); }
+
+        .hero {
+            background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 58%, #d1fae5 100%);
+            border-color: #bbf7d0;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: center;
+            overflow: hidden;
             position: relative;
-            display: inline-block;
         }
 
-        .dropdown-content {
-            display: none;
+        .hero::before {
+            content: '';
             position: absolute;
-            background-color: white;
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            z-index: 100;
-            top: 100%;
-            left: 0;
-            margin-top: 0px;
-            /* Remove gap */
-            padding-top: 8px;
-            /* Add internal padding instead */
+            width: 220px;
+            height: 220px;
+            right: -70px;
+            top: -80px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.18), transparent 68%);
         }
 
-        .dropdown-content a {
-            color: #374151;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            transition: background-color 0.2s;
+        .hero h1 { margin: 0; font-size: clamp(1.45rem, 4vw, 2rem); letter-spacing: -0.02em; }
+        .hero p { margin: 8px 0 0; color: #334155; font-size: 0.97rem; }
+        .hero-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            display: grid;
+            place-items: center;
+            font-size: 1.45rem;
+            box-shadow: 0 14px 26px rgba(22, 163, 74, .25);
+            z-index: 1;
         }
 
-        .dropdown-content a:hover {
-            background-color: #f3f4f6;
-            color: #059669;
+        .dashboard-row {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 14px;
+            align-items: start;
         }
 
-        .dropdown-content a:first-child {
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
+        .score-card { text-align: center; }
+        .score-title { margin: 0; font-size: 1rem; color: #334155; font-weight: 700; }
+        .score-ring {
+            width: 190px;
+            height: 190px;
+            border-radius: 999px;
+            margin: 12px auto 0;
+            display: grid;
+            place-items: center;
+            background: conic-gradient(var(--primary) var(--score-angle), #e2e8f0 0);
+            transition: background .35s ease;
         }
 
-        .dropdown-content a:last-child {
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
+        .score-core {
+            width: 146px;
+            height: 146px;
+            border-radius: 999px;
+            background: #fff;
+            display: grid;
+            place-items: center;
+            box-shadow: inset 0 0 0 1px #e2e8f0;
         }
 
-        .dropdown:hover .dropdown-content {
-            display: block;
+        .score-value { font-size: 2.05rem; font-weight: 800; line-height: 1; }
+        .score-sub { margin-top: 10px; color: #64748b; font-size: .9rem; }
+
+        .completion-banner {
+            margin-top: 14px;
+            border: 1px solid #86efac;
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            color: #166534;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: .92rem;
+            font-weight: 700;
+            display: none;
+            animation: glowIn .45s ease;
         }
 
-        .dropdown-trigger {
-            cursor: pointer;
-            user-select: none;
+        .completion-banner.show { display: block; }
+
+        .hint-card {
+            border-style: dashed;
+            border-color: #d1d5db;
+            color: #64748b;
+            font-size: .9rem;
         }
 
-        /* Ensure dropdown stays visible when hovering over content */
-        .dropdown-content:hover {
-            display: block;
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 12px;
         }
 
-        .checkbox-item {
+        .category-card {
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(15, 23, 42, .09);
+        }
+
+        .category-card.section-complete {
+            border-color: #86efac;
+            box-shadow: 0 16px 28px rgba(34, 197, 94, .16);
+            animation: pulseCard .35s ease;
+        }
+
+        .category-head {
             display: flex;
             align-items: center;
-            padding: 16px;
-            border-bottom: 1px solid #e5e7eb;
-            transition: background-color 0.2s;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 6px;
         }
 
-        .checkbox-item:hover {
-            background-color: #f9fafb;
+        .category-title-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: #111827;
         }
 
-        .checkbox-item:last-child {
-            border-bottom: none;
+        .category-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: #f1f5f9;
+            font-size: 1rem;
         }
 
-        .checkbox-input {
-            width: 20px;
-            height: 20px;
-            margin-right: 12px;
+        .progress-wrap { margin-top: 8px; }
+        .progress-head { display: flex; justify-content: space-between; color: #64748b; font-size: .82rem; margin-bottom: 5px; }
+        .progress { height: 8px; border-radius: 999px; background: #e2e8f0; overflow: hidden; }
+        .progress > span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width .25s ease; }
+
+        .task-list { margin-top: 8px; border-top: 1px solid #f1f5f9; }
+
+        .task-item {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: start;
+            gap: 9px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f8fafc;
+            transition: background .2s ease;
+            border-radius: 10px;
+        }
+
+        .task-item:last-child { border-bottom: 0; }
+
+        .task-check {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: var(--primary);
             cursor: pointer;
+        }
+
+        .task-body {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .task-name {
+            font-weight: 600;
+            color: #1f2937;
+            transition: color .2s ease, text-decoration-color .2s ease;
+        }
+
+        .task-freq {
+            font-size: .74rem;
+            font-weight: 700;
+            color: #0f766e;
+            background: #ecfeff;
+            border: 1px solid #a5f3fc;
+            border-radius: 999px;
+            padding: 3px 8px;
+            white-space: nowrap;
+        }
+
+        .task-check:checked + .task-body .task-name {
+            text-decoration: line-through;
+            text-decoration-thickness: 2px;
+            text-decoration-color: #86efac;
+            color: #16a34a;
+        }
+
+        .task-check:checked + .task-body {
+            background: #f0fdf4;
+            border-radius: 8px;
+            padding: 6px 8px;
+        }
+
+        @keyframes glowIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseCard {
+            0% { transform: scale(0.99); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 980px) {
+            .nav-links { display: none; }
+            .menu-btn { display: inline-flex; align-items: center; justify-content: center; }
+            .hero { grid-template-columns: 1fr; }
+            .dashboard-row { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 760px) {
+            .categories-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 
-<body class="bg-gray-50">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-full xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="/dashboard" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
+<body>
+    <%
+        const allChecklistItems = [
+            ...(checklist.water || []),
+            ...(checklist.feed || []),
+            ...(checklist.biosecurity || []),
+            ...(checklist.health || [])
+        ];
+        const totalChecklistCount = allChecklistItems.length;
+        const completedChecklistCount = allChecklistItems.filter(item => completedItems.includes(item.id)).length;
+        const allTasksCompleted = totalChecklistCount > 0 && completedChecklistCount === totalChecklistCount;
+    %>
 
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="/dashboard" class="text-gray-700 hover:text-emerald-600 transition">🏠 Dashboard</a>
-
-                    <!-- Farm Management Dropdown -->
-                    <div class="dropdown">
-                        <span class="dropdown-trigger text-emerald-600 font-semibold">🌾 Farm ▾</span>
-                        <div class="dropdown-content">
-                            <a href="/animals/add">➕ Add Animal</a>
-                            <a href="/dashboard">📊 My Animals</a>
-
-                            <a href="/ai-assistant">🩺 AI Diagnosis</a>
-                            <a href="/guide/medicine-guide">💊 Medicine Guide</a>
-                            <a href="/compliance">✅ Biosecurity</a>
-                        </div>
-                    </div>
-
-                    <!-- Commerce Dropdown -->
-                    <div class="dropdown">
-                        <span class="dropdown-trigger text-gray-700 hover:text-emerald-600 transition">💼 Commerce
-                            ▾</span>
-                        <div class="dropdown-content">
-                            <a href="/marketplace">🛒 Browse Marketplace</a>
-                            <a href="/list-product">➕ List Product</a>
-                            <a href="/my-products">📦 My Products</a>
-                            <a href="/orders/sales">💰 Sales</a>
-                        </div>
-                    </div>
-
-                    <a href="/community" class="text-gray-700 hover:text-emerald-600 transition">👥 Community</a>
-                    <span class="text-gray-600">Hi, <%= user.name %></span>
-                    <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-red-600 hover:text-red-700 transition">Logout</button>
-                    </form>
-                </div>
-
-                <!-- Mobile Hamburger Button -->
-                <button id="complianceMenuBtn"
-                    class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative">
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-                    <span class="block w-6 h-0.5 bg-gray-700"></span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Menu Overlay -->
-        <div id="complianceMenu"
-            class="mobile-menu hidden fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-40 md:hidden overflow-y-auto">
-            <div class="flex flex-col p-6 pt-20 space-y-4">
-                <a href="/dashboard"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">🏠
-                    Dashboard</a>
-
-                <div class="text-gray-500 text-xs font-semibold uppercase mt-2">Farm Management</div>
-                <a href="/animals/add"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">➕ Add
-                    Animal</a>
-                <a href="/dashboard"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">📊 My
-                    Animals</a>
-                <a href="/ai-assistant"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">🩺 AI
-                    Diagnosis</a>
-                <a href="/guide/medicine-guide"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">💊
-                    Medicine Guide</a>
-                <a href="/compliance" class="text-emerald-600 font-semibold py-2 pl-3 border-b border-gray-200">✅
-                    Biosecurity</a>
-
-                <div class="text-gray-500 text-xs font-semibold uppercase mt-2">Commerce</div>
-                <a href="/marketplace"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">🛒
-                    Browse Marketplace</a>
-                <a href="/list-product"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">➕ List
-                    Product</a>
-                <a href="/my-products"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-100">📦 My
-                    Products</a>
-                <a href="/orders/sales"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 pl-3 border-b border-gray-200">💰
-                    Sales</a>
-
-                <a href="/community"
-                    class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">👥
-                    Community</a>
-                <span class="text-gray-600 px-3 py-2 bg-emerald-50 rounded-full text-center text-sm">Hi, <%= user.name
-                        %></span>
+    <nav class="topbar">
+        <div class="topbar-inner">
+            <a href="/dashboard" class="brand"><i class="fa-solid fa-cow"></i><span>JeevBandhu</span></a>
+            <div class="nav-links">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/ai-assistant" class="nav-link">AI Diagnosis</a>
+                <a href="/guide/medicine-guide" class="nav-link">Medicine Guide</a>
+                <a href="/compliance" class="nav-link active">Biosecurity</a>
+                <a href="/community" class="nav-link">Community</a>
+                <a href="/orders/sales" class="nav-link">Sales</a>
+                <span class="nav-link" style="background:#f1f5f9;cursor:default;"> <%= user.name %> </span>
                 <form action="/logout" method="POST" class="inline">
-                    <button type="submit"
-                        class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2">Logout</button>
+                    <button type="submit" class="logout-btn">Logout</button>
                 </form>
             </div>
+            <button id="menuBtn" class="menu-btn" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></button>
+        </div>
+        <div id="mobileMenu" class="mobile-menu">
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/ai-assistant" class="nav-link">AI Diagnosis</a>
+            <a href="/guide/medicine-guide" class="nav-link">Medicine Guide</a>
+            <a href="/compliance" class="nav-link active">Biosecurity</a>
+            <a href="/community" class="nav-link">Community</a>
+            <a href="/orders/sales" class="nav-link">Sales</a>
+            <form action="/logout" method="POST" class="inline">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
         </div>
     </nav>
 
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Daily Compliance Tracker</h1>
-            <p class="text-gray-600 mt-2">Complete your daily biosecurity checklist</p>
-        </div>
+    <main class="page">
+        <section class="card hero">
+            <div>
+                <h1>Daily Biosecurity Compliance</h1>
+                <p>Track and complete your farm's daily biosecurity tasks.</p>
+            </div>
+            <div class="hero-icon" aria-hidden="true"><i class="fa-solid fa-shield-check"></i></div>
+        </section>
 
-        <!-- Compliance Score Card -->
-        <div class="card mb-8 bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-200">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-900 mb-1">Today's Compliance Score</h2>
-                    <p class="text-sm text-gray-600">7-Day Average: <%= averageScore %>%</p>
-                </div>
-                <div class="text-right">
-                    <div id="scoreDisplay"
-                        class="text-5xl font-bold <%= score >= 80 ? 'text-green-600' : score >= 50 ? 'text-yellow-600' : 'text-red-600' %>">
-                        <%= score %>%
+        <section class="dashboard-row">
+            <aside class="card score-card">
+                <h2 class="score-title">Today's Compliance Score</h2>
+                <div id="scoreRing" class="score-ring" style="--score-angle:<%= Math.max(0, Math.min(100, score)) * 3.6 %>deg;">
+                    <div class="score-core">
+                        <div>
+                            <div id="scoreDisplay" class="score-value"><%= score %>%</div>
+                            <div style="font-size:.74rem;color:#64748b;text-transform:uppercase;letter-spacing:.05em;">Today</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+                <p class="score-sub">7-Day Average: <strong><%= averageScore %>%</strong></p>
 
-        <!-- Water Section -->
-        <div class="card mb-6">
-            <div class="flex items-center mb-4 pb-4 border-b border-gray-200">
-                <span class="text-3xl mr-3">💧</span>
-                <h3 class="text-xl font-bold text-gray-900">Water</h3>
-            </div>
-            <% checklist.water.forEach(item=> { %>
-                <div class="checkbox-item">
-                    <input type="checkbox" class="checkbox-input" id="<%= item.id %>"
-                        <%=completedItems.includes(item.id) ? 'checked' : '' %>
-                    onchange="toggleItem('<%= item.id %>')">
-                        <div class="flex-1">
-                            <label for="<%= item.id %>" class="font-medium text-gray-900 cursor-pointer">
-                                <%= item.name %>
-                            </label>
-                            <p class="text-sm text-gray-500">
-                                <%= item.frequency %>
-                            </p>
-                        </div>
+                <div id="completionFeedback" class="completion-banner <%= allTasksCompleted ? 'show' : '' %>">
+                    All tasks completed for today 🎉
                 </div>
-                <% }) %>
-        </div>
+            </aside>
 
-        <!-- Feed Section -->
-        <div class="card mb-6">
-            <div class="flex items-center mb-4 pb-4 border-b border-gray-200">
-                <span class="text-3xl mr-3">🌾</span>
-                <h3 class="text-xl font-bold text-gray-900">Feed</h3>
+            <div class="card hint-card">
+                <strong>Compliance Focus</strong>
+                <p style="margin:8px 0 0;line-height:1.55;">Use this dashboard to complete all recurring biosecurity checks. Each section tracks real-time progress as you update tasks.</p>
             </div>
-            <% checklist.feed.forEach(item=> { %>
-                <div class="checkbox-item">
-                    <input type="checkbox" class="checkbox-input" id="<%= item.id %>"
-                        <%=completedItems.includes(item.id) ? 'checked' : '' %>
-                    onchange="toggleItem('<%= item.id %>')">
-                        <div class="flex-1">
-                            <label for="<%= item.id %>" class="font-medium text-gray-900 cursor-pointer">
-                                <%= item.name %>
-                            </label>
-                            <p class="text-sm text-gray-500">
-                                <%= item.frequency %>
-                            </p>
-                        </div>
-                </div>
-                <% }) %>
-        </div>
+        </section>
 
-        <!-- Biosecurity Section -->
-        <div class="card mb-6">
-            <div class="flex items-center mb-4 pb-4 border-b border-gray-200">
-                <span class="text-3xl mr-3">🛡️</span>
-                <h3 class="text-xl font-bold text-gray-900">Biosecurity</h3>
-            </div>
-            <% checklist.biosecurity.forEach(item=> { %>
-                <div class="checkbox-item">
-                    <input type="checkbox" class="checkbox-input" id="<%= item.id %>"
-                        <%=completedItems.includes(item.id) ? 'checked' : '' %>
-                    onchange="toggleItem('<%= item.id %>')">
-                        <div class="flex-1">
-                            <label for="<%= item.id %>" class="font-medium text-gray-900 cursor-pointer">
-                                <%= item.name %>
-                            </label>
-                            <p class="text-sm text-gray-500">
-                                <%= item.frequency %>
-                            </p>
-                        </div>
+        <section class="categories-grid">
+            <div class="card category-card" data-category="water" data-total="<%= checklist.water.length %>">
+                <div class="category-head">
+                    <div class="category-title-wrap"><span class="category-icon">💧</span><span>Water</span></div>
                 </div>
-                <% }) %>
-        </div>
+                <% const waterDone = checklist.water.filter(i => completedItems.includes(i.id)).length; %>
+                <div class="progress-wrap">
+                    <div class="progress-head"><span>Progress:</span><span class="category-progress-count"><%= waterDone %> / <%= checklist.water.length %> tasks complete</span></div>
+                    <div class="progress"><span class="category-progress-bar" data-progress-width="<%= checklist.water.length ? (waterDone / checklist.water.length) * 100 : 0 %>"></span></div>
+                </div>
+                <div class="task-list">
+                    <% checklist.water.forEach(item => { %>
+                    <div class="task-item">
+                        <input class="task-check" type="checkbox" id="<%= item.id %>" <%= completedItems.includes(item.id) ? 'checked' : '' %> onchange="toggleItem('<%= item.id %>')">
+                        <div class="task-body">
+                            <label class="task-name" for="<%= item.id %>"><%= item.name %></label>
+                            <span class="task-freq"><%= item.frequency %></span>
+                        </div>
+                    </div>
+                    <% }) %>
+                </div>
+            </div>
 
-        <!-- Health Section -->
-        <div class="card mb-6">
-            <div class="flex items-center mb-4 pb-4 border-b border-gray-200">
-                <span class="text-3xl mr-3">🏥</span>
-                <h3 class="text-xl font-bold text-gray-900">Health</h3>
-            </div>
-            <% checklist.health.forEach(item=> { %>
-                <div class="checkbox-item">
-                    <input type="checkbox" class="checkbox-input" id="<%= item.id %>"
-                        <%=completedItems.includes(item.id) ? 'checked' : '' %>
-                    onchange="toggleItem('<%= item.id %>')">
-                        <div class="flex-1">
-                            <label for="<%= item.id %>" class="font-medium text-gray-900 cursor-pointer">
-                                <%= item.name %>
-                            </label>
-                            <p class="text-sm text-gray-500">
-                                <%= item.frequency %>
-                            </p>
-                        </div>
+            <div class="card category-card" data-category="feed" data-total="<%= checklist.feed.length %>">
+                <div class="category-head">
+                    <div class="category-title-wrap"><span class="category-icon">🌾</span><span>Feed</span></div>
                 </div>
-                <% }) %>
-        </div>
+                <% const feedDone = checklist.feed.filter(i => completedItems.includes(i.id)).length; %>
+                <div class="progress-wrap">
+                    <div class="progress-head"><span>Progress:</span><span class="category-progress-count"><%= feedDone %> / <%= checklist.feed.length %> tasks complete</span></div>
+                    <div class="progress"><span class="category-progress-bar" data-progress-width="<%= checklist.feed.length ? (feedDone / checklist.feed.length) * 100 : 0 %>"></span></div>
+                </div>
+                <div class="task-list">
+                    <% checklist.feed.forEach(item => { %>
+                    <div class="task-item">
+                        <input class="task-check" type="checkbox" id="<%= item.id %>" <%= completedItems.includes(item.id) ? 'checked' : '' %> onchange="toggleItem('<%= item.id %>')">
+                        <div class="task-body">
+                            <label class="task-name" for="<%= item.id %>"><%= item.name %></label>
+                            <span class="task-freq"><%= item.frequency %></span>
+                        </div>
+                    </div>
+                    <% }) %>
+                </div>
+            </div>
+
+            <div class="card category-card" data-category="biosecurity" data-total="<%= checklist.biosecurity.length %>">
+                <div class="category-head">
+                    <div class="category-title-wrap"><span class="category-icon">🛡️</span><span>Biosecurity</span></div>
+                </div>
+                <% const bioDone = checklist.biosecurity.filter(i => completedItems.includes(i.id)).length; %>
+                <div class="progress-wrap">
+                    <div class="progress-head"><span>Progress:</span><span class="category-progress-count"><%= bioDone %> / <%= checklist.biosecurity.length %> tasks complete</span></div>
+                    <div class="progress"><span class="category-progress-bar" data-progress-width="<%= checklist.biosecurity.length ? (bioDone / checklist.biosecurity.length) * 100 : 0 %>"></span></div>
+                </div>
+                <div class="task-list">
+                    <% checklist.biosecurity.forEach(item => { %>
+                    <div class="task-item">
+                        <input class="task-check" type="checkbox" id="<%= item.id %>" <%= completedItems.includes(item.id) ? 'checked' : '' %> onchange="toggleItem('<%= item.id %>')">
+                        <div class="task-body">
+                            <label class="task-name" for="<%= item.id %>"><%= item.name %></label>
+                            <span class="task-freq"><%= item.frequency %></span>
+                        </div>
+                    </div>
+                    <% }) %>
+                </div>
+            </div>
+
+            <div class="card category-card" data-category="health" data-total="<%= checklist.health.length %>">
+                <div class="category-head">
+                    <div class="category-title-wrap"><span class="category-icon">🏥</span><span>Health</span></div>
+                </div>
+                <% const healthDone = checklist.health.filter(i => completedItems.includes(i.id)).length; %>
+                <div class="progress-wrap">
+                    <div class="progress-head"><span>Progress:</span><span class="category-progress-count"><%= healthDone %> / <%= checklist.health.length %> tasks complete</span></div>
+                    <div class="progress"><span class="category-progress-bar" data-progress-width="<%= checklist.health.length ? (healthDone / checklist.health.length) * 100 : 0 %>"></span></div>
+                </div>
+                <div class="task-list">
+                    <% checklist.health.forEach(item => { %>
+                    <div class="task-item">
+                        <input class="task-check" type="checkbox" id="<%= item.id %>" <%= completedItems.includes(item.id) ? 'checked' : '' %> onchange="toggleItem('<%= item.id %>')">
+                        <div class="task-body">
+                            <label class="task-name" for="<%= item.id %>"><%= item.name %></label>
+                            <span class="task-freq"><%= item.frequency %></span>
+                        </div>
+                    </div>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script>
+        function clampPercent(value) {
+            return Math.max(0, Math.min(100, Number(value) || 0));
+        }
+
+        function updateCompletionState() {
+            const cards = document.querySelectorAll('.category-card');
+            let totalTasks = 0;
+            let completedTasks = 0;
+
+            cards.forEach((card) => {
+                const total = parseInt(card.dataset.total || '0', 10);
+                const checks = card.querySelectorAll('.task-check');
+                const done = Array.from(checks).filter((check) => check.checked).length;
+                const percent = total > 0 ? (done / total) * 100 : 0;
+
+                totalTasks += total;
+                completedTasks += done;
+
+                const countEl = card.querySelector('.category-progress-count');
+                const barEl = card.querySelector('.category-progress-bar');
+                if (countEl) countEl.textContent = `${done} / ${total} tasks complete`;
+                if (barEl) barEl.style.width = `${clampPercent(percent)}%`;
+
+                card.classList.toggle('section-complete', total > 0 && done === total);
+            });
+
+            const completionFeedback = document.getElementById('completionFeedback');
+            if (completionFeedback) {
+                const allDone = totalTasks > 0 && completedTasks === totalTasks;
+                completionFeedback.classList.toggle('show', allDone);
+            }
+        }
+
+        function updateScoreUI(scoreValue) {
+            const safeScore = clampPercent(scoreValue);
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const scoreRing = document.getElementById('scoreRing');
+
+            if (scoreDisplay) scoreDisplay.textContent = `${safeScore}%`;
+            if (scoreRing) scoreRing.style.setProperty('--score-angle', `${safeScore * 3.6}deg`);
+        }
+
         async function toggleItem(itemId) {
             try {
                 const response = await fetch('/api/compliance/toggle', {
@@ -320,53 +485,32 @@
                 });
 
                 const result = await response.json();
-
                 if (result.success) {
-                    // Update score display
-                    const scoreDisplay = document.getElementById('scoreDisplay');
-                    scoreDisplay.textContent = result.score + '%';
-
-                    // Update color based on score
-                    scoreDisplay.className = result.score >= 80 ? 'text-5xl font-bold text-green-600' :
-                        result.score >= 50 ? 'text-5xl font-bold text-yellow-600' :
-                            'text-5xl font-bold text-red-600';
+                    updateScoreUI(result.score);
+                    updateCompletionState();
                 } else {
-                    alert(`❌ ${result.error}`);
+                    alert(result.error || 'Failed to update compliance');
                 }
             } catch (error) {
-                alert('❌ Failed to update compliance. Please try again.');
+                alert('Failed to update compliance. Please try again.');
             }
         }
 
-        // Mobile menu toggle
-        const complianceMenuBtn = document.getElementById('complianceMenuBtn');
-        const complianceMenu = document.getElementById('complianceMenu');
-
-        if (complianceMenuBtn && complianceMenu) {
-            complianceMenuBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                complianceMenu.classList.toggle('hidden');
-                complianceMenu.classList.toggle('active');
-                complianceMenuBtn.classList.toggle('active');
-            });
-
-            document.addEventListener('click', function (e) {
-                if (complianceMenu && !complianceMenu.contains(e.target) && !complianceMenuBtn.contains(e.target)) {
-                    complianceMenu.classList.add('hidden');
-                    complianceMenu.classList.remove('active');
-                    complianceMenuBtn.classList.remove('active');
-                }
-            });
-
-            const complianceLinks = complianceMenu.querySelectorAll('a');
-            complianceLinks.forEach(link => {
-                link.addEventListener('click', function () {
-                    complianceMenu.classList.add('hidden');
-                    complianceMenu.classList.remove('active');
-                    complianceMenuBtn.classList.remove('active');
-                });
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
             });
         }
+
+        const progressBars = document.querySelectorAll('[data-progress-width]');
+        progressBars.forEach((bar) => {
+            const width = clampPercent(parseFloat(bar.dataset.progressWidth || '0'));
+            bar.style.width = `${width}%`;
+        });
+
+        updateCompletionState();
     </script>
 </body>
 
