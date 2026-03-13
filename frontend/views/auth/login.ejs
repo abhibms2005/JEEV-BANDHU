@@ -7,20 +7,342 @@
     <title>Login - JeevBandhu</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --brand: #16a34a;
+            --brand-2: #22c55e;
+            --text: #0f172a;
+            --muted: #64748b;
+            --line: #dbe7e0;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 50%, #f8fafc 100%);
+            color: var(--text);
+        }
+
         .page-shell {
             opacity: 1;
             transform: scale(1);
             transition: opacity 360ms ease, transform 360ms ease;
+            animation: shellIn 500ms ease;
         }
 
         .page-shell.page-exit {
             opacity: 0;
             transform: scale(0.985);
+        }
+
+        .auth-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-blob {
+            position: absolute;
+            border-radius: 999px;
+            filter: blur(56px);
+            opacity: .36;
+            animation: blobFloat 9s ease-in-out infinite;
+        }
+
+        .bg-blob.one {
+            width: 360px;
+            height: 360px;
+            top: -120px;
+            left: -120px;
+            background: radial-gradient(circle at 30% 30%, #6ee7b7, #34d399);
+        }
+
+        .bg-blob.two {
+            width: 320px;
+            height: 320px;
+            right: -100px;
+            top: 30%;
+            background: radial-gradient(circle at 40% 30%, #86efac, #22c55e);
+            animation-delay: 1.2s;
+        }
+
+        .bg-blob.three {
+            width: 280px;
+            height: 280px;
+            bottom: -100px;
+            left: 28%;
+            background: radial-gradient(circle at 30% 30%, #bfdbfe, #93c5fd);
+            animation-delay: 2s;
+        }
+
+        .auth-layout {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 34px 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-inner {
+            width: min(460px, 100%);
+        }
+
+        .brand-block {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand-anchor {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #059669;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            animation: brandFloat 3.2s ease-in-out infinite;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: rgba(34, 197, 94, 0.2);
+            color: #059669;
+            box-shadow: 0 0 0 8px rgba(34, 197, 94, 0.1);
+        }
+
+        .hero-title {
+            margin: 16px 0 6px;
+            font-size: clamp(2rem, 5.4vw, 2.7rem);
+            letter-spacing: -0.03em;
+            font-weight: 800;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: titleIn 460ms ease forwards;
+        }
+
+        .hero-sub {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: titleIn 460ms ease 90ms forwards;
+        }
+
+        .auth-card {
+            border-radius: 18px;
+            padding: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            transition: transform .22s ease, box-shadow .22s ease;
+            animation: cardIn 520ms ease;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 44px rgba(15, 23, 42, 0.12);
+        }
+
+        .error-box {
+            margin-bottom: 20px;
+            padding: 12px 14px;
+            border: 1px solid #fecaca;
+            border-radius: 12px;
+            background: #fef2f2;
+            color: #b91c1c;
+            display: flex;
+            gap: 9px;
+            align-items: flex-start;
+            font-size: .92rem;
+        }
+
+        .fields { display: grid; gap: 16px; }
+
+        .field-group {
+            position: relative;
+        }
+
+        .field-input {
+            width: 100%;
+            height: 52px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 0 14px 0 44px;
+            outline: none;
+            font-size: .95rem;
+            color: #0f172a;
+            background: rgba(255, 255, 255, 0.96);
+            transition: all .2s ease;
+        }
+
+        .field-input:hover {
+            border-color: #a7f3d0;
+            background: #fff;
+        }
+
+        .field-input:focus {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+            background: #fff;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #10b981;
+            font-size: .9rem;
+            transition: color .2s ease;
+        }
+
+        .field-group:focus-within .input-icon {
+            color: #047857;
+        }
+
+        .field-label {
+            position: absolute;
+            left: 42px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: .94rem;
+            pointer-events: none;
+            transition: all .2s ease;
+        }
+
+        .field-input:focus + .field-label,
+        .field-input:not(:placeholder-shown) + .field-label {
+            top: 0;
+            left: 12px;
+            transform: translateY(-50%);
+            font-size: .76rem;
+            color: #166534;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1px 6px;
+            border-radius: 999px;
+        }
+
+        .meta-row {
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .remember {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #64748b;
+            font-size: .9rem;
+            cursor: pointer;
+        }
+
+        .remember input { accent-color: #16a34a; }
+
+        .forgot-link {
+            font-size: .9rem;
+            text-decoration: none;
+            color: #059669;
+            font-weight: 700;
+            transition: color .2s ease;
+        }
+
+        .forgot-link:hover {
+            color: #047857;
+        }
+
+        .btn-signin {
+            margin-top: 22px;
+            width: 100%;
+            border: 0;
+            border-radius: 14px;
+            min-height: 52px;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            box-shadow: 0 14px 24px rgba(22, 163, 74, 0.28);
+            transition: all .2s ease;
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .btn-signin::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
+            z-index: -1;
+        }
+
+        .btn-signin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 28px rgba(22, 163, 74, 0.35);
+        }
+
+        .btn-signin:disabled {
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 10px 16px rgba(22, 163, 74, 0.24);
+        }
+
+        .btn-ripple {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%) scale(0);
+            animation: ripple 550ms ease-out;
+            pointer-events: none;
+        }
+
+        .foot-row {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #dbe5de;
+            text-align: center;
+            color: #64748b;
+            font-size: .96rem;
+        }
+
+        .register-link {
+            text-decoration: none;
+            color: #059669;
+            font-weight: 800;
+            transition: color .2s ease;
+        }
+
+        .register-link:hover {
+            color: #047857;
         }
 
         .login-transition {
@@ -159,83 +481,116 @@
             0%, 80%, 100% { opacity: .25; transform: translateY(0); }
             40% { opacity: 1; transform: translateY(-3px); }
         }
+
+        @keyframes shellIn {
+            from { opacity: 0; transform: scale(.985); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes titleIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(14px) scale(.985); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes brandFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        @keyframes blobFloat {
+            0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+            50% { transform: translateY(-14px) translateX(8px) scale(1.05); }
+        }
+
+        @keyframes ripple {
+            from { transform: translate(-50%, -50%) scale(0); opacity: .6; }
+            to { transform: translate(-50%, -50%) scale(16); opacity: 0; }
+        }
+
+        @media (max-width: 640px) {
+            .auth-layout { padding: 22px 12px; }
+            .brand-block { margin-bottom: 22px; }
+            .brand-anchor { font-size: 1.7rem; }
+            .auth-card { padding: 22px; border-radius: 16px; }
+            .hero-title { font-size: 2rem; }
+        }
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-emerald-50 via-white to-blue-50 min-h-screen overflow-x-hidden" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+<body>
     <div id="pageShell" class="page-shell">
-    <!-- Animated Background -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-40 -left-40 w-96 h-96 bg-emerald-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+    <div class="auth-bg" aria-hidden="true">
+        <div class="bg-blob one"></div>
+        <div class="bg-blob two"></div>
+        <div class="bg-blob three"></div>
     </div>
 
-    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="max-w-md w-full">
-            <!-- Logo & Heading -->
-            <div class="text-center mb-12">
-                <a href="/" class="inline-flex items-center gap-2 text-3xl font-extrabold gradient-text hover:scale-105 transition-transform duration-300 mb-8">
-                    <i class="fas fa-cow text-emerald-600 text-2xl"></i>
+    <main class="auth-layout">
+        <section class="auth-inner">
+            <div class="brand-block">
+                <a href="/" class="brand-anchor">
+                    <span class="brand-icon"><i class="fas fa-cow"></i></span>
                     <span>JeevBandhu</span>
                 </a>
-                <h2 class="text-4xl font-display font-bold text-gray-900 mb-2">Welcome back</h2>
-                <p class="text-gray-600">Sign in to manage your livestock</p>
+                <h2 class="hero-title">Welcome back</h2>
+                <p class="hero-sub">Sign in to manage your livestock operations.</p>
             </div>
 
             <form id="loginForm" action="/login" method="POST">
-                <div class="card-lg">
+                <div class="auth-card">
                     <% if (error) { %>
-                        <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg flex items-start gap-3">
-                            <i class="fas fa-exclamation-circle text-red-600 mt-0.5 flex-shrink-0"></i>
+                        <div class="error-box">
+                            <i class="fas fa-exclamation-circle"></i>
                             <span><%= error %></span>
                         </div>
                     <% } %>
 
-                    <div class="space-y-5">
-                        <div>
-                            <label for="email" class="form-label">
-                                <i class="fas fa-envelope text-emerald-600 mr-2"></i>Email Address
-                            </label>
-                            <input id="email" name="email" type="email" required class="input-field"
-                                placeholder="you@example.com">
+                    <div class="fields">
+                        <div class="field-group">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input id="email" name="email" type="email" required class="field-input" placeholder=" ">
+                            <label for="email" class="field-label">Email Address</label>
                         </div>
 
-                        <div>
-                            <label for="password" class="form-label">
-                                <i class="fas fa-lock text-emerald-600 mr-2"></i>Password
-                            </label>
-                            <input id="password" name="password" type="password" required class="input-field"
-                                placeholder="Enter your password">
+                        <div class="field-group">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input id="password" name="password" type="password" required class="field-input" placeholder=" ">
+                            <label for="password" class="field-label">Password</label>
                         </div>
 
-                        <div class="flex items-center justify-between">
-                            <label class="flex items-center gap-2 cursor-pointer group">
-                                <input type="checkbox" name="remember" class="w-4 h-4 text-emerald-600">
-                                <span class="text-sm text-gray-600 group-hover:text-gray-900">Remember me</span>
+                        <div class="meta-row">
+                            <label class="remember">
+                                <input type="checkbox" name="remember">
+                                <span>Remember me</span>
                             </label>
-                            <a href="#" class="text-sm text-emerald-600 hover:text-emerald-700 font-semibold">Forgot?</a>
+                            <a href="#" class="forgot-link">Forgot?</a>
                         </div>
                     </div>
 
-                    <div class="mt-8">
-                        <button id="loginSubmitBtn" type="submit" class="w-full btn-primary btn-lg flex items-center justify-center gap-2">
+                    <div>
+                        <button id="loginSubmitBtn" type="submit" class="btn-signin">
                             <i class="fas fa-sign-in-alt"></i>
                             <span>Sign In</span>
                         </button>
                     </div>
 
-                    <div class="mt-6 pt-6 border-t border-gray-200 text-center">
-                        <p class="text-gray-600">
+                    <div class="foot-row">
+                        <p>
                             New to JeevBandhu?
-                            <a href="/register" class="font-bold text-emerald-600 hover:text-emerald-700 transition-colors">
+                            <a href="/register" class="register-link">
                                 Create an account
                             </a>
                         </p>
                     </div>
                 </div>
             </form>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <div id="loginTransition" class="login-transition" aria-hidden="true">
         <div class="login-transition-card">
@@ -271,6 +626,7 @@
             init() {
                 if (!this.form) return;
                 this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+                this.submitBtn?.addEventListener('pointerdown', (e) => this.addRipple(e));
             }
 
             setLoading(isLoading) {
@@ -283,6 +639,17 @@
                 } else {
                     this.submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i><span>Sign In</span>';
                 }
+            }
+
+            addRipple(event) {
+                if (!this.submitBtn || this.submitBtn.disabled) return;
+                const rect = this.submitBtn.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                ripple.className = 'btn-ripple';
+                ripple.style.left = `${event.clientX - rect.left}px`;
+                ripple.style.top = `${event.clientY - rect.top}px`;
+                this.submitBtn.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
             }
 
             showOverlay() {
