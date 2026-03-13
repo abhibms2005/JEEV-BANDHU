@@ -11,9 +11,159 @@
         rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-shell {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 360ms ease, transform 360ms ease;
+        }
+
+        .page-shell.page-exit {
+            opacity: 0;
+            transform: scale(0.985);
+        }
+
+        .login-transition {
+            position: fixed;
+            inset: 0;
+            z-index: 110;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 320ms ease, visibility 320ms ease;
+        }
+
+        .login-transition.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .login-transition-card {
+            width: min(460px, 92vw);
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid #bbf7d0;
+            border-radius: 24px;
+            padding: 28px 24px;
+            box-shadow: 0 24px 60px rgba(22, 163, 74, 0.18);
+            text-align: center;
+            animation: transitionCardIn 360ms ease;
+            backdrop-filter: blur(6px);
+        }
+
+        .transition-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #059669;
+            font-weight: 800;
+            font-size: 1.7rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 18px;
+        }
+
+        .check-wrap {
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            margin: 0 auto 14px;
+            background: radial-gradient(circle at 30% 30%, #4ade80, #16a34a);
+            display: grid;
+            place-items: center;
+            box-shadow: 0 14px 36px rgba(34, 197, 94, 0.38);
+            animation: popIn 420ms cubic-bezier(.2, .9, .3, 1.2);
+        }
+
+        .check-icon {
+            color: #fff;
+            font-size: 1.9rem;
+            transform: scale(0.7);
+            opacity: 0;
+            animation: checkIn 380ms ease 130ms forwards;
+        }
+
+        .transition-title {
+            margin: 0;
+            font-size: 1.55rem;
+            font-weight: 800;
+            color: #064e3b;
+            opacity: 0;
+            transform: translateY(8px);
+            animation: textIn 340ms ease 170ms forwards;
+        }
+
+        .transition-sub {
+            margin: 8px 0 0;
+            color: #0f766e;
+            font-size: .98rem;
+            opacity: 0;
+            transform: translateY(8px);
+            animation: textIn 340ms ease 240ms forwards;
+        }
+
+        .loading-row {
+            margin-top: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #047857;
+            font-weight: 600;
+            font-size: .92rem;
+            opacity: 0;
+            transform: translateY(8px);
+            animation: textIn 340ms ease 310ms forwards;
+        }
+
+        .dot-loader {
+            display: inline-flex;
+            gap: 5px;
+        }
+
+        .dot-loader span {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #16a34a;
+            opacity: .3;
+            animation: dotPulse 1s infinite ease-in-out;
+        }
+
+        .dot-loader span:nth-child(2) { animation-delay: .15s; }
+        .dot-loader span:nth-child(3) { animation-delay: .3s; }
+
+        @keyframes transitionCardIn {
+            from { transform: translateY(12px) scale(.97); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        @keyframes popIn {
+            from { transform: scale(.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes checkIn {
+            from { transform: scale(.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes textIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes dotPulse {
+            0%, 80%, 100% { opacity: .25; transform: translateY(0); }
+            40% { opacity: 1; transform: translateY(-3px); }
+        }
+    </style>
 </head>
 
 <body class="bg-gradient-to-br from-emerald-50 via-white to-blue-50 min-h-screen overflow-x-hidden" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+    <div id="pageShell" class="page-shell">
     <!-- Animated Background -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="absolute -top-40 -left-40 w-96 h-96 bg-emerald-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
@@ -32,7 +182,7 @@
                 <p class="text-gray-600">Sign in to manage your livestock</p>
             </div>
 
-            <form action="/login" method="POST">
+            <form id="loginForm" action="/login" method="POST">
                 <div class="card-lg">
                     <% if (error) { %>
                         <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg flex items-start gap-3">
@@ -68,7 +218,7 @@
                     </div>
 
                     <div class="mt-8">
-                        <button type="submit" class="w-full btn-primary btn-lg flex items-center justify-center gap-2">
+                        <button id="loginSubmitBtn" type="submit" class="w-full btn-primary btn-lg flex items-center justify-center gap-2">
                             <i class="fas fa-sign-in-alt"></i>
                             <span>Sign In</span>
                         </button>
@@ -86,6 +236,108 @@
             </form>
         </div>
     </div>
+
+    <div id="loginTransition" class="login-transition" aria-hidden="true">
+        <div class="login-transition-card">
+            <div class="transition-brand">
+                <i class="fas fa-cow"></i>
+                <span>JeevBandhu</span>
+            </div>
+            <div class="check-wrap">
+                <i class="fas fa-check check-icon"></i>
+            </div>
+            <h3 class="transition-title">Login Successful</h3>
+            <p class="transition-sub">Preparing your dashboard...</p>
+            <div class="loading-row">
+                <span>Loading your workspace</span>
+                <span class="dot-loader" aria-hidden="true"><span></span><span></span><span></span></span>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        class LoginTransition {
+            constructor() {
+                this.overlay = document.getElementById('loginTransition');
+                this.pageShell = document.getElementById('pageShell');
+                this.form = document.getElementById('loginForm');
+                this.submitBtn = document.getElementById('loginSubmitBtn');
+                this.redirectDelay = 1500;
+                this.fadeDelay = 340;
+                this.init();
+            }
+
+            init() {
+                if (!this.form) return;
+                this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+            }
+
+            setLoading(isLoading) {
+                if (!this.submitBtn) return;
+                this.submitBtn.disabled = isLoading;
+                this.submitBtn.classList.toggle('opacity-70', isLoading);
+                this.submitBtn.classList.toggle('cursor-not-allowed', isLoading);
+                if (isLoading) {
+                    this.submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i><span>Signing in...</span>';
+                } else {
+                    this.submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i><span>Sign In</span>';
+                }
+            }
+
+            showOverlay() {
+                if (!this.overlay) return;
+                this.overlay.classList.add('show');
+                this.overlay.setAttribute('aria-hidden', 'false');
+            }
+
+            async handleSubmit(event) {
+                event.preventDefault();
+
+                const formData = new FormData(this.form);
+                const payload = new URLSearchParams();
+                formData.forEach((value, key) => payload.append(key, value));
+
+                this.setLoading(true);
+
+                try {
+                    const response = await fetch(this.form.action, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                            'Accept': 'text/html'
+                        },
+                        body: payload.toString(),
+                        credentials: 'same-origin'
+                    });
+
+                    const redirectedTo = response.url || '';
+                    const success = response.redirected && !redirectedTo.includes('/login');
+
+                    if (success) {
+                        this.showOverlay();
+                        setTimeout(() => {
+                            this.pageShell?.classList.add('page-exit');
+                            setTimeout(() => {
+                                window.location.href = redirectedTo;
+                            }, this.fadeDelay);
+                        }, this.redirectDelay);
+                        return;
+                    }
+
+                    window.location.reload();
+                } catch (error) {
+                    window.location.reload();
+                } finally {
+                    if (!this.overlay?.classList.contains('show')) {
+                        this.setLoading(false);
+                    }
+                }
+            }
+        }
+
+        new LoginTransition();
+    </script>
 </body>
 
 </html>
